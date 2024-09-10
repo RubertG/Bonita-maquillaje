@@ -18,7 +18,7 @@ export const ProductsContainer = ({
       <ul className={`${className} grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2`}>
         {
           loading ? (
-            Array(9).fill(0).map((_, index) => (
+            Array(8).fill(0).map((_, index) => (
               <ProductSkeleton key={index} />
             ))
           ) : (
