@@ -17,7 +17,7 @@ export const ProductsContainer = ({
     <>
       {
         !loading && (
-          <p className="text-text-300 font-light text-end">
+          <p className="text-text-300 font-light text-end mt-3">
             <span className="font-normal">{products.length}</span> {products.length === 1 ? "Producto" : "Productos"}
           </p>
         )
