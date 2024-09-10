@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-hide::-webkit-scrollbar, 
+.scrollbar-hide-sm::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide, .scrollbar-hide-sm {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+@media screen and (min-width: 768px) {
+  .scrollbar-hide-sm {
+    -ms-overflow-style: block;
+    /* IE and Edge */
+    scrollbar-width: auto;
+    /* Firefox */
+  }
+
+  .scrollbar-hide-sm::-webkit-scrollbar {
+    display: block;
+  }
+}
+
+.entry {
+  opacity: 0;
+  animation: entry 0.2s ease-in-out both;
+}
+
+textarea {
+  field-sizing: content;
+}
+
+*::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+*::-webkit-scrollbar:vertical {
+  width: 10px;
+  @apply bg-bg-50;
+}
+
+*::-webkit-scrollbar-button:increment,
+*::-webkit-scrollbar-button:decrement {
+  display: none;
+}
+
+*::-webkit-scrollbar:horizontal {
+  @apply bg-bg-100;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-accent-200;
+  border-radius: 20px;
+  border: 2px solid;
+  @apply border-bg-100;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.input-apparence-none::-webkit-outer-spin-button,
+.input-apparence-none::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-apparence-none {
+  -moz-appearance: textfield;
+}
+
+@keyframes entry {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
