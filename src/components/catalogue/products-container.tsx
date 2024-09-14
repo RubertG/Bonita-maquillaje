@@ -39,7 +39,7 @@ export const ProductsContainer = ({
               {
                 (searchParams.busqueda) && (
                   <ButtonWithIcon
-                    href={`/admin/productos?${new URLSearchParams({
+                    href={`/catalogo?${new URLSearchParams({
                       categoria: searchParams.categoria || ""
                     }).toString()}`}>
                     <Delete className="stroke-text-100" />
