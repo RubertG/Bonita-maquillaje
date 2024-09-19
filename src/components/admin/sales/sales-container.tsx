@@ -19,7 +19,7 @@ export const SalesContainer = ({
 
   if (!orders || !orders.filterOrders || !orders.orders || orders.filterOrders.length === 0) return (
     <section className={`${className} text-center text-text-300 mt-4`}>
-      No se encontraron pedidos
+      No se encontraron pedidos 
     </section>
   )
 
