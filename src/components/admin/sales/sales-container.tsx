@@ -17,9 +17,9 @@ export const SalesContainer = ({
     orders, setReload, count
   } = useOrders(true)
 
-  if (!orders) return (
-    <section className={`${className} text-center text-text-300`}>
-      No se encontraron pedidos :(
+  if (!orders || !orders.filterOrders || !orders.orders || orders.filterOrders.length === 0) return (
+    <section className={`${className} text-center text-text-300 mt-4`}>
+      No se encontraron pedidos
     </section>
   )
 
@@ -28,7 +28,7 @@ export const SalesContainer = ({
       {
         !loading && (
           <p className="text-text-300 font-light text-end">
-            <span className="font-normal">{count}</span> {count === 1 ? "orden" : "ordenes"}
+            <span className="font-normal">{count}</span> {count === 1 ? "venta" : "ventas"}
           </p>
         )
       }

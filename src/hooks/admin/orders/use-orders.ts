@@ -10,38 +10,63 @@ import { useEffect, useState } from "react"
 
 export const useOrders = (state: boolean = false) => {
   const [orders, setOrders] = useState<{
-    orders: Order[]
-    filterOrders: Order[]
-  } | undefined>(() => {
+    orders: Order[] | undefined
+    filterOrders: Order[] | undefined
+  }>(() => {
     const orders = localStorage.getItem(state ? "sales" : "orders")
     if (!orders) return {
       orders: [],
       filterOrders: []
     }
-    return {
-      orders: JSON.parse(orders),
-      filterOrders: JSON.parse(orders)
+    try {
+      return {
+        orders: JSON.parse(orders) || [],
+        filterOrders: JSON.parse(orders) || []
+      }
+    } catch (error) {
+      console.error("Error parsing orders from localStorage", error)
+      return {
+        orders: [],
+        filterOrders: []
+      }
     }
   })
+
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<DocumentData, DocumentData> | undefined>(() => {
     const lastVisible = localStorage.getItem(state ? "salesLastVisible" : "ordersLastVisible")
     if (!lastVisible) return undefined
-    return JSON.parse(lastVisible)
+    try {
+      return JSON.parse(lastVisible)
+    } catch (error) {
+      console.error("Error parsing lastVisible from localStorage", error)
+      return undefined
+    }
   })
+
   const [hasNext, setHasNext] = useState(() => {
     const hasNext = localStorage.getItem(state ? "salesHasNext" : "ordersHasNext")
     if (!hasNext) return false
-    return JSON.parse(hasNext)
+    try {
+      return JSON.parse(hasNext)
+    } catch (error) {
+      console.error("Error parsing hasNext from localStorage", error)
+      return false
+    }
   })
+
   const [loading, setLoading] = useState(false)
   const [reload, setReload] = useState(false)
   const [count, setCount] = useState(() => {
     const count = localStorage.getItem(state ? "salesCount" : "ordersCount")
-
     if (!count) return 0
-    
-    return JSON.parse(count)
+    try {
+      return JSON.parse(count)
+    } catch (error) {
+      console.error("Error parsing count from localStorage", error)
+      return 0
+    }
   })
+
   const searchParams = useSearchParams()
   const router = useRouter()
   const search = searchParams.get("busqueda")
@@ -62,7 +87,7 @@ export const useOrders = (state: boolean = false) => {
   }, [])
 
   useEffect(() => {
-    if (!orders || orders.orders.length === 0) {
+    if (!orders || !orders.orders || orders.orders.length === 0) {
       getOrders()
       return
     }
@@ -70,13 +95,16 @@ export const useOrders = (state: boolean = false) => {
     if (!search) {
       setOrders({
         ...orders,
-        filterOrders: JSON.parse(JSON.stringify(orders.orders))
+        filterOrders: JSON.parse(JSON.stringify(orders.orders) || "[]")
       })
       return
     }
 
     const handleSearch = async () => {
       setLoading(true)
+
+      if (!orders.orders) return 
+
       const newOrders = orders?.orders.filter(order => order.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
 
       if (!newOrders) {
@@ -109,7 +137,10 @@ export const useOrders = (state: boolean = false) => {
     const { orders: o, lastVisible: l } = await getFirstOrders(state)
 
     if (!o) {
-      setOrders(undefined)
+      setOrders({
+        orders: undefined,
+        filterOrders: undefined
+      })
     } else {
       if (search) {
         const newOrders = o.filter(order => order.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
@@ -133,8 +164,6 @@ export const useOrders = (state: boolean = false) => {
     setLoading(false)
   }
 
-
-
   const getMoreOrders = async () => {
     if (!lastVisible || !orders) return
 
@@ -143,11 +172,14 @@ export const useOrders = (state: boolean = false) => {
     const { orders: o, lastVisible: l } = await getNextOrders(lastVisible, state)
 
     if (!orders) {
-      setOrders(undefined)
+      setOrders({
+        orders: undefined,
+        filterOrders: undefined
+      })
     }
 
     const h = o.length === LIMIT_ORDERS_PER_PAGE
-    const newOrders = [...orders.orders, ...o]
+    const newOrders = [...(orders?.orders || []), ...o]
     setOrders({
       orders: newOrders,
       filterOrders: newOrders
