@@ -46,7 +46,7 @@ export const OldImg = ({
             <p className="font-light text-text-200 whitespace-nowrap overflow-hidden text-ellipsis"
               title={item.name}
             >
-              {item.name} dawwwwwwwwwwwwwwwww
+              {item.name}
             </p>
             <p className="font-light text-sm text-text-200">
               {returnFileSize(item.size)}
