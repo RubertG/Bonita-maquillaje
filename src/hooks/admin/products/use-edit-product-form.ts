@@ -29,6 +29,7 @@ export const useEditProductForm = ({ id }: Props) => {
   const [imgsOld, setImgsOld] = useState<FileStateItem[]>([])
   const [tones, setTones] = useState<ToneType[]>([])
   const [error, setError] = useState<string>("")
+  const [images, setImages] = useState<Array<File | FileStateItem>>([])
   const router = useRouter()
   const { refreshProducts } = useProductsContext()
 
@@ -48,20 +49,24 @@ export const useEditProductForm = ({ id }: Props) => {
 
       try {
         const newImgs: FileStateItem[] = await Promise.all(
-          imgs.map(async (img) => {
-            const url = await saveFile(img, "/products")
-            return {
-              name: img.name,
-              url,
-              size: img.size
+          images.map(async (img) => {
+            if (img instanceof File) {
+              const url = await saveFile(img as File, "/products")
+              return {
+                name: img.name,
+                url,
+                size: img.size
+              }
             }
+
+            return img
           })
         )
 
         const product: Product = {
           ...data,
           id,
-          imgs: [...imgsOld,...newImgs],
+          imgs: newImgs,
           tones,
           price: parseFloat(data.price),
           stock: parseInt(data.stock)
@@ -134,6 +139,8 @@ export const useEditProductForm = ({ id }: Props) => {
     tones,
     defaultValues,
     imgsOld,
-    setImgsOld
+    setImgsOld,
+    images,
+    setImages
   }
 }

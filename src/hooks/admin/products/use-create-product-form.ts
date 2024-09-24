@@ -13,7 +13,7 @@ import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
 
 export const useCreateProductForm = () => {
-  const [imgs, setImgs] = useState<File[]>([])
+  const [imgs, setImgs] = useState<File[] | FileStateItem[]>([])
   const [categories, setCategories] = useState<Pick<Category, "name" | "id">[]>([])
   const [errorImgs, setErrorImgs] = useState("")
   const [tones, setTones] = useState<ToneType[]>([])
@@ -36,7 +36,8 @@ export const useCreateProductForm = () => {
       try {
         const newImgs: FileStateItem[] = await Promise.all(
           imgs.map(async (img) => {
-            const url = await saveFile(img, "/products")
+            const url = await saveFile(img as File, "/products")
+
             return {
               name: img.name,
               url,
