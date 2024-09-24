@@ -53,7 +53,10 @@ export const OldImg = ({
         </div>
       </div>
       <button
-        onClick={handlePopup}
+        onClick={(e) => {
+          e.stopPropagation()
+          handlePopup()
+        }}
       >
         <Delete className="stroke-text-300 lg:hover:scale-110 lg:transition-transform" />
       </button>
@@ -61,7 +64,8 @@ export const OldImg = ({
         popup &&
         <PopupDelete
           title="¿Deseas eliminar esta imagen?"
-          handleDelete={async () => {
+          handleDelete={async (e) => {
+            e.stopPropagation()
             setLoading(true)
             await handleDeleteOld(item)
             setLoading(false)

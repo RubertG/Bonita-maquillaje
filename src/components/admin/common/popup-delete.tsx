@@ -12,7 +12,7 @@ export const PopupDelete = ({
 }: {
   title: string
   handlePopup: () => void
-  handleDelete: () => void
+  handleDelete: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   loading: boolean
 }) => {
   return (

@@ -50,7 +50,10 @@ export const ImgCard = ({
         </div>
       </div>
       <button
-        onClick={() => handleDelete(item)}
+        onClick={(e) => {
+          e.stopPropagation()
+          handleDelete(item)
+        }}
       >
         <Delete className="stroke-text-300 lg:hover:scale-110 lg:transition-transform" />
       </button>
