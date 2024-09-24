@@ -15,7 +15,7 @@ interface Props {
   id?: string
 }
 
-export const CategoryForm = ({
+export const CategoryForm = ({ 
   className, id
 }: Props) => {
   const {
