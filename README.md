@@ -9,3 +9,7 @@ El catálogo de productos tiene la descripción de cada producto, imagenes, tona
 En el carrito puedes ver los productos en el carrito, eliminarlos, cambiar la cantidad de productos, aplicar codigos de descuento o hacer el pedido.
 
 Además, tiene su página de administración para gestionar los productos, categorías, pedidos, ventas y códigos de descuento.  
+
+### Proximamente en la página web:
+
+- Categorias con subcategorias
