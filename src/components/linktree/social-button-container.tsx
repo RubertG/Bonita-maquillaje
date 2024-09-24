@@ -14,6 +14,13 @@ export function SocialButtonContainer({
     >
       <ButtonWithIcon
         className="w-full"
+        href="/catalogo"
+      >
+        <Store className="absolute top-1/2 -translate-y-1/2 left-0 ml-3.5 stroke-text-100" />
+        <p className="w-full">Catálogo</p>
+      </ButtonWithIcon>
+      <ButtonWithIcon
+        className="w-full"
         href="https://www.instagram.com/maquillajebonita_/"
       >
         <Instagram className="absolute top-1/2 -translate-y-1/2 left-0 ml-3.5 stroke-text-100" />
@@ -39,13 +46,6 @@ export function SocialButtonContainer({
       >
         <Location className="absolute top-1/2 -translate-y-1/2 left-0 ml-3.5 stroke-text-100" />
         <p className="w-full">Ubicación</p>
-      </ButtonWithIcon>
-      <ButtonWithIcon
-        className="w-full"
-        href="/catalogo"
-      >
-        <Store className="absolute top-1/2 -translate-y-1/2 left-0 ml-3.5 stroke-text-100" />
-        <p className="w-full">Catálogo</p>
       </ButtonWithIcon>
     </section>
   )

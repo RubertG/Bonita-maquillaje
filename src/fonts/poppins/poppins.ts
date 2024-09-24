@@ -4,5 +4,5 @@ export const poppins = Poppins({
   subsets: ['latin'],
   weight: ['300','400', '500', '600', '700'],
   preload: true,
-  variable: '--font-poppins',
+  variable: '--font-poppins'
 })
