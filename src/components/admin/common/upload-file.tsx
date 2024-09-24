@@ -1,13 +1,12 @@
 "use client"
 
-import { Delete } from "@/components/common/icons"
 import { FileInput } from "@/components/common/input"
 import { LIMIT_FILES_SIZE } from "@/consts/admin/admin"
 import { FileStateItem } from "@/types/admin/admin"
 import { returnFileSize } from "@/utils/return-file-size"
-import { InputHTMLAttributes } from "react"
-import { OldImg } from "./old-img"
+import { Dispatch, InputHTMLAttributes, SetStateAction } from "react"
 import { useUploadFile } from "@/hooks/common/use-upload-file"
+import { ImagesContainer } from "./images-container"
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
@@ -20,6 +19,8 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   setItems: (items: File[]) => void
   refCollection?: string
   fixedSize?: number
+  images: Array<File | FileStateItem>
+  setImages: Dispatch<SetStateAction<Array<File | FileStateItem>>>
 }
 
 export const UploadFile = ({
@@ -33,17 +34,22 @@ export const UploadFile = ({
   setImgsOld,
   multiple = true,
   refCollection = "products",
+  images,
+  setImages,
   ...props
 }: Props) => {
-  const { handleChange, totalSize, handleDeleteOld, handleDelete, error } = useUploadFile({
+  const { handleChange, totalSize, handleDeleteOld, handleDelete, error, handleDragEnd } = useUploadFile({
     items,
     limitSize,
     setItems,
     imgsOld,
     setImgsOld,
     multiple,
-    refCollection
+    refCollection,
+    images,
+    setImages
   })
+
 
   return (
     <section className={`${className}`}>
@@ -59,45 +65,14 @@ export const UploadFile = ({
       <p className="text-sm text-text-100 mt-3 font-light">
         El peso total cargado es de <span className="text-accent-300 font-medium">{returnFileSize(totalSize)}</span>
       </p>
-      <ul className="grid gap-3 mt-5">
-        {
-          imgsOld?.map((item, index) => (
-            <OldImg key={index} item={item} handleDeleteOld={handleDeleteOld} aspect={aspect} />
-          ))
-        }
-        {
-          items.map((item, index) => (
-            <li
-              className="flex w-full gap-2 items-center rounded-lg justify-between lg:transition-colors overflow-hidden"
-              key={index}
-            >
-              <div className="flex gap-2 items-center justify-between overflow-hidden">
-                <img
-                  style={{ aspectRatio: aspect }}
-                  className="w-16 object-cover rounded-lg"
-                  loading="lazy"
-                  src={URL.createObjectURL(item)} alt={`${item.name} - Bonita Maquillaje`}
-                  title={`${item.name} - Bonita Maquillaje`} />
-                <div className="w-full overflow-hidden">
-                  <p className="font-light text-text-200 whitespace-nowrap overflow-hidden text-ellipsis"
-                    title={item.name}
-                  >
-                    {item.name}
-                  </p>
-                  <p className="font-light text-sm text-text-200">
-                    {returnFileSize(item.size)}
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => handleDelete(item)}
-              >
-                <Delete className="stroke-text-300 lg:hover:scale-110 lg:transition-transform" />
-              </button>
-            </li>
-          ))
-        }
-      </ul>
+      <ImagesContainer
+        className="mt-5"
+        images={images}
+        handleDragEnd={handleDragEnd}
+        handleDelete={handleDelete}
+        aspect={aspect}
+        handleDeleteOld={handleDeleteOld}
+      />
       <p
         className={`text-red-500 font-light text-sm ${classNameError}`}
       >{error}</p>

@@ -3,16 +3,20 @@
 import { deleteFile } from "@/firebase/services/storage"
 import { FileStateItem } from "@/types/admin/admin"
 import { returnFileSize } from "@/utils/return-file-size"
-import { ChangeEvent, useEffect, useState } from "react"
+import { DragEndEvent } from "@dnd-kit/core"
+import { arrayMove } from "@dnd-kit/sortable"
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react"
 
 interface Props {
   limitSize: number
-  items: File[]
+  items: File[] 
   imgsOld?: FileStateItem[]
   setImgsOld?: (imgs: FileStateItem[]) => void
   setItems: (items: File[]) => void
   refCollection: string
   multiple: boolean
+  images: Array<File | FileStateItem>
+  setImages: Dispatch<SetStateAction<Array<File | FileStateItem>>>
 }
 
 export const useUploadFile = ({
@@ -22,7 +26,8 @@ export const useUploadFile = ({
   imgsOld,
   setImgsOld,
   multiple,
-  refCollection
+  refCollection,
+  setImages
 }: Props) => {
   const [error, setError] = useState("")
   const [totalSize, setTotalSize] = useState(0)
@@ -35,6 +40,7 @@ export const useUploadFile = ({
   }, [imgsOld])
 
   useEffect(() => {
+    setImages([...(imgsOld || []), ...items])
     if (items.length === 0 && imgsOld && imgsOld.length === 0) {
       setTotalSize(0)
     }
@@ -107,11 +113,32 @@ export const useUploadFile = ({
     }
   }
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!active || !over) return
+
+    if (active.id !== over.id) {
+      setImages((imgs) => {
+        const oldIndex = imgs.findIndex((img) => `${img.name}-${img.size}` === active.id)
+        const newIndex = imgs.findIndex((img) => `${img.name}-${img.size}` === over.id)
+        console.log({
+          oldIndex,
+          newIndex
+        })
+
+        console.log(arrayMove(imgs, oldIndex, newIndex))
+        return arrayMove(imgs, oldIndex, newIndex)
+      })
+    }
+  }
+
   return {
     handleChange,
     totalSize,
     handleDeleteOld,
     handleDelete,
-    error
+    error,
+    handleDragEnd
   }
 }
