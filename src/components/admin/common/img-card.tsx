@@ -24,31 +24,29 @@ export const ImgCard = ({
   }
 
   return (
-    <li className="flex w-full gap-2 items-center rounded-lg justify-between lg:transition-colors overflow-hidden">
-      <div
-        style={style}
-        ref={setNodeRef}
-        {...attributes}
-        {...listeners}
-        className="cursor-grab overflow-hidden"
-      >
-        <div className="flex gap-2 items-center justify-between overflow-hidden">
-          <img
-            style={{ aspectRatio: aspect }}
-            className="w-16 object-cover rounded-lg"
-            loading="lazy"
-            src={URL.createObjectURL(item)} alt={`${item.name} - Bonita Maquillaje`}
-            title={`${item.name} - Bonita Maquillaje`} />
-          <div className="w-full overflow-hidden">
-            <p className="font-light text-text-200 whitespace-nowrap overflow-hidden text-ellipsis"
-              title={item.name}
-            >
-              {item.name}
-            </p>
-            <p className="font-light text-sm text-text-200">
-              {returnFileSize(item.size)}
-            </p>
-          </div>
+    <li
+      style={style}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      className="flex w-full gap-2 items-center rounded-lg justify-between lg:transition-colors overflow-hidden"
+    >
+      <div className="flex gap-2 items-center justify-between overflow-hidden">
+        <img
+          style={{ aspectRatio: aspect }}
+          className="w-16 object-cover rounded-lg"
+          loading="lazy"
+          src={URL.createObjectURL(item)} alt={`${item.name} - Bonita Maquillaje`}
+          title={`${item.name} - Bonita Maquillaje`} />
+        <div className="w-full overflow-hidden">
+          <p className="font-light text-text-200 whitespace-nowrap overflow-hidden text-ellipsis"
+            title={item.name}
+          >
+            {item.name}
+          </p>
+          <p className="font-light text-sm text-text-200">
+            {returnFileSize(item.size)}
+          </p>
         </div>
       </div>
       <button
