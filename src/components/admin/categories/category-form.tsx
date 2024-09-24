@@ -7,6 +7,8 @@ import { Save, Spinner } from "@/components/common/icons"
 import clsx from "clsx"
 import { useCategoryForm } from "@/hooks/admin/category/use-category-form"
 import { PopupDelete } from "../common/popup-delete"
+import { Dispatch, SetStateAction } from "react"
+import { FileStateItem } from "@/types/admin/admin"
 
 interface Props {
   className?: string
@@ -26,6 +28,8 @@ export const CategoryForm = ({
   return (
     <section className={`max-w-xl mx-auto ${className}`}>
       <UploadFile
+        images={imgs}
+        setImages={setImgs as Dispatch<SetStateAction<(File | FileStateItem)[]>>} 
         aspect="1/1"
         limitSize={LIMIT_FILE_SIZE}
         classNameError="mt-2 mb-5"
