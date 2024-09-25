@@ -29,7 +29,7 @@ export const ImgCard = ({
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="flex w-full gap-2 items-center rounded-lg justify-between lg:transition-colors overflow-hidden"
+      className="flex w-full gap-2 items-center rounded-lg justify-between lg:transition-colors overflow-hidden cursor-grab"
     >
       <div className="flex gap-2 items-center justify-between overflow-hidden">
         <img
@@ -50,6 +50,8 @@ export const ImgCard = ({
         </div>
       </div>
       <button
+        {...attributes}
+        {...listeners}
         onClick={(e) => {
           e.stopPropagation()
           handleDelete(item)
