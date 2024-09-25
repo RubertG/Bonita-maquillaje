@@ -122,12 +122,7 @@ export const useUploadFile = ({
       setImages((imgs) => {
         const oldIndex = imgs.findIndex((img) => `${img.name}-${img.size}` === active.id)
         const newIndex = imgs.findIndex((img) => `${img.name}-${img.size}` === over.id)
-        console.log({
-          oldIndex,
-          newIndex
-        })
-
-        console.log(arrayMove(imgs, oldIndex, newIndex))
+        
         return arrayMove(imgs, oldIndex, newIndex)
       })
     }
