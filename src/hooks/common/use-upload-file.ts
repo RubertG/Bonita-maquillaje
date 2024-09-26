@@ -40,7 +40,6 @@ export const useUploadFile = ({
   }, [imgsOld])
 
   useEffect(() => {
-    setImages([...(imgsOld || []), ...items])
     if (items.length === 0 && imgsOld && imgsOld.length === 0) {
       setTotalSize(0)
     }
