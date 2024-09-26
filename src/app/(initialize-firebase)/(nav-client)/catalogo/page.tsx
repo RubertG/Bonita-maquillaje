@@ -2,8 +2,6 @@ import { ProductsContainer } from "@/components/catalogue/products-container"
 import { CategoriesContainer } from "@/components/catalogue/categories-container"
 import { H1 } from "@/components/common/h1"
 import { Searcher } from "@/components/common/searcher"
-import { Suspense } from "react"
-import { CategoriesSkeletonContainer } from "@/components/admin/categories/categories-skeleton-container"
 
 export const metadata = {
   title: "Nuestro catálogo - Bonita Maquillaje",
@@ -31,9 +29,7 @@ async function CataloguePage() {
       <H1 className="mb-6">Nuestro Catálogo</H1>
       <Searcher className="max-w-2xl mx-auto" />
 
-      <Suspense fallback={<CategoriesSkeletonContainer className="mt-6 lg:mt-4" />}>
-        <CategoriesContainer className="mt-6 lg:mt-4" />
-      </Suspense>
+      <CategoriesContainer className="mt-6 lg:mt-4" />
 
       <ProductsContainer className="mt-6" />
     </main>
