@@ -1,14 +1,18 @@
 import { getCategories } from "@/firebase/services/categories"
 import { BackButton } from "../common/back-button"
 
-export const BackButtonCategory = async () => {
+interface Props {
+  href: string
+}
+
+export const BackButtonCategory = async ({ href = "/catalogo"}: Props) => {
   const categories = await getCategories()
 
   if (!categories) return (
-    <BackButton href={"/catalogo"} />
+    <BackButton href={href} />
   )
  
   return (
-    <BackButton href={`/catalogo?categoria=${categories[0].id}`} />
+    <BackButton href={`${href}?categoria=${categories[0].id}`} />
   )
 } 
