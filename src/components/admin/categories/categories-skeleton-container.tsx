@@ -8,8 +8,7 @@ export const CategoriesSkeletonContainer = ({ className, limit = 3 }: { classNam
           <CategorySkeleton key={index} />
         ))
       }
-          <CategorySkeleton />
-
+      <CategorySkeleton />
     </section>
   )
 }

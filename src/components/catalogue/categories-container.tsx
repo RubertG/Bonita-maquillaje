@@ -10,7 +10,7 @@ interface Props {
   className?: string
 }
 
-export const CategoriesContainer = async ({ className }: Props) => {
+export const CategoriesContainer = ({ className }: Props) => {
   const [categories, setCategories] = useState<CategoryType[]>([])
   const [loading, setLoading] = useState(true)
 
