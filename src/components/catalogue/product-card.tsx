@@ -13,7 +13,7 @@ export const ProductCard = ({ name, price, imgs, id }: Product) => {
         loading="lazy"
       />
       <footer className="mt-2 text-center">
-        <h2 className="text-text-100 overflow-hidden text-ellipsis whitespace-nowrap">
+        <h2 className="text-text-100 line-clamp-2">
           {name}
         </h2>
         <p className="text-accent-300 text-sm lg:text-base lg:-mt-0.5">
