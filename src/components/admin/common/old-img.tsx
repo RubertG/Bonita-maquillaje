@@ -7,6 +7,7 @@ import { useState } from "react"
 import { PopupDelete } from "./popup-delete"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
+
 export const OldImg = ({
   item,
   handleDeleteOld,
@@ -24,6 +25,7 @@ export const OldImg = ({
     transform: CSS.Transform.toString(transform),
     transition
   }
+  
   const handlePopup = () => setPopup(!popup)
 
   return (
