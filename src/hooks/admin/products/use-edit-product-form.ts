@@ -82,6 +82,10 @@ export const useEditProductForm = ({ id }: Props) => {
   })
 
   useEffect(() => {
+    setImages([...imgsOld, ...imgs])
+  }, [imgsOld, imgs])
+
+  useEffect(() => {
     const getP = async () => {
       const p = await getProduct(id)
       if (!p) return
