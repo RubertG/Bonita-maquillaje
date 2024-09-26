@@ -50,7 +50,6 @@ export const UploadFile = ({
     setImages
   })
 
-
   return (
     <section className={`${className}`}>
       <p
