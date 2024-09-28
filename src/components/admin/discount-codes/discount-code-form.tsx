@@ -4,64 +4,15 @@ import { Button } from "@/components/common/button"
 import { Save, Spinner } from "@/components/common/icons"
 import { Input, SelectInput } from "@/components/common/input"
 import { ALL_CATEGORY } from "@/consts/admin/orders"
-import { getCategories } from "@/firebase/services/categories"
-import { saveDiscountCode } from "@/firebase/services/discount-codes"
-import { useForm } from "@/hooks/common/use-form"
-import { Category, DiscountCode } from "@/types/db/db"
-import { discountCodeSchema } from "@/validations/admin/discount-code/discount-code-schema"
+import { useDiscountForm } from "@/hooks/admin/discount-code/use-discount-form"
 import clsx from "clsx"
-import { Timestamp } from "firebase/firestore"
-import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
-import { v4 as uuidv4 } from 'uuid'
-
-interface Inputs {
-  code: string
-  discount: string
-  category: string
-  day: string
-}
 
 export const DiscountCodeForm = ({
   className
 }: {
   className?: string
 }) => {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [error, setError] = useState<string>("")
-  const router = useRouter()
-  const formRef = useRef<HTMLFormElement>(null)
-  const { errors, handleSubmit, loading, register } = useForm<Inputs>({
-    schema: discountCodeSchema,
-    actionSubmit: async (inputs) => {
-      setError("")
-      try {
-        const newCode: DiscountCode = {
-          id: uuidv4(),
-          code: inputs.code,
-          discount: parseInt(inputs.discount),
-          expiration: Timestamp.fromDate(new Date(inputs.day)),
-          category: inputs.category
-        }
-        await saveDiscountCode(newCode)
-        router.refresh()
-        formRef.current?.reset()
-      } catch (error) {
-        setError("Error al crear el código de descuento")
-      }
-    }
-  })
-
-  useEffect(() => {
-    const getC = async () => {
-      const categories = await getCategories()
-
-      if (!categories) return
-
-      setCategories(categories)
-    }
-    getC()
-  }, [])
+  const { categories, error, errors, register, loading, formRef, handleSubmit } = useDiscountForm()
 
   return (
     <form
