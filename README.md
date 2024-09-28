@@ -14,9 +14,3 @@ Además, tiene su página de administración para gestionar los productos, categ
 
 - Categorias con subcategorias
 
-#### TODO 
-
-- Optimizar el contexto de categorias.
-- Optimizar el contexto de productos.
-- Optimizar el contexto de pedidos.
-- Optimizar el contexto de ventas.
