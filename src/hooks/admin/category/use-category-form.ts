@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid"
 import { deleteCategory, getCategory, saveCategory, updateCategory } from "@/firebase/services/categories"
 import { CategoryInputs, FileStateItem } from "@/types/admin/admin"
 import { Category } from "@/types/db/db"
+import { useStoreCategory } from "@/stores/common/category.store"
 
 export const useCategoryForm = (id?: string) => {
   const [defaultValues, setDefaultValues] = useState<CategoryInputs>({
@@ -20,6 +21,11 @@ export const useCategoryForm = (id?: string) => {
   const [error, setError] = useState("")
   const [loadingDelete, setLoadingDelete] = useState(false)
   const [popup, setPopup] = useState(false)
+  
+  const addCategory = useStoreCategory(state => state.addCategory)
+  const updateStoreCategory = useStoreCategory(state => state.updateCategory)
+  const deleteStoreCategory = useStoreCategory(state => state.deleteCategory)
+
   const router = useRouter()
   const { errors, handleSubmit, loading, register } = useForm<CategoryInputs>({
     schema: categorySchema,
@@ -63,13 +69,17 @@ export const useCategoryForm = (id?: string) => {
         }
 
         if (id) {
-          await updateCategory({
+          const newCategory = {
             ...category,
             id
-          })
+          }
+          updateStoreCategory(newCategory)
+          await updateCategory(newCategory)
         } else {
+          addCategory(category)
           await saveCategory(category)
         }
+
         router.push("/admin/productos")
         router.refresh()
       } catch (error) {
@@ -123,6 +133,7 @@ export const useCategoryForm = (id?: string) => {
 
     setLoadingDelete(true)
 
+    deleteStoreCategory(id)
     if (imgOld.length > 0) {
       await Promise.all([
         await deleteFile(`categories/${imgOld[0].name}`),

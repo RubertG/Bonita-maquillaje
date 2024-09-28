@@ -8,13 +8,15 @@ import { useForm } from "../../common/use-form"
 import { productSchema } from "@/validations/admin/products/product-schema"
 import { v4 as uuidv4 } from 'uuid'
 import { saveProduct } from "@/firebase/services/products"
-import { getCategories } from "@/firebase/services/categories"
 import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
+import { useStoreCategory } from "@/stores/common/category.store"
 
 export const useCreateProductForm = () => {
   const [imgs, setImgs] = useState<File[] | FileStateItem[]>([])
   const [categories, setCategories] = useState<Pick<Category, "name" | "id">[]>([])
+  const storeCategories = useStoreCategory(state => state.categories)
+  const fetchCategories = useStoreCategory(state => state.fetchCategories)
   const [errorImgs, setErrorImgs] = useState("")
   const [tones, setTones] = useState<ToneType[]>([])
   const [error, setError] = useState<string>("")
@@ -67,15 +69,19 @@ export const useCreateProductForm = () => {
 
   useEffect(() => {
     const getC = async () => {
-      const c = await getCategories()
-      if (!c) return
-      setCategories(c.map(category => ({
+
+      if (storeCategories.length === 0) {
+        await fetchCategories()
+      }
+
+      setCategories(storeCategories.map(category => ({
         name: category.name,
         id: category.id
       })))
     }
+
     getC()
-  }, [])
+  }, [storeCategories])
 
   useEffect(() => {
     setErrorImgs("")
