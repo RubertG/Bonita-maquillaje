@@ -17,6 +17,4 @@ Además, tiene su página de administración para gestionar los productos, categ
 #### TODO 
 
 [x] Optimizar el contexto de categorias. 
-[] Optimizar el contexto de productos.
-[] Optimizar el contexto de pedidos.
-[] Optimizar el contexto de ventas.
+[] Optimizar el contexto de pedidos y ventas.
