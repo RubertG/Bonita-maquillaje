@@ -2,31 +2,22 @@
 
 import { SquarePlus } from "@/components/common/icons"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { Category as CategoryType } from "@/types/db/db"
 import { Category } from "@/components/common/category"
-import { getCategories } from "@/firebase/services/categories"
 import { CategoriesSkeletonContainer } from "../categories/categories-skeleton-container"
+import { useStoreCategory } from "@/stores/common/category.store"
+import { useEffect } from "react"
 
 interface Props {
   className?: string
 }
 
 export const CategoriesContainer = ({ className }: Props) => {
-  const [categories, setCategories] = useState<CategoryType[]>([])
-  const [loading, setLoading] = useState(true)
+  const categories = useStoreCategory(state => state.categories)
+  const loading = useStoreCategory(state => state.loading)
+  const fetchCategories = useStoreCategory(state => state.fetchCategories)
 
   useEffect(() => {
-    const getC = async () => {
-      setLoading(true)
-      const categories = await getCategories()
-
-      if (!categories) return
-
-      setCategories(categories)
-      setLoading(false)
-    }
-    getC()
+    fetchCategories()
   }, [])
 
   return (

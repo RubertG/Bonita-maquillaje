@@ -7,9 +7,9 @@ import { BaseSyntheticEvent, useEffect, useState } from "react"
 import { useForm } from "../../common/use-form"
 import { productSchema } from "@/validations/admin/products/product-schema"
 import { getProduct, updateProduct } from "@/firebase/services/products"
-import { getCategories } from "@/firebase/services/categories"
 import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
+import { useStoreCategory } from "@/stores/common/category.store"
 
 interface Props {
   id: string
@@ -30,6 +30,8 @@ export const useEditProductForm = ({ id }: Props) => {
   const [tones, setTones] = useState<ToneType[]>([])
   const [error, setError] = useState<string>("")
   const [images, setImages] = useState<Array<File | FileStateItem>>([])
+  const storeCategories = useStoreCategory(state => state.categories)
+  const fetchCategories = useStoreCategory(state => state.fetchCategories)
   const router = useRouter()
   const { refreshProducts } = useProductsContext()
 
@@ -104,15 +106,19 @@ export const useEditProductForm = ({ id }: Props) => {
 
   useEffect(() => {
     const getC = async () => {
-      const c = await getCategories()
-      if (!c) return
-      setCategories(c.map(category => ({
+
+      if (storeCategories.length === 0) {
+        await fetchCategories()
+      }
+
+      setCategories(storeCategories.map(category => ({
         name: category.name,
         id: category.id
       })))
     }
+
     getC()
-  }, [])
+  }, [storeCategories])
 
   useEffect(() => {
     setErrorImgs("")
