@@ -4,6 +4,7 @@ import { Delete } from "@/components/common/icons"
 import { returnFileSize } from "@/utils/return-file-size"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
+import Image from "next/image"
 
 interface Props {
   item: File
@@ -32,7 +33,9 @@ export const ImgCard = ({
       className="flex w-full gap-2 items-center rounded-lg justify-between lg:transition-colors overflow-hidden cursor-grab"
     >
       <div className="flex gap-2 items-center justify-between overflow-hidden">
-        <img
+        <Image
+          width={64}
+          height={64 * (3 / 4)}
           style={{ aspectRatio: aspect }}
           className="w-16 object-cover rounded-lg"
           loading="lazy"
