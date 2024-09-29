@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 interface Props {
   className?: string
 }
@@ -9,7 +11,10 @@ export function Header({
     <header
       className={`${className} lg:flex lg:items-center lg:justify-center lg:gap-7 lg:mb-5`}
     >
-      <img
+      <Image
+        width={160}
+        height={160}
+        priority
         src="/logo.webp"
         alt="Logo de Bonita Maquillaje"
         title="Logo de Bonita Maquillaje"
