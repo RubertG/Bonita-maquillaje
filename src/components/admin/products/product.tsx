@@ -1,5 +1,6 @@
 import { Product as ProductType } from "@/types/db/db"
 import { OptionsProduct } from "./options-product"
+import Image from "next/image"
 
 export const Product = ({ imgs, name, price, stock, id }: ProductType) => {
   return (
@@ -7,9 +8,10 @@ export const Product = ({ imgs, name, price, stock, id }: ProductType) => {
       className="flex w-full gap-2 items-start rounded-lg justify-between lg:p-2 lg:hover:bg-bg-200 lg:transition-colors overflow-hidden"
     >
       <div className="flex gap-2 items-center justify-between overflow-hidden">
-        <img
+        <Image
+          width={64}
+          height={64 * (3 / 4)}
           className="w-16 object-cover rounded-lg aspect-[3/4]"
-          loading="lazy"
           src={imgs[0].url} alt={`${name} - Bonita Maquillaje`}
           title={`${name} - Bonita Maquillaje`} />
         <div className="flex flex-col items-start overflow-hidden">
