@@ -1,6 +1,7 @@
 import { branch } from "@/fonts/branch/branch"
 import Link from "next/link"
 import { Cart } from "../common/icons"
+import Image from "next/image"
 
 export function Nav() {
   return (
@@ -13,7 +14,9 @@ export function Nav() {
           className="flex items-center justify-center gap-1"
           href="/catalogo"
         >
-          <img
+          <Image
+            width={40}
+            height={40}
             src="/logo-2.webp"
             alt="Logo de Bonita Maquillaje"
             className="h-10 object-cover" />

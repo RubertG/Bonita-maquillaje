@@ -4,6 +4,7 @@ import { singOutSession } from "@/firebase/services/auth"
 import { getCategories } from "@/firebase/services/categories"
 import { branch } from "@/fonts/branch/branch"
 import clsx from "clsx"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -54,7 +55,9 @@ export function Nav() {
           className="flex items-center justify-center gap-1"
           href="/"
         >
-          <img
+          <Image
+            width={40}
+            height={40}
             src="/logo-2.webp"
             alt="Logo de Bonita Maquillaje"
             className="h-10 object-cover" />
