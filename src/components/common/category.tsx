@@ -2,6 +2,7 @@
 
 import { Category as CategoryType } from "@/types/db/db"
 import clsx from "clsx"
+import Image from "next/image"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
@@ -16,7 +17,9 @@ export const Category = ({ img, name, id }: CategoryType) => {
       })}
       href={`?categoria=${id}`}
     >
-      <img
+      <Image
+        width={70}
+        height={70}
         src={img.url}
         className="w-14 h-14 object-cover m-auto mb-1 aspect-square rounded-lg"
         title={`${name} - Bonita Maquillaje`}
