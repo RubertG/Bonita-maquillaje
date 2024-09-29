@@ -5,6 +5,7 @@ import { Delete, Plus } from "@/components/common/icons"
 import { Product } from "@/types/admin/admin"
 import { Tone } from "@/types/db/db"
 import clsx from "clsx"
+import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -38,9 +39,10 @@ export const AddProductCard = ({
   return (
     <li className="flex w-full gap-2 items-center justify-between rounded-lg lg:p-2 lg:hover:bg-bg-100 lg:transition-colors">
       <div className="flex gap-2 items-center overflow-hidden w-full">
-        <img
+        <Image
+          width={64}
+          height={64 * (3 / 4)}
           className="w-16 object-cover rounded-lg aspect-[3/4]"
-          loading="lazy"
           src={product.imgs[0].url} alt={`${product.name} - Bonita Maquillaje`}
           title={`${product.name} - Bonita Maquillaje`} />
         <div className="flex flex-col items-start justify-start gap-1 overflow-hidden py-2">
@@ -120,11 +122,13 @@ export const DeleteProductCard = ({
     <li
       className="flex w-full gap-2 items-center justify-between rounded-lg lg:hover:bg-bg-100 lg:transition-colors">
       <div className="flex gap-2 items-center overflow-hidden w-full">
-        <img
+        <Image
+          width={64}
+          height={64 * (3 / 4)}
           className="w-16 object-cover rounded-lg aspect-[3/4]"
-          loading="lazy"
           src={product.imgs[0].url} alt={`${product.name} - Bonita Maquillaje`}
-          title={`${product.name} - Bonita Maquillaje`} />
+          title={`${product.name} - Bonita Maquillaje`}
+        />
         <div className="flex flex-col items-start justify-start gap-1 overflow-hidden py-2">
           <h3 className="lg:text-lg text-text-100 text-ellipsis overflow-hidden whitespace-nowrap"
             title={product.name}
