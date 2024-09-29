@@ -5,6 +5,7 @@ import clsx from "clsx"
 import { useState } from "react"
 import { Search, X } from "../common/icons"
 import { Popup } from "../common/popup"
+import Image from "next/image"
 
 export const ImgsContainer = ({
   imgs,
@@ -27,18 +28,21 @@ export const ImgsContainer = ({
         >
           <Search className="w-5 h-5 stroke-text-100 lg:group-hover:stroke-accent-300 lg:transition-colors" />
         </button>
-        <img
+        <Image
+          width={400}
+          height={400 * (3 / 4)}
           src={imgs[imgActive].url}
           alt={`${imgs[imgActive].name} - Bonita Maquillaje`}
           className="w-full object-cover rounded-lg aspect-[3.5/4]"
-          loading="lazy"
         />
       </picture>
       <footer className="mt-2.5 flex gap-2 items-center overflow-auto pb-1 scrollbar-hide-sm">
         {
           imgs.length > 1 && (
             imgs.map((img, i) => (
-              <img
+              <Image
+                width={120}
+                height={120 * (3.5 / 4)}
                 key={img.name}
                 src={img.url}
                 alt={`${img.name} - Bonita Maquillaje`}
