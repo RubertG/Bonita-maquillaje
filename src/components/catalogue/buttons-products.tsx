@@ -7,8 +7,8 @@ import { useForm } from "@/hooks/common/use-form"
 import { z } from "zod"
 import { useEffect, useState } from "react"
 import { ItemCart } from "@/types/catalogue/cart"
-import { setCart } from "@/utils/cart"
 import { useRouter } from "next/navigation"
+import { useCartStore } from "@/stores/cart/cart.store"
 
 export const ButtonsProducts = ({
   className,
@@ -21,12 +21,14 @@ export const ButtonsProducts = ({
   },
   id: string
 }) => {
+  const addItemCart = useCartStore(state => state.addItem)
+
   const [inCart, setInCart] = useState(false)
   const router = useRouter()
   const { loading, handleSubmit } = useForm({
     schema: z.object({}),
     actionSubmit: async () => {
-      setCart({
+      addItemCart({
         id,
         ...(searchParams.color && { color: searchParams.color }),
         amount: searchParams.cantidad ? parseInt(searchParams.cantidad) : 1
@@ -51,7 +53,7 @@ export const ButtonsProducts = ({
   }, [searchParams.color])
 
   const handleAddCart = () => {
-    setCart({
+    addItemCart({
       id,
       ...(searchParams.color && { color: searchParams.color }),
       amount: searchParams.cantidad ? parseInt(searchParams.cantidad) : 1
