@@ -2,15 +2,14 @@
 
 Página web de Bonita Maquillaje, tienda virtual y física en la ciudad de Cúcuta. Te ofrecemos los productos más TOP de marcas Colombianas en maquillaje, skincare y accesorios.
 
-La página web tiene en su home page su Linkstree con sus redes sociales, ubicacion y enlace para el catalogo de productos.
+La página web tiene en su home page su Linkstree con sus redes sociales, ubicacion y enlace para el catalogo de productos (Por ahora en PDF).
 
-El catálogo de productos tiene la descripción de cada producto, imagenes, tonalidad, cantidad y botón para hacer pedido o agregar al carrito.
+## Próximamente
 
-En el carrito puedes ver los productos en el carrito, eliminarlos, cambiar la cantidad de productos, aplicar codigos de descuento o hacer el pedido.
+- Catalogo de productos para que los usuarios puedan hacer sus pedidos y contactar directamente a la empresa para comprar un producto.
 
-Además, tiene su página de administración para gestionar los productos, categorías, pedidos, ventas y códigos de descuento.  
+## TODO
 
-### Proximamente en la página web:
-
-- Categorias con subcategorias
-
+[] Numero en el icono de carrito
+[] Cambiar el numero segun la cantidad de productos en el carrito
+[] Testear
