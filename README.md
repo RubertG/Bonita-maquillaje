@@ -10,6 +10,9 @@ La página web tiene en su home page su Linkstree con sus redes sociales, ubicac
 
 ## TODO
 
-[] Numero en el icono de carrito
+[] Estilos numero en el icono de carrito
+[] Store del valor del carrito 
+[x] Solucionar error al borrar un producto
+[] Agregar las funciones del store a los botones correspondientes 
 [] Cambiar el numero segun la cantidad de productos en el carrito
 [] Testear

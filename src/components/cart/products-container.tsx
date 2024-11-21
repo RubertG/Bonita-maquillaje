@@ -4,7 +4,7 @@ import { DeleteProductCard } from "../admin/orders/product-card"
 import { Product } from "@/types/admin/admin"
 import Skeleton from "react-loading-skeleton"
 import { Delete } from "../common/icons"
-import { changeCount, removeCart } from "@/utils/cart"
+import { changeCount, updateCart } from "@/utils/cart"
 
 interface Props {
   products: Product[]
@@ -34,14 +34,15 @@ export const ProductsContainer = ({
   }
 
   const handleDeleteProduct = (product: Product) => {
-    setProducts(products.filter((p) => {
-      if (product.id === product.id && product.tone && p.tone) {
+    const newCart = products.filter((p) => {
+      if (product.tone && p.tone && product.id === product.id) {
         return p.tone !== product.tone
       }
 
       return p.id !== product.id
-    }))
-    removeCart(product)
+    })
+    setProducts(newCart)
+    updateCart(newCart)
   }
 
   return (
