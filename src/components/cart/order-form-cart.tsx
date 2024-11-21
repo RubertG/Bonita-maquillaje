@@ -9,12 +9,12 @@ import { useOrderForm } from "@/hooks/admin/orders/use-order-form"
 import { OrderForm } from "../admin/orders/order-form"
 import { ProductsContainer } from "./products-container"
 import { useEffect, useState } from "react"
-import { getCart } from "@/utils/cart"
 import { ProductsSummary } from "../common/products-summary"
 import { ButtonWithIcon } from "../common/button-with-icon"
 import { Store } from "../common/icons"
 import { Popup } from "../common/popup"
 import { Button } from "../common/button"
+import { useCartStore } from "@/stores/cart/cart.store"
 
 export const OrderFormCart = ({
   className, id, colorDefault
@@ -23,6 +23,8 @@ export const OrderFormCart = ({
   id?: string,
   colorDefault?: string
 }) => {
+  const getCart = useCartStore(state => state.getCart)
+
   const [popup, setPopup] = useState(false)
   const router = useRouter()
   const [loadingProducts, setLoadingProducts] = useState(true)
