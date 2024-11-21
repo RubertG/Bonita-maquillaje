@@ -50,20 +50,8 @@ export const getCart = async () => {
   return productsCart.filter(product => product !== null)
 }
 
-export const removeCart = (product: Product) => {
-  const cartLocal = localStorage.getItem('cart')
-
-  if (!cartLocal) return
-
-  const parseCart = JSON.parse(cartLocal) as ItemCart[]
-  const newCart = parseCart.filter(it => {
-    if (product.id === product.id && product.tone?.color && it?.color) {
-      return it?.color !== product.tone?.color
-    }
-
-    return it.id === product.id
-  })
-  localStorage.setItem('cart', JSON.stringify(newCart))
+export const updateCart = (products: Product[]) => {
+  localStorage.setItem('cart', JSON.stringify(products))
 }
 
 export const changeCount = (id: string, count: number) => {

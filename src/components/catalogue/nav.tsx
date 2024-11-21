@@ -1,7 +1,7 @@
 import { branch } from "@/fonts/branch/branch"
 import Link from "next/link"
-import { Cart } from "../common/icons"
 import Image from "next/image"
+import { CartButton } from "./cart-button"
 
 export function Nav() {
   return (
@@ -29,9 +29,7 @@ export function Nav() {
           className="text-text-100 font-light bg-bg-100 lg:bg-inherit lg:w-auto flex items-center justify-center"
         >
           <li>
-            <Link href="/carrito" title="Ir al carrito">
-              <Cart className="stroke-text-100 lg:transition-all lg:hover:stroke-accent-300 lg:hover:scale-110" />
-            </Link>
+            <CartButton />
           </li>
         </ul>
       </nav>
