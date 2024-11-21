@@ -4,7 +4,7 @@ import { DeleteProductCard } from "../admin/orders/product-card"
 import { Product } from "@/types/admin/admin"
 import Skeleton from "react-loading-skeleton"
 import { Delete } from "../common/icons"
-import { changeCount, updateCart } from "@/utils/cart"
+import { useCartStore } from "@/stores/cart/cart.store"
 
 interface Props {
   products: Product[]
@@ -19,6 +19,9 @@ export const ProductsContainer = ({
   loading,
   skeletons = 2
 }: Props) => {
+  const changeCount = useCartStore(state => state.changeCount)
+  const updateCart = useCartStore(state => state.updateCart)
+
   const handleChangeCount = (product: Product, count: number) => {
     const newProducts = products.map((p) => {
       if (p.id === product.id) {

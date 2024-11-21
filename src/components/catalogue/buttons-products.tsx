@@ -6,7 +6,6 @@ import { Gift, SaveCart, Spinner } from "../common/icons"
 import { useForm } from "@/hooks/common/use-form"
 import { z } from "zod"
 import { useEffect, useState } from "react"
-import { ItemCart } from "@/types/catalogue/cart"
 import { useRouter } from "next/navigation"
 import { useCartStore } from "@/stores/cart/cart.store"
 
@@ -21,6 +20,7 @@ export const ButtonsProducts = ({
   },
   id: string
 }) => {
+  const cart = useCartStore(state => state.items)
   const addItemCart = useCartStore(state => state.addItem)
 
   const [inCart, setInCart] = useState(false)
@@ -38,19 +38,14 @@ export const ButtonsProducts = ({
   })
 
   useEffect(() => {
-    if (localStorage.getItem("cart")) {
-      const cartLocal = localStorage.getItem("cart")
+    if (cart.length === 0) return
+    
+    setInCart(cart.some((item) => {
+      if (item.color) return item.id === id && item.color === searchParams.color
 
-      if (!cartLocal) return
-
-      const cart = JSON.parse(cartLocal) as ItemCart[]
-      setInCart(cart.some((item) => {
-        if (item.color) return item.id === id && item.color === searchParams.color
-
-        return item.id === id
-      }))
-    }
-  }, [searchParams.color])
+      return item.id === id
+    }))
+  }, [searchParams.color, cart])
 
   const handleAddCart = () => {
     addItemCart({
