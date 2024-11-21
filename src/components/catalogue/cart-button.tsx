@@ -1,17 +1,12 @@
 "use client"
 
 import { Cart } from '../common/icons'
-import { useEffect, useState } from 'react'
-import { getCart } from '@/utils/cart'
 import { useRouter } from 'next/navigation'
+import { useCartStore } from '@/stores/cart/cart.store'
 
 export const CartButton = () => {
-  const [cartSize, setCartSize] = useState(0)
+  const cartSize = useCartStore(state => state.items.length)
   const router = useRouter()
-
-  useEffect(() => {
-    getCart().then(cart => setCartSize(cart.length)).catch(() => setCartSize(0))
-  }, [])
 
   return (
     <button
