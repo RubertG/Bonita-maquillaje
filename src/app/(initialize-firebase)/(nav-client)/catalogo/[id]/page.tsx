@@ -38,7 +38,7 @@ export default async function ProductPage({
 
   return (
     <main
-      className="px-4 my-16 xl:px-0 lg:mt-20 max-w-5xl mx-auto"
+      className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto"
     >
       <section className="flex items-center gap-3 justify-between">
         <Suspense fallback={(
@@ -63,7 +63,7 @@ export default async function ProductPage({
             />
           </header>
 
-          <p className="text-text-200 mt-3 font-light whitespace-pre-wrap">
+          <p className="text-text-200 mt-3 font-light whitespace-pre-wrap leading-snug">
             {product.description}
           </p>
 
