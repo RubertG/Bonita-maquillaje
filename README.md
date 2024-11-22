@@ -8,11 +8,15 @@ La página web tiene en su home page su Linkstree con sus redes sociales, ubicac
 
 - Catalogo de productos para que los usuarios puedan hacer sus pedidos y contactar directamente a la empresa para comprar un producto.
 
-## TODO
+## Tecnologías usadas
 
-[] Estilos numero en el icono de carrito
-[] Store del valor del carrito 
-[x] Solucionar error al borrar un producto
-[] Agregar las funciones del store a los botones correspondientes 
-[] Cambiar el numero segun la cantidad de productos en el carrito
-[] Testear
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind](https://tailwindcss.com/)
+- [Firebase](https://firebase.google.com/)
+- [React Hook Form](https://react-hook-form.com/)
+- [React Loading Skeleton](https://github.com/danilowu/react-loading-skeleton)
+
+## Desarrollador
+
+- [Rubert Gonzalez Perez](https://github.com/rubertg)

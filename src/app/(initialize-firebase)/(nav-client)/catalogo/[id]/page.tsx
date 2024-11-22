@@ -63,7 +63,7 @@ export default async function ProductPage({
             />
           </header>
 
-          <p className="text-text-200 mt-3 font-light">
+          <p className="text-text-200 mt-3 font-light whitespace-pre-wrap">
             {product.description}
           </p>
 
