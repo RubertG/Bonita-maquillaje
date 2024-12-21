@@ -1,5 +1,5 @@
 import { branch } from "@/fonts/branch/branch"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 
 interface Props {
   children: React.ReactNode
