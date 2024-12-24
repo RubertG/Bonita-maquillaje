@@ -6,8 +6,8 @@ import { Gift, SaveCart, Spinner } from "../common/icons"
 import { useForm } from "@/hooks/common/use-form"
 import { z } from "zod"
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { useCartStore } from "@/stores/cart/cart.store"
+import { useTransitionRouter } from "next-view-transitions"
 
 export const ButtonsProducts = ({
   className,
@@ -24,7 +24,7 @@ export const ButtonsProducts = ({
   const addItemCart = useCartStore(state => state.addItem)
 
   const [inCart, setInCart] = useState(false)
-  const router = useRouter()
+  const router = useTransitionRouter()
   const { loading, handleSubmit } = useForm({
     schema: z.object({}),
     actionSubmit: async () => {

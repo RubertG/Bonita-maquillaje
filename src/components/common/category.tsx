@@ -2,8 +2,8 @@
 
 import { Category as CategoryType } from "@/types/db/db"
 import clsx from "clsx"
+import { Link } from "next-view-transitions"
 import Image from "next/image"
-import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
 export const Category = ({ img, name, id }: CategoryType) => {

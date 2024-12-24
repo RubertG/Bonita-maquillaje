@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { SkeletonTheme } from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
+import { ViewTransitions } from "next-view-transitions"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bonita-maquillaje.com"),
@@ -34,9 +35,11 @@ export default function RootLayout({
       </head>
       <body className='antialiased bg-bg-100'>
         <main>
+          <ViewTransitions>
           <SkeletonTheme baseColor="#feeaf0" highlightColor="#fff4f4">
             {children}
           </SkeletonTheme>
+          </ViewTransitions>
         </main>
       </body>
     </html >

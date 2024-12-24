@@ -1,12 +1,12 @@
 "use client"
 
+import { useTransitionRouter } from 'next-view-transitions'
 import { Cart } from '../common/icons'
-import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/stores/cart/cart.store'
 
 export const CartButton = () => {
   const cartSize = useCartStore(state => state.items.length)
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   return (
     <button

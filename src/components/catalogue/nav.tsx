@@ -1,5 +1,5 @@
 import { branch } from "@/fonts/branch/branch"
-import Link from "next/link"
+import { Link } from "next-view-transitions"
 import Image from "next/image"
 import { CartButton } from "./cart-button"
 
@@ -12,7 +12,7 @@ export function Nav() {
         className="flex items-center justify-between max-w-7xl mx-auto">
         <Link
           className="flex items-center justify-center gap-1"
-          href="/catalogo"
+          href="/"
         >
           <Image
             width={40}
