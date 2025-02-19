@@ -4,10 +4,6 @@ Página web de Bonita Maquillaje, tienda virtual y física en la ciudad de Cúcu
 
 La página web tiene en su home page su Linkstree con sus redes sociales, ubicacion y su catálogo de productos.
 
-## Próximamente
-
-- Catalogo de productos para que los usuarios puedan hacer sus pedidos y contactar directamente a la empresa para comprar un producto.
-
 ## Tecnologías usadas
 
 - [Next.js](https://nextjs.org/)

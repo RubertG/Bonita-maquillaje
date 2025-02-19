@@ -18,7 +18,7 @@ export const ProductCard = ({ name, price, imgs, id }: Product) => {
           translateY: 0
         }}
         viewport={{
-          amount: 0.6, 
+          amount: 0.4, 
           margin: "0px", 
           once: true 
         }}
