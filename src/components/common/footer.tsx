@@ -7,7 +7,7 @@ export const Footer = () => {
         <span className="font-normal">© {new Date().getFullYear()} Bonita Maquillaje.</span> Todos los derechos
         reservados. 
       </p>
-      <p>Desarrollado por <a href="https://github.com/rubertg" className="font-normal lg:hover:underline">Rubert Gonzalez</a></p>
+      <p>Desarrollado por <a href="https://rubertweb.dev" className="font-normal lg:hover:underline">Rubert Gonzalez</a></p>
     </footer>
   )
 }
