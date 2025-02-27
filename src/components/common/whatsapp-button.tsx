@@ -6,7 +6,7 @@ import { AnimatePresence, domAnimation, LazyMotion, m } from "motion/react"
 import { useAutoHide } from "@/hooks/common/use-auto-hide"
 
 const WhatsappButton = () => {
-  const { show } = useAutoHide(5000)
+  const { show } = useAutoHide(4000)
 
   return (
     <LazyMotion features={domAnimation}>
