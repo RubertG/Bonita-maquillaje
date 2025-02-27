@@ -16,7 +16,19 @@ interface CartState {
 const cartStore: StateCreator<CartState> = (set, get) => ({
   items: [],
 
-  addItem: (item) => set({ items: [...get().items, item] }),
+  addItem: (item) => {
+    const cart = get().items
+    const itemExists = cart.findIndex(it => it.id === item.id && it?.color === item?.color)
+
+    if (itemExists !== -1) {
+      cart[itemExists].amount += item.amount
+      set({ items: cart })
+      
+      return
+    }
+
+    set({ items: [...cart, item] })
+  },
   updateCart: (p) => {
     const newCart: ItemCart[] = p.map((product) => ({
       id: product.id,
