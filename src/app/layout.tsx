@@ -36,9 +36,9 @@ export default function RootLayout({
       <body className='antialiased bg-bg-100'>
         <main>
           <ViewTransitions>
-          <SkeletonTheme baseColor="#feeaf0" highlightColor="#fff4f4">
-            {children}
-          </SkeletonTheme>
+            <SkeletonTheme baseColor="#feeaf0" highlightColor="#fff4f4">
+              {children}
+            </SkeletonTheme>
           </ViewTransitions>
         </main>
       </body>
