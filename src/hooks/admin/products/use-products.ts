@@ -17,6 +17,7 @@ export const useProducts = () => {
   const searchParams = useSearchParams()
   const pathNameOriginal = usePathname()
   const router = useRouter()
+  const isInAdmin = pathNameOriginal.startsWith("/admin")
 
   useEffect(() => {
     if (!pathNames.find((pn) => pathNameOriginal === pn)) return
@@ -36,10 +37,10 @@ export const useProducts = () => {
     let p: Product[] = []
 
     if (!category) {
-
       const [first] = await getCategories()
       const c = first.id
-      p = await getProducts({ category: c })
+      p = await getProducts({ category: c, stock: isInAdmin ? false : true })
+      console.log({p, isInAdmin})
 
       setProducts({
         ...products,
@@ -56,7 +57,7 @@ export const useProducts = () => {
     }
 
     if (category && !products[category]) {
-      p = await getProducts({ category: category })
+      p = await getProducts({ category: category, stock: isInAdmin ? false : true })
       setProducts({
         ...products,
         [category]: p
@@ -71,7 +72,7 @@ export const useProducts = () => {
 
   const refreshProducts = async (category: string) => {
     setLoading(true)
-    const p: Product[] = await getProducts({ category })
+    const p: Product[] = await getProducts({ category, stock: isInAdmin ? false : true })
     setProducts({
       ...products,
       [category]: p

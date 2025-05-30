@@ -5,10 +5,16 @@ import { Id, Product } from "@/types/db/db"
 
 interface Query {
   category: Id
+  stock?: boolean
 }
 
-export const getProducts = async ({ category }: Query) => {
-  const q = query(collection(db, ROUTES_COLLECTIONS.PRODUCTS),
+export const getProducts = async ({ category, stock = false }: Query) => {
+  const q = stock ? query(
+    collection(db, ROUTES_COLLECTIONS.PRODUCTS),
+    where('category', '==', category),
+    where('stock', '>', 0)
+  ) : query(
+    collection(db, ROUTES_COLLECTIONS.PRODUCTS),
     where('category', '==', category)
   )
   const querySnapshot = await getDocs(q)
