@@ -3,12 +3,12 @@ import { BackButton } from "@/components/common/back-button"
 import { H1 } from "@/components/common/h1"
 
 interface Props {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }
 
-export default function EditProductPage({ params: { id } }: Props) {
+export default async function EditProductPage({ params }: Props) {
+  const { id } = await params
+
   return (
     <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-5xl mx-auto">
       <BackButton

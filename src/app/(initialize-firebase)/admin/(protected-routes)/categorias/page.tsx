@@ -4,14 +4,14 @@ import { H1 } from "@/components/common/h1"
 import { branch } from "@/fonts/branch/branch"
 
 interface Props {
-  searchParams: {
-    [key: string]: string
-  }
+  searchParams: Promise<{ [key: string]: string | undefined }>
 }
 
-export default function CategoriesPage({
+export default async function CategoriesPage({
   searchParams
 }: Props) {
+  const searchParamsResolved = await searchParams
+
   return (
     <main
       className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
@@ -21,12 +21,12 @@ export default function CategoriesPage({
 
       <h2 className={`${branch.className} text-text-50 text-[2rem] md:text-3xl lg:text-4xl text-center mt-7`}>
         {
-          searchParams.categoria ? `Editar categoría` : "Crear categoría"
+          searchParamsResolved.categoria ? `Editar categoría` : "Crear categoría"
         }
       </h2>
       <CategoryForm
         className="mt-5"
-        id={searchParams.categoria} />
+        id={searchParamsResolved.categoria} />
     </main>
   )
 }

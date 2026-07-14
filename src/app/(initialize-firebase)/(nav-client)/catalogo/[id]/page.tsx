@@ -11,15 +11,12 @@ import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
 interface Props {
-  params: {
-    id: string
-  },
-  searchParams: {
-    [key: string]: string | undefined
-  }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | undefined }>
 }
 
-export const generateMetadata = async ({ params: { id } }: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
+  const { id } = await params
   const products = await getProduct(id)
 
   return {
@@ -29,9 +26,11 @@ export const generateMetadata = async ({ params: { id } }: Props): Promise<Metad
 }
 
 export default async function ProductPage({
-  params: { id },
+  params,
   searchParams
 }: Props) {
+  const { id } = await params
+  const searchParamsResolved = await searchParams
   const product = await getProduct(id)
 
   if (!product) return notFound()
@@ -76,7 +75,7 @@ export default async function ProductPage({
                 <Tones
                   className="mt-3"
                   tones={product.tones}
-                  searchParams={searchParams}
+                  searchParams={searchParamsResolved}
                 />
               </>
             )
@@ -88,12 +87,12 @@ export default async function ProductPage({
           <CounterProduct
             className="mt-3"
             price={product.price}
-            searchParams={searchParams}
+            searchParams={searchParamsResolved}
           />
 
           <ButtonsProducts
             className="mt-7"
-            searchParams={searchParams}
+            searchParams={searchParamsResolved}
             id={product.id}
           />
         </aside>

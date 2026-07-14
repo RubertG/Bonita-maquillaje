@@ -5,18 +5,16 @@ import { H1 } from "@/components/common/h1"
 import { Suspense } from "react"
 
 interface Props {
-  params: {
-    id: string
-  },
-  searchParams: {
-    [key: string]: string | undefined
-  }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | undefined }>
 }
 
-export default function ProductPage({
-  params: { id },
-  searchParams: { color }
+export default async function ProductPage({
+  params,
+  searchParams
 }: Props) {
+  const { id } = await params
+  const { color } = await searchParams
 
   return (
     <main
