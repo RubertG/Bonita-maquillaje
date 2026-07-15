@@ -65,7 +65,7 @@ export const EditOrderForm = ({
         }
         
         router.push("/admin/pedidos")
-      } catch (_err) {
+      } catch {
         setErrorSubmit("Error al guardar el pedido")
       }
     }
@@ -94,7 +94,7 @@ export const EditOrderForm = ({
     }
 
     getO()
-  }, [])
+  }, [id, router, setProducts])
 
   const handleIsOrder = () => {
     setIsOrder(!isOrder)

@@ -15,14 +15,15 @@ export const Searcher = ({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
-  const [search, setSearch] = useState(searchParams.get("busqueda"))
+  const busqueda = searchParams.get("busqueda")
+  const [search, setSearch] = useState(busqueda)
   const router = useRouter()
 
   useEffect(() => {
-    if (inputRef.current && !searchParams.get("busqueda")) {
+    if (inputRef.current && !busqueda) {
       inputRef.current.value = ""
     }
-  }, [searchParams.get("busqueda")])
+  }, [busqueda])
 
   const handleSearch = () => {
     const categoriaValue = searchParams.get("categoria")

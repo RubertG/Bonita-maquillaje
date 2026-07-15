@@ -16,7 +16,7 @@ export const CategoriesContainer = ({ className }: Props) => {
 
   useEffect(() => {
     fetchCategories()
-  }, [])
+  }, [fetchCategories])
 
   return (
     <section className={`${className} flex gap-2 items-center overflow-x-auto scrollbar-hide md:justify-center`}>

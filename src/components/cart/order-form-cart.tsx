@@ -135,7 +135,7 @@ export const OrderFormCart = ({
       setLoadingProducts(false)
     }
     getC()
-  }, [])
+  }, [colorDefault, getCart, id, products.length, setProducts])
 
   return (
     <>

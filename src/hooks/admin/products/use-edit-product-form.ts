@@ -77,7 +77,7 @@ export const useEditProductForm = ({ id }: Props) => {
         await updateProduct(product)
         router.push(`/admin/productos?categoria=${data.category}`)
         refreshProducts(data.category)
-      } catch (_error) {
+      } catch {
         setError("Ocurrio un error al guardar el producto")
       }
     }
@@ -102,7 +102,7 @@ export const useEditProductForm = ({ id }: Props) => {
       setImgsOld(p.imgs)
     }
     getP()
-  }, [])
+  }, [id])
 
   useEffect(() => {
     const getC = async () => {
@@ -118,7 +118,7 @@ export const useEditProductForm = ({ id }: Props) => {
     }
 
     getC()
-  }, [storeCategories])
+  }, [storeCategories, fetchCategories])
 
   useEffect(() => {
     setErrorImgs("")

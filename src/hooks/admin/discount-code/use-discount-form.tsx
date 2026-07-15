@@ -36,7 +36,7 @@ export const useDiscountForm = () => {
         await saveDiscountCode(newCode)
         router.refresh()
         formRef.current?.reset()
-      } catch (_error) {
+      } catch {
         setError("Error al crear el código de descuento")
       }
     }
@@ -44,7 +44,7 @@ export const useDiscountForm = () => {
 
   useEffect(() => {
     fetchCategories()
-  }, [])
+  }, [fetchCategories])
 
   return {
     error,

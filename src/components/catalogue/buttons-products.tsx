@@ -45,7 +45,7 @@ export const ButtonsProducts = ({
 
       return item.id === id
     }))
-  }, [searchParams.color, cart])
+  }, [searchParams.color, cart, id])
 
   const handleAddCart = () => {
     addItemCart({

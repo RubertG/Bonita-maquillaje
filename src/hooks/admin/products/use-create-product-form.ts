@@ -60,7 +60,7 @@ export const useCreateProductForm = () => {
         await saveProduct(product)
         router.push(`/admin/productos?categoria=${data.category}`)
         refreshProducts(data.category)
-      } catch (_error) {
+      } catch {
         setError("Ocurrio un error al guardar el producto")
       }
 
@@ -81,7 +81,7 @@ export const useCreateProductForm = () => {
     }
 
     getC()
-  }, [storeCategories])
+  }, [storeCategories, fetchCategories])
 
   useEffect(() => {
     setErrorImgs("")

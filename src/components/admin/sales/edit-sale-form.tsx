@@ -57,7 +57,7 @@ export const EditSaleForm = ({
         await updateOrder(order)
         removeStorage(true /* state */)
         router.push("/admin/ventas")
-      } catch (_err) {
+      } catch {
         setErrorSubmit("Error al guardar la venta")
       }
     }
@@ -86,7 +86,7 @@ export const EditSaleForm = ({
     }
 
     getO()
-  }, [])
+  }, [id, router, setProducts])
 
   return (
     <section className="flex flex-col-reverse gap-4 max-w-lg mx-auto lg:grid lg:grid-cols-[50%_50%] lg:gap-6 lg:max-w-none">
