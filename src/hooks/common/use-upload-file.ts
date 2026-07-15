@@ -35,7 +35,7 @@ export const useUploadFile = ({
   useEffect(() => {
     setError("")
     if (imgsOld) {
-      setTotalSize(totalSize + imgsOld.reduce((total, item) => total + item.size, 0))
+      setTotalSize((prev) => prev + imgsOld.reduce((total, item) => total + item.size, 0))
     }
   }, [imgsOld])
 

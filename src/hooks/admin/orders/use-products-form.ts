@@ -3,7 +3,7 @@
 import { getAllProducts } from "@/firebase/services/products"
 import { Product } from "@/types/admin/admin"
 import { Tone } from "@/types/db/db"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 interface Props {
   products: Product[]
@@ -24,47 +24,7 @@ export const useProductsForm = ({
 }: Props) => {
   const [search, setSearch] = useState<string | undefined>()
 
-  useEffect(() => {
-    if (search && search !== "") {
-      if (searchedProducts.original.length === 0) {
-        getP()
-        return
-      }
-
-      const originalAux = JSON.parse(JSON.stringify(searchedProducts.original)) as Product[]
-      setSearchedProducts({
-        original: searchedProducts.original,
-        filtered: originalAux.filter((product) => {
-          return product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-        })
-      })
-      return
-    }
-
-    if (searchedProducts.original.length === 0) {
-      getP()
-      return
-    }
-
-    if (searchedProducts.filtered.length !== 0 && !search) {
-      setSearchedProducts({
-        original: searchedProducts.original,
-        filtered: []
-      })
-      return
-    }
-
-    setSearchedProducts({
-      original: searchedProducts.original,
-      filtered: JSON.parse(JSON.stringify(searchedProducts.original)) as Product[]
-    })
-  }, [search])
-
-  useEffect(() => {
-    setSearch("")
-  }, [products])
-
-  const getP = async () => {
+  const getP = useCallback(async () => {
     const p = await getAllProducts(search || "")
     const parseProducts: Product[] = p.map((p) => ({
       ...p,
@@ -74,7 +34,50 @@ export const useProductsForm = ({
       original: parseProducts,
       filtered: search ? parseProducts : []
     })
-  }
+  }, [search, setSearchedProducts])
+
+  useEffect(() => {
+    if (search && search !== "") {
+      setSearchedProducts((prev) => {
+        if (prev.original.length === 0) {
+          getP()
+          return prev
+        }
+
+        const originalAux = JSON.parse(JSON.stringify(prev.original)) as Product[]
+        return {
+          original: prev.original,
+          filtered: originalAux.filter((product) => {
+            return product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+          })
+        }
+      })
+      return
+    }
+
+    setSearchedProducts((prev) => {
+      if (prev.original.length === 0) {
+        getP()
+        return prev
+      }
+
+      if (prev.filtered.length !== 0 && !search) {
+        return {
+          original: prev.original,
+          filtered: []
+        }
+      }
+
+      return {
+        original: prev.original,
+        filtered: JSON.parse(JSON.stringify(prev.original)) as Product[]
+      }
+    })
+  }, [getP, search, setSearchedProducts])
+
+  useEffect(() => {
+    setSearch("")
+  }, [products])
 
   const handleSelectProduct = (product: Product) => {
     setProducts([...products, product])

@@ -6,7 +6,7 @@ import { Order } from "@/types/db/db"
 import { removeStorage, setStorage } from "@/utils/orders-storage"
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 export const useOrders = (state: boolean = false) => {
   const [orders, setOrders] = useState<{
@@ -71,12 +71,50 @@ export const useOrders = (state: boolean = false) => {
   const router = useRouter()
   const search = searchParams.get("busqueda")
 
+  const getCount = useCallback(async () => {
+    const count = await getCountOrders(state)
+    setCount(count)
+    return count
+  }, [state])
+
+  const getOrders = useCallback(async () => {
+    setLoading(true)
+    const { orders: o, lastVisible: l } = await getFirstOrders(state)
+
+    if (!o) {
+      setOrders({
+        orders: undefined,
+        filterOrders: undefined
+      })
+    } else {
+      if (search) {
+        const newOrders = o.filter(order => order.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+        setOrders({
+          orders: o,
+          filterOrders: newOrders
+        })
+      } else {
+        setOrders({
+          orders: o,
+          filterOrders: o
+        })
+      }
+    }
+
+    const h = o.length === LIMIT_ORDERS_PER_PAGE
+    const count = await getCount()
+    setStorage(o, l, h, state, count)
+    setLastVisible(l)
+    setHasNext(h)
+    setLoading(false)
+  }, [getCount, search, state])
+
   useEffect(() => {
     if (reload) {
       getOrders()
       setReload(false)
     }
-  }, [reload])
+  }, [getOrders, reload])
 
   useEffect(() => {
     window.addEventListener('beforeunload', () => removeStorage(state))
@@ -84,7 +122,7 @@ export const useOrders = (state: boolean = false) => {
     return () => {
       window.removeEventListener('beforeunload', () => removeStorage(state))
     }
-  }, [])
+  }, [state])
 
   useEffect(() => {
     if (!orders || !orders.orders || orders.orders.length === 0) {
@@ -124,45 +162,8 @@ export const useOrders = (state: boolean = false) => {
     }
 
     handleSearch()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
-
-  const getCount = async () => {
-    const count = await getCountOrders(state)
-    setCount(count)
-    return count
-  }
-
-  const getOrders = async () => {
-    setLoading(true)
-    const { orders: o, lastVisible: l } = await getFirstOrders(state)
-
-    if (!o) {
-      setOrders({
-        orders: undefined,
-        filterOrders: undefined
-      })
-    } else {
-      if (search) {
-        const newOrders = o.filter(order => order.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
-        setOrders({
-          orders: o,
-          filterOrders: newOrders
-        })
-      } else {
-        setOrders({
-          orders: o,
-          filterOrders: o
-        })
-      }
-    }
-
-    const h = o.length === LIMIT_ORDERS_PER_PAGE
-    const count = await getCount()
-    setStorage(o, l, h, state, count)
-    setLastVisible(l)
-    setHasNext(h)
-    setLoading(false)
-  }
 
   const getMoreOrders = async () => {
     if (!lastVisible || !orders) return

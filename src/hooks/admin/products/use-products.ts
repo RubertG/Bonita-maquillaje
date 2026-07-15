@@ -4,7 +4,7 @@ import { getCategories } from "@/firebase/services/categories"
 import { getProducts } from "@/firebase/services/products"
 import { Product } from "@/types/db/db"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 interface ProductType { [key: string]: Product[] }
 
@@ -19,20 +19,7 @@ export const useProducts = () => {
   const router = useRouter()
   const isInAdmin = pathNameOriginal.startsWith("/admin")
 
-  useEffect(() => {
-    if (!pathNames.find((pn) => pathNameOriginal === pn)) return
-    fetchProducts(searchParams.get("busqueda") || "", searchParams.get("categoria") || "")
-  }, [searchParams])
-
-  const filterProducts = (p: Product[], search: string) => {
-    const newProducts = p.filter(product => {
-      return product.name.toLocaleLowerCase().includes(search?.toLocaleLowerCase())
-    })
-
-    return newProducts
-  }
-
-  const fetchProducts = async (search?: string, category?: string) => {
+  const fetchProducts = useCallback(async (search?: string, category?: string) => {
     setLoading(true)
     let p: Product[] = []
 
@@ -40,12 +27,11 @@ export const useProducts = () => {
       const [first] = await getCategories()
       const c = first.id
       p = await getProducts({ category: c, stock: isInAdmin ? false : true })
-      console.log({p, isInAdmin})
 
-      setProducts({
-        ...products,
+      setProducts((prev) => ({
+        ...prev,
         [c]: p
-      })
+      }))
       const url = new URLSearchParams({
         ...(search && { busqueda: search }),
         categoria: c
@@ -58,16 +44,29 @@ export const useProducts = () => {
 
     if (category && !products[category]) {
       p = await getProducts({ category: category, stock: isInAdmin ? false : true })
-      setProducts({
-        ...products,
+      setProducts((prev) => ({
+        ...prev,
         [category]: p
-      })
+      }))
     } else {
       p = products[category]
     }
 
     setProductsFilter(filterProducts(p, search || ""))
     setLoading(false)
+  }, [isInAdmin, pathNameOriginal, products, router])
+
+  useEffect(() => {
+    if (!pathNames.find((pn) => pathNameOriginal === pn)) return
+    fetchProducts(searchParams.get("busqueda") || "", searchParams.get("categoria") || "")
+  }, [fetchProducts, pathNameOriginal, searchParams])
+
+  const filterProducts = (p: Product[], search: string) => {
+    const newProducts = p.filter(product => {
+      return product.name.toLocaleLowerCase().includes(search?.toLocaleLowerCase())
+    })
+
+    return newProducts
   }
 
   const refreshProducts = async (category: string) => {
