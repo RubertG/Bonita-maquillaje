@@ -14,7 +14,7 @@ export const OrderCard = ({ name, create_at, id, products, setReload }: Props) =
         month: 'long',
         year: 'numeric'
       })
-    } catch (_error) {
+    } catch {
       const date = new Date(create_at.seconds * 1000)
       return date.toLocaleDateString('es-ES', {
         day: 'numeric',

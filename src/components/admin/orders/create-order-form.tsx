@@ -41,7 +41,7 @@ export const CreateOrderForm = () => {
         await saveOrder(order)
         removeStorage()
         router.push("/admin/pedidos")
-      } catch (_err) {
+      } catch {
         setErrorSubmit("Error al crear el pedido")
       }
     }
