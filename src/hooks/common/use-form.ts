@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { FieldValues, SubmitHandler, useForm as useFormReactHook } from "react-hook-form"
-import { z } from "zod"
+import { FieldValues, Resolver, SubmitHandler, useForm as useFormReactHook } from "react-hook-form"
+import { z } from "zod/v4"
 
-export function useForm<Inputs extends FieldValues = FieldValues, TypeSchema extends z.ZodType = z.ZodType<Inputs>>({
+export function useForm<Inputs extends FieldValues = FieldValues, TypeSchema extends z.ZodType<Inputs, Inputs> = z.ZodType<Inputs, Inputs>>({
   schema,
   actionSubmit,
   values
@@ -21,7 +21,7 @@ export function useForm<Inputs extends FieldValues = FieldValues, TypeSchema ext
     formState: { errors }
   } = useFormReactHook<Inputs>({
     values,
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema) as unknown as Resolver<Inputs>
   })
   const [loading, setLoading] = useState(false)
 
