@@ -41,7 +41,7 @@ export const CreateSaleForm = () => {
         await saveOrder(order)
         removeStorage(true /* state */)
         router.push("/admin/ventas")
-      } catch (err) {
+      } catch (_err) {
         setErrorSubmit("Error al crear la venta")
       }
     }

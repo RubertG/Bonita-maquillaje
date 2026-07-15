@@ -19,7 +19,7 @@ export const ButtonShare = ({
         url: url,
         text
       })
-    } catch (error) {
+    } catch (_error) {
       if (!window) return 
 
       window.location.href = `https://wa.me/?text=${text}%20${url}`

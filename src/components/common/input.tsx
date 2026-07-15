@@ -31,7 +31,7 @@ export const DiscountCodeInput = ({ className, onClickButton, loading, setError,
       <input
         className={`w-full rounded-l-lg px-3.5 py-2.5 focus:outline-bg-200 bg-bg-50 text-text-200 font-light placeholder:text-gray-400 ${className}`}
         onChange={(e) => {
-          setError && setError("")
+          if (setError) setError("")
           setCode(e.target.value)
         }}
         {...props} />
@@ -105,8 +105,6 @@ export const SelectInput = forwardRef(function SelectInput({ className, items, t
         <option
           className="text-text-300 font-light py-1 bg-bg-50 hover:bg-bg-200"
           disabled
-          selected
-          aria-selected
           value="">{title}</option>
         {items?.map((item) => (
           <option

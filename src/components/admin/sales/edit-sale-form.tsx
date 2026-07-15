@@ -57,7 +57,7 @@ export const EditSaleForm = ({
         await updateOrder(order)
         removeStorage(true /* state */)
         router.push("/admin/ventas")
-      } catch (err) {
+      } catch (_err) {
         setErrorSubmit("Error al guardar la venta")
       }
     }

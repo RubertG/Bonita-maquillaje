@@ -77,7 +77,7 @@ export const useEditProductForm = ({ id }: Props) => {
         await updateProduct(product)
         router.push(`/admin/productos?categoria=${data.category}`)
         refreshProducts(data.category)
-      } catch (error) {
+      } catch (_error) {
         setError("Ocurrio un error al guardar el producto")
       }
     }

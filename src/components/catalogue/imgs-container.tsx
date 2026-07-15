@@ -67,10 +67,12 @@ export const ImgsContainer = ({
               <X className="w-7 h-7 stroke-text-100 lg:group-hover:stroke-accent-300 lg:transition-colors" />
             </button>
             <div className="flex items-center justify-center px-4">
-              <img
+              <Image
                 loading="lazy"
                 src={imgs[imgActive].url}
                 alt={`${imgs[imgActive].name} - Bonita Maquillaje`}
+                width={800}
+                height={800}
                 className="w-full md:w-[90%] max-h-screen object-cover rounded-lg shadow-button"
               />
             </div>

@@ -36,7 +36,7 @@ export const useDiscountForm = () => {
         await saveDiscountCode(newCode)
         router.refresh()
         formRef.current?.reset()
-      } catch (error) {
+      } catch (_error) {
         setError("Error al crear el código de descuento")
       }
     }
