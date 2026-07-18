@@ -2,10 +2,10 @@
 
 import { Product } from "@/types/admin/admin"
 import { ProductsContainer } from "./products-container"
-import { DeleteProductCard } from "./product-card"
+import { DeleteProductCard } from "./delete-product-card"
 import clsx from "clsx"
 import { ProductsSummary } from "../../common/products-summary"
-import { SearcherClient } from "@/components/common/searcher"
+import { SearcherClient } from "@/components/common/searcher-client"
 import { useProductsForm } from "@/hooks/admin/orders/use-products-form"
 
 interface Props {

@@ -1,6 +1,6 @@
 "use client"
 
-import { DeleteProductCard } from "../admin/orders/product-card"
+import { DeleteProductCard } from "../admin/orders/delete-product-card"
 import { Product } from "@/types/admin/admin"
 import Skeleton from "react-loading-skeleton"
 import { Delete } from "../common/icons"

@@ -1,7 +1,7 @@
 "use client"
 
 import { Product } from "@/types/admin/admin"
-import { AddProductCard } from "./product-card"
+import { AddProductCard } from "./add-product-card"
 import { Tone } from "@/types/db/db"
 
 interface Props {
