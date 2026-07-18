@@ -17,10 +17,7 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
         </MobileMenuItem>
       ))}
       <MobileMenuItem>
-        <div className="flex items-center gap-3 py-2 px-3 text-text-100 font-normal hover:text-principal-300 hover:scale-105 transition-all duration-200 origin-left">
-          <CartButton />
-          <span>Carrito</span>
-        </div>
+        <CartButton variant="item" />
       </MobileMenuItem>
       {isAdmin && (
         <MobileMenuItem className="mt-auto">

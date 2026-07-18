@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { motion, AnimatePresence, useReducedMotion, type Transition } from "motion/react"
 import { Menu, X } from "@/components/common/icons"
+import { branch } from "@/fonts/branch/branch"
 import { Category } from "@/types/db/db"
 
 export type NavCategory = Pick<Category, "id" | "name">
@@ -142,21 +143,24 @@ export function MobileMenu({ children }: MobileMenuProps) {
               role="dialog"
               aria-modal="true"
               aria-label="Menú de navegación"
-              className="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-bg-100 z-50 flex flex-col p-4"
+              className="fixed top-0 left-0 h-full w-full max-w-sm bg-bg-100 z-50 flex flex-col p-4"
               variants={panelVariants}
               initial="hidden"
               animate="visible"
               exit="hidden"
               transition={panelTransition}
             >
-              <button
-                type="button"
-                onClick={close}
-                aria-label="Cerrar menú"
-                className="self-end mb-4 p-2 text-text-100"
-              >
-                <X className="w-6 h-6" />
-              </button>
+              <div className="flex items-center justify-between mb-4">
+                <span className={`text-xl ${branch.className}`}>Bonita maquillaje</span>
+                <button
+                  type="button"
+                  onClick={close}
+                  aria-label="Cerrar menú"
+                  className="p-2 text-text-100"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
               <motion.ul
                 variants={listVariants}
                 initial="hidden"
