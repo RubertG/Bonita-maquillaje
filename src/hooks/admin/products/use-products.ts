@@ -4,11 +4,11 @@ import { getCategories } from "@/firebase/services/categories"
 import { getProducts } from "@/firebase/services/products"
 import { Product } from "@/types/db/db"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 interface ProductType { [key: string]: Product[] }
 
-const pathNames = ["/admin/productos", "/catalogo"]
+const pathNames = ["/admin/productos"]
 
 export const useProducts = () => {
   const [products, setProducts] = useState<ProductType>({})
@@ -19,7 +19,20 @@ export const useProducts = () => {
   const router = useRouter()
   const isInAdmin = pathNameOriginal.startsWith("/admin")
 
-  const fetchProducts = useCallback(async (search?: string, category?: string) => {
+  useEffect(() => {
+    if (!pathNames.find((pn) => pathNameOriginal === pn)) return
+    fetchProducts(searchParams.get("busqueda") || "", searchParams.get("categoria") || "")
+  }, [searchParams])
+
+  const filterProducts = (p: Product[], search: string) => {
+    const newProducts = p.filter(product => {
+      return product.name.toLocaleLowerCase().includes(search?.toLocaleLowerCase())
+    })
+
+    return newProducts
+  }
+
+  const fetchProducts = async (search?: string, category?: string) => {
     setLoading(true)
     let p: Product[] = []
 
@@ -28,10 +41,10 @@ export const useProducts = () => {
       const c = first.id
       p = await getProducts({ category: c, stock: isInAdmin ? false : true })
 
-      setProducts((prev) => ({
-        ...prev,
+      setProducts({
+        ...products,
         [c]: p
-      }))
+      })
       const url = new URLSearchParams({
         ...(search && { busqueda: search }),
         categoria: c
@@ -44,29 +57,16 @@ export const useProducts = () => {
 
     if (category && !products[category]) {
       p = await getProducts({ category: category, stock: isInAdmin ? false : true })
-      setProducts((prev) => ({
-        ...prev,
+      setProducts({
+        ...products,
         [category]: p
-      }))
+      })
     } else {
       p = products[category]
     }
 
     setProductsFilter(filterProducts(p, search || ""))
     setLoading(false)
-  }, [isInAdmin, pathNameOriginal, products, router])
-
-  useEffect(() => {
-    if (!pathNames.find((pn) => pathNameOriginal === pn)) return
-    fetchProducts(searchParams.get("busqueda") || "", searchParams.get("categoria") || "")
-  }, [fetchProducts, pathNameOriginal, searchParams])
-
-  const filterProducts = (p: Product[], search: string) => {
-    const newProducts = p.filter(product => {
-      return product.name.toLocaleLowerCase().includes(search?.toLocaleLowerCase())
-    })
-
-    return newProducts
   }
 
   const refreshProducts = async (category: string) => {

@@ -37,12 +37,13 @@ export const useCreateProductForm = () => {
       }
 
       try {
+        const productId = uuidv4()
         const newImgs: FileStateItem[] = await Promise.all(
           imgs.map(async (img) => {
-            const url = await saveFile(img as File, "/products")
+            const { url, name } = await saveFile(img as File, productId, "/products")
 
             return {
-              name: img.name,
+              name,
               url,
               size: img.size
             }
@@ -51,11 +52,9 @@ export const useCreateProductForm = () => {
 
         const product: Product = {
           ...data,
-          id: uuidv4(),
+          id: productId,
           imgs: newImgs,
-          stock: parseInt(data.stock),
-          price: parseFloat(data.price),
-          tones: tones
+          tones
         }
 
         const token = await getAuthToken()

@@ -15,8 +15,8 @@ export interface CategoryInputs {
 export interface Inputs {
   name: string
   description: string
-  price: string
-  stock: string
+  price: number
+  stock: number
   category: string
 }
 

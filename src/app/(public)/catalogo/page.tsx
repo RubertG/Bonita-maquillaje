@@ -4,6 +4,7 @@ import { CategoriesSkeletonContainer } from "@/components/admin/categories/categ
 import { CategoriesContainer } from "@/components/catalogue/categories-container"
 import { ProductSkeleton } from "@/components/catalogue/product-skeleton"
 import { ProductsContainer } from "@/components/catalogue/products-container"
+import { CatalogProductsProvider } from "@/contexts/catalog/catalog-products-context"
 import { H1 } from "@/components/common/h1"
 import { Searcher } from "@/components/common/searcher"
 import { getCategories } from "@/firebase/services/server/categories"
@@ -41,7 +42,11 @@ async function CategoriesSection() {
 async function ProductsSection() {
   const products = await getProducts()
 
-  return <ProductsContainer className="mt-6" initialProducts={products} />
+  return (
+    <CatalogProductsProvider initialProducts={products}>
+      <ProductsContainer className="mt-6" />
+    </CatalogProductsProvider>
+  )
 }
 
 export default async function CataloguePage() {

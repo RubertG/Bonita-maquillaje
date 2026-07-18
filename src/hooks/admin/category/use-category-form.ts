@@ -46,10 +46,10 @@ export const useCategoryForm = (id?: string) => {
       }
 
       try {
-        let imgRef = ""
+        const categoryId = id ?? uuidv4()
         let category: Category = {
           name: data.name,
-          id: uuidv4(),
+          id: categoryId,
           img: {
             name: "",
             url: "",
@@ -58,12 +58,12 @@ export const useCategoryForm = (id?: string) => {
         }
 
         if (imgs.length > 0) {
-          imgRef = await saveFile(imgs[0], "/categories")
+          const { url, name } = await saveFile(imgs[0], categoryId, "/categories")
           category = {
             ...category,
             img: {
-              name: imgs[0].name,
-              url: imgRef,
+              name,
+              url,
               size: imgs[0].size
             }
           }
@@ -77,12 +77,8 @@ export const useCategoryForm = (id?: string) => {
         const token = await getAuthToken()
 
         if (id) {
-          const newCategory = {
-            ...category,
-            id
-          }
-          updateStoreCategory(newCategory)
-          const result = await updateCategoryAction(token, newCategory)
+          updateStoreCategory(category)
+          const result = await updateCategoryAction(token, category)
           if (!result.ok) {
             throw new Error(result.error)
           }
@@ -97,7 +93,6 @@ export const useCategoryForm = (id?: string) => {
         router.push("/admin/productos")
         router.refresh()
       } catch (error) {
-        console.log(error)
         setError("Ocurrio un error al cargar la categoría")
       }
     }

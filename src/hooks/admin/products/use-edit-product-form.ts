@@ -22,8 +22,8 @@ export const useEditProductForm = ({ id }: Props) => {
   const [defaultValues, setDefaultValues] = useState<Inputs>({
     name: "",
     description: "",
-    price: "",
-    stock: "",
+    price: 0,
+    stock: 0,
     category: ""
   })
   const [categories, setCategories] = useState<Pick<Category, "name" | "id">[]>([])
@@ -55,9 +55,9 @@ export const useEditProductForm = ({ id }: Props) => {
         const newImgs: FileStateItem[] = await Promise.all(
           images.map(async (img) => {
             if (img instanceof File) {
-              const url = await saveFile(img as File, "/products")
+              const { url, name } = await saveFile(img as File, id, "/products")
               return {
-                name: img.name,
+                name,
                 url,
                 size: img.size
               }
@@ -71,9 +71,7 @@ export const useEditProductForm = ({ id }: Props) => {
           ...data,
           id,
           imgs: newImgs,
-          tones,
-          price: parseFloat(data.price),
-          stock: parseInt(data.stock)
+          tones
         }
 
         const token = await getAuthToken()
@@ -100,8 +98,8 @@ export const useEditProductForm = ({ id }: Props) => {
       setDefaultValues({
         name: p.name,
         description: p.description,
-        price: p.price.toString(),
-        stock: p.stock.toString(),
+        price: p.price,
+        stock: p.stock,
         category: p.category
       })
       setTones(p.tones)

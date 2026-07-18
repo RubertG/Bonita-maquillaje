@@ -8,8 +8,11 @@ export const ProductCard = ({
   name,
   price,
   imgs,
-  id
-}: Pick<CatalogProduct, "name" | "price" | "imgs" | "id">) => {
+  id,
+  priority = false
+}: Pick<CatalogProduct, "name" | "price" | "imgs" | "id"> & {
+  priority?: boolean
+}) => {
   return (
     <LazyMotion features={domAnimation}>
       <m.div
@@ -35,10 +38,12 @@ export const ProductCard = ({
         <Link href={`/catalogo/${id}`}>
           <Image
             width={200}
-            height={200 * (3 / 4)}
+            height={150}
             className="w-full aspect-[3/4] object-cover rounded-lg bg-bg-200"
             src={imgs[0].url}
             alt={`${name} - Bonita Maquillaje`}
+            priority={priority}
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
           />
           <footer className="mt-2 text-center">
             <h2 className="text-text-100 line-clamp-2">

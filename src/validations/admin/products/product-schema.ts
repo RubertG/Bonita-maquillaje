@@ -10,10 +10,10 @@ export const productSchema = z.object({
   description: z.string().min(1, {
     message: "La descripción del producto es requerida"
   }),
-  price: z.string().min(1, {
-    message: "El precio es requerido"
+  price: z.coerce.number().min(1, {
+    message: "El precio es requerido y debe ser mayor a 0"
   }),
-  stock: z.string().min(1, {
-    message: "El stock es requerido"
+  stock: z.coerce.number().int().min(1, {
+    message: "El stock es requerido y debe ser mayor a 0"
   })
 })

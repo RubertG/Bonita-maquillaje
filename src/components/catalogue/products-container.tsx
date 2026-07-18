@@ -5,21 +5,19 @@ import { useSearchParams } from "next/navigation"
 
 import { ButtonWithIcon } from "@/components/common/button-with-icon"
 import { Delete } from "@/components/common/icons"
-import { CatalogProduct } from "@/types/server/catalog"
+import { useCatalogProducts } from "@/contexts/catalog/catalog-products-context"
 import { ProductSkeleton } from "./product-skeleton"
 import { ProductCard } from "./product-card"
 
 interface Props {
   className?: string
-  initialProducts?: CatalogProduct[]
 }
 
 export const ProductsContainer = ({
-  className,
-  initialProducts = []
+  className
 }: Props) => {
+  const { products } = useCatalogProducts()
   const searchParams = useSearchParams()
-  const [products] = useState(initialProducts)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -52,8 +50,8 @@ export const ProductsContainer = ({
       <ul
         className={`${className} grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2`}
       >
-        {displayProducts.map(product => (
-          <ProductCard key={product.id} {...product} />
+        {displayProducts.map((product, index) => (
+          <ProductCard key={product.id} {...product} priority={index < 5} />
         ))}
       </ul>
 
