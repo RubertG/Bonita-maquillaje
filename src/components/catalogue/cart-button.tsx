@@ -17,7 +17,7 @@ export const CartButton = ({ variant = "icon" }: CartButtonProps) => {
       <button
         type="button"
         onClick={() => router.push("/carrito")}
-        className="flex items-center justify-between w-full py-2 px-3 text-text-100 font-normal"
+        className="flex items-center justify-between w-full py-2 px-3 text-text-100 font-normal border-b border-bg-200"
       >
         <span>Carrito</span>
         {cartSize > 0 && (
