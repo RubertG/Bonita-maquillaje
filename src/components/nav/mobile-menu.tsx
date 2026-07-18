@@ -65,18 +65,6 @@ export function MobileMenu({ children }: MobileMenuProps) {
   const close = useCallback(() => setIsOpen(false), [])
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add("overflow-hidden")
-    } else {
-      document.body.classList.remove("overflow-hidden")
-    }
-
-    return () => {
-      document.body.classList.remove("overflow-hidden")
-    }
-  }, [isOpen])
-
-  useEffect(() => {
     if (!isOpen) return
 
     const menu = menuRef.current
@@ -125,7 +113,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
         type="button"
         onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
-        aria-controls="mobile-menu"
+        aria-controls="mobile-menu-panel"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
         className="flex items-center justify-center p-2 text-text-100 lg:hidden"
       >
@@ -147,7 +135,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
             />
             <motion.aside
               key="mobile-menu-panel"
-              id="mobile-menu"
+              id="mobile-menu-panel"
               ref={menuRef}
               role="dialog"
               aria-modal="true"

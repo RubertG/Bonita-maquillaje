@@ -20,7 +20,7 @@ export function NavCategoryLink({ category, className }: NavCategoryLinkProps) {
   return (
     <Link
       href={href}
-      className={`block py-2 px-3 lg:py-1 w-full border-b border-bg-200 lg:border-0 lg:hover:bg-bg-300 lg:rounded-lg lg:transition-colors text-text-100 ${
+      className={`block py-2 px-3 lg:py-1 w-full border-b border-bg-200 lg:border-0 text-text-100 font-normal hover:text-principal-300 hover:scale-105 transition-all duration-200 origin-left ${
         isActive ? "text-principal-300 border-b-2 border-principal-300" : ""
       } ${className ?? ""}`}
     >
