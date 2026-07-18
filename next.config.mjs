@@ -7,9 +7,6 @@ const nextConfig = {
       port: '',
       pathname: '/**'
     }]
-  },
-  eslint: {
-    ignoreDuringBuilds: true
   }
 }
 

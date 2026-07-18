@@ -5,12 +5,12 @@ import { useState } from "react"
 import { FieldValues, Resolver, SubmitHandler, useForm as useFormReactHook } from "react-hook-form"
 import { z } from "zod/v4"
 
-export function useForm<Inputs extends FieldValues = FieldValues, TypeSchema extends z.ZodType<Inputs, Inputs> = z.ZodType<Inputs, Inputs>>({
+export function useForm<Inputs extends FieldValues = FieldValues>({
   schema,
   actionSubmit,
   values
 }: {
-  schema: TypeSchema
+  schema: z.ZodType<any, any>
   actionSubmit: (data: Inputs) => Promise<void>
   values?: Inputs
 }) {

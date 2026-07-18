@@ -6,7 +6,8 @@ import { verifyAdminToken } from "@/firebase/server"
 const TOKEN_COOKIE = "admin_token"
 
 export async function setAuthCookie(token: string): Promise<void> {
-  cookies().set(TOKEN_COOKIE, token, {
+  const cookieStore = await cookies()
+  cookieStore.set(TOKEN_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -16,11 +17,13 @@ export async function setAuthCookie(token: string): Promise<void> {
 }
 
 export async function clearAuthCookie(): Promise<void> {
-  cookies().delete(TOKEN_COOKIE)
+  const cookieStore = await cookies()
+  cookieStore.delete(TOKEN_COOKIE)
 }
 
 export async function verifyAdminSession(): Promise<{ ok: true } | { ok: false; error: string }> {
-  const token = cookies().get(TOKEN_COOKIE)?.value
+  const cookieStore = await cookies()
+  const token = cookieStore.get(TOKEN_COOKIE)?.value
   if (!token) {
     return { ok: false, error: "Missing admin token" }
   }
