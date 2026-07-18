@@ -7,7 +7,7 @@ import { signIn } from "@/firebase/services/auth"
 import { Spinner } from "@/components/common/icons"
 import clsx from "clsx"
 import { useForm } from "@/hooks/common/use-form"
-import { setAuthCookie } from "@/app/actions/admin/auth"
+import { setAuthCookie, verifyAdminTokenAction } from "@/app/actions/admin/auth"
 import { useRouter } from "next/navigation"
 
 interface Inputs {
@@ -33,6 +33,12 @@ export const LoginForm = () => {
       }
 
       const token = await userCredential.user.getIdToken()
+      const adminResult = await verifyAdminTokenAction(token)
+      if (!adminResult.ok) {
+        setError("password", { message: "No tienes permisos de administrador." })
+        return
+      }
+
       await setAuthCookie(token)
       router.replace("/admin/productos")
     }
