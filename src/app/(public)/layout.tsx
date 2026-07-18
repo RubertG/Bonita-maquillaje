@@ -1,4 +1,4 @@
-import { Nav } from "@/components/catalogue/nav"
+import { Nav } from "@/components/nav/nav"
 import { Footer } from "@/components/common/footer"
 import WhatsappButton from "@/components/common/whatsapp-button"
 import { CatalogProductsProvider } from "@/contexts/catalog/catalog-products-context"
