@@ -33,6 +33,7 @@ const listVariants = {
   visible: {
     opacity: 1,
     transition: {
+      delayChildren: 0.15,
       staggerChildren: 0.05
     }
   }
@@ -45,10 +46,11 @@ const itemVariants = {
 
 export function MobileMenuItem({ children, className }: MobileMenuItemProps) {
   const reduced = useReducedMotion()
+  const itemTransition: Transition = reduced ? { duration: 0 } : { duration: 0.3, ease: "easeOut" }
   return (
     <motion.li
       variants={itemVariants}
-      transition={reduced ? { duration: 0 } : undefined}
+      transition={itemTransition}
       className={className}
     >
       {children}
@@ -102,9 +104,9 @@ export function MobileMenu({ children }: MobileMenuProps) {
     }
   }, [isOpen, close])
 
-  const transition: Transition = reducedMotion
+  const panelTransition: Transition = reducedMotion
     ? { duration: 0 }
-    : { type: "spring", stiffness: 300, damping: 30 }
+    : { duration: 0.3, ease: "easeOut" }
 
   return (
     <>
@@ -145,7 +147,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              transition={transition}
+              transition={panelTransition}
             >
               <button
                 type="button"
@@ -159,7 +161,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
                 variants={listVariants}
                 initial="hidden"
                 animate="visible"
-                transition={reducedMotion ? { staggerChildren: 0 } : { staggerChildren: 0.05 }}
+                transition={reducedMotion ? { delayChildren: 0, staggerChildren: 0 } : undefined}
                 className="flex-1 flex flex-col gap-6 overflow-y-auto"
               >
                 {children}

@@ -33,7 +33,12 @@ export async function Nav() {
   return (
     <nav className="bg-bg-100 lg:bg-bg-transparent lg:backdrop-blur-sm px-4 py-2.5 fixed w-full top-0 left-0 z-30">
       <div className="flex items-center max-w-7xl mx-auto">
-        <div className="flex-1 flex items-center justify-start">
+        <div className="flex-1 flex items-center justify-start gap-4">
+          <div className="lg:hidden">
+            <MobileMenu categories={categories} isAdmin={isAdmin}>
+              <NavCategories categories={categories} isAdmin={isAdmin} />
+            </MobileMenu>
+          </div>
           <Link
             className="hidden lg:flex items-center justify-center gap-1"
             href="/"
@@ -64,12 +69,7 @@ export async function Nav() {
           )}
         </ul>
 
-        <div className="flex-1 flex items-center justify-end gap-4">
-          <div className="lg:hidden">
-            <MobileMenu categories={categories} isAdmin={isAdmin}>
-              <NavCategories categories={categories} isAdmin={isAdmin} />
-            </MobileMenu>
-          </div>
+        <div className="flex-1 flex items-center justify-end">
           <CartButton />
         </div>
       </div>
