@@ -167,6 +167,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
                 animate="visible"
                 transition={reducedMotion ? { delayChildren: 0, staggerChildren: 0 } : undefined}
                 className="flex-1 flex flex-col gap-6 overflow-y-auto"
+                onClick={close}
               >
                 {children}
               </motion.ul>
