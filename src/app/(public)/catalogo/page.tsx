@@ -1,14 +1,11 @@
 import { Suspense } from "react"
 
 import { CategoriesSkeletonContainer } from "@/components/admin/categories/categories-skeleton-container"
-import { CategoriesContainer } from "@/components/catalogue/categories-container"
 import { ProductSkeleton } from "@/components/catalogue/product-skeleton"
-import { ProductsContainer } from "@/components/catalogue/products-container"
-import { CatalogProductsProvider } from "@/contexts/catalog/catalog-products-context"
+import { CategoriesSection } from "@/components/catalogue/sections/categories-section"
+import { ProductsSection } from "@/components/catalogue/sections/products-section"
 import { H1 } from "@/components/common/h1"
 import { Searcher } from "@/components/common/searcher"
-import { getCategories } from "@/firebase/services/server/categories"
-import { getProducts } from "@/firebase/services/server/products"
 
 export const dynamic = "force-dynamic"
 
@@ -31,22 +28,6 @@ export const metadata = {
     url: "https://bonita-maquillaje.com/catalogo",
     siteName: "Bonita Maquillaje"
   }
-}
-
-async function CategoriesSection() {
-  const categories = await getCategories()
-
-  return <CategoriesContainer className="mt-6 lg:mt-4" initialCategories={categories} />
-}
-
-async function ProductsSection() {
-  const products = await getProducts()
-
-  return (
-    <CatalogProductsProvider initialProducts={products}>
-      <ProductsContainer className="mt-6" />
-    </CatalogProductsProvider>
-  )
 }
 
 export default async function CataloguePage() {
