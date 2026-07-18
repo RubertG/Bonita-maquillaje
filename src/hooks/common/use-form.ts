@@ -10,6 +10,7 @@ export function useForm<Inputs extends FieldValues = FieldValues>({
   actionSubmit,
   values
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: z.ZodType<any, any>
   actionSubmit: (data: Inputs) => Promise<void>
   values?: Inputs
