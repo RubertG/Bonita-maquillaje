@@ -44,8 +44,13 @@ const itemVariants = {
 }
 
 export function MobileMenuItem({ children, className }: MobileMenuItemProps) {
+  const reduced = useReducedMotion()
   return (
-    <motion.li variants={itemVariants} className={className}>
+    <motion.li
+      variants={itemVariants}
+      transition={reduced ? { duration: 0 } : undefined}
+      className={className}
+    >
       {children}
     </motion.li>
   )
@@ -166,6 +171,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
                 variants={listVariants}
                 initial="hidden"
                 animate="visible"
+                transition={reducedMotion ? { staggerChildren: 0 } : { staggerChildren: 0.05 }}
                 className="flex-1 flex flex-col gap-6 overflow-y-auto"
               >
                 {children}
