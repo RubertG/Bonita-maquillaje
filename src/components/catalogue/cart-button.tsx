@@ -1,6 +1,6 @@
 "use client"
 
-import { useTransitionRouter } from "next-view-transitions"
+import { useRouter } from "next/navigation"
 import { Cart } from "../common/icons"
 import { useCartStore } from "@/stores/cart/cart.store"
 
@@ -10,7 +10,7 @@ interface CartButtonProps {
 
 export const CartButton = ({ variant = "icon" }: CartButtonProps) => {
   const cartSize = useCartStore(state => state.items.length)
-  const router = useTransitionRouter()
+  const router = useRouter()
 
   if (variant === "item") {
     return (

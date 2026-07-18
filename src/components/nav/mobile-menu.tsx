@@ -34,8 +34,8 @@ const listVariants = {
   visible: {
     opacity: 1,
     transition: {
-      delayChildren: 0.15,
-      staggerChildren: 0.05
+      delayChildren: 0.25,
+      staggerChildren: 0.1
     }
   }
 }
@@ -118,7 +118,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
         aria-expanded={isOpen}
         aria-controls="mobile-menu-panel"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
-        className="flex items-center justify-center p-2 text-text-100 lg:hidden"
+        className="flex items-center justify-center py-2 text-text-100 lg:hidden"
       >
         <Menu className="w-6 h-6" />
       </button>
