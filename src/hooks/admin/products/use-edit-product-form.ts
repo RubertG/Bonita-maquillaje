@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useEffect, useState } from "react"
 import { useForm } from "../../common/use-form"
 import { productSchema } from "@/validations/admin/products/product-schema"
-import { getProduct, updateProduct } from "@/firebase/services/products"
+import { getProduct } from "@/firebase/services/products"
+import { updateProduct } from "@/app/actions/admin/products"
+import { getAuthToken } from "@/lib/auth-token"
 import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
 import { useStoreCategory } from "@/stores/common/category.store"
@@ -74,10 +76,14 @@ export const useEditProductForm = ({ id }: Props) => {
           stock: parseInt(data.stock)
         }
 
-        await updateProduct(product)
+        const token = await getAuthToken()
+        const result = await updateProduct(token, product)
+        if (!result.ok) {
+          throw new Error(result.error)
+        }
         router.push(`/admin/productos?categoria=${data.category}`)
         refreshProducts(data.category)
-      } catch {
+      } catch (error) {
         setError("Ocurrio un error al guardar el producto")
       }
     }

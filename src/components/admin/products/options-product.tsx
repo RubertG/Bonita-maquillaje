@@ -1,7 +1,8 @@
 "use client"
 
 import { Delete, Edit } from "@/components/common/icons"
-import { deleteProduct } from "@/firebase/services/products"
+import { deleteProduct } from "@/app/actions/admin/products"
+import { getAuthToken } from "@/lib/auth-token"
 import { deleteFile } from "@/firebase/services/storage"
 import { Product } from "@/types/db/db"
 import { useState } from "react"
@@ -18,7 +19,13 @@ export const OptionsProduct = ({ id, imgs }: Pick<Product, "id" | "imgs">) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    await deleteProduct(id)
+    const token = await getAuthToken()
+    const result = await deleteProduct(token, id)
+    if (!result.ok) {
+      setLoading(false)
+      setPopup(false)
+      return
+    }
     await Promise.all(imgs.map(img => deleteFile(`products/${img.name}`)))
     refreshProducts(searchParams.get("categoria") || "")
     setLoading(false)

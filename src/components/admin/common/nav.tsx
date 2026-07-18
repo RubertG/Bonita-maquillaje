@@ -1,7 +1,9 @@
 'use client'
 
 import { singOutSession } from "@/firebase/services/auth"
+import { clearAuthCookie } from "@/app/actions/admin/auth"
 import { getCategories } from "@/firebase/services/categories"
+import { useRouter } from "next/navigation"
 import { branch } from "@/fonts/branch/branch"
 import clsx from "clsx"
 import Image from "next/image"
@@ -36,6 +38,7 @@ export function Nav() {
   const [open, setOpen] = useState(false)
   const [firstCategory, setFirstCategory] = useState<string>("")
   const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
     const getFirstCategory = async () => {
@@ -107,6 +110,8 @@ export function Nav() {
             <button
               onClick={async () => {
                 await singOutSession()
+                await clearAuthCookie()
+                router.replace("/admin")
               }}
               className="block py-2 px-3 lg:py-1 w-full border-b border-bg-200 lg:border-0 lg:hover:bg-bg-200 lg:rounded-lg lg:transition-colors">
               Cerrar sesión

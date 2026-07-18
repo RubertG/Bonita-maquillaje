@@ -7,7 +7,8 @@ import { BaseSyntheticEvent, useEffect, useState } from "react"
 import { useForm } from "../../common/use-form"
 import { productSchema } from "@/validations/admin/products/product-schema"
 import { v4 as uuidv4 } from 'uuid'
-import { saveProduct } from "@/firebase/services/products"
+import { createProduct } from "@/app/actions/admin/products"
+import { getAuthToken } from "@/lib/auth-token"
 import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
 import { useStoreCategory } from "@/stores/common/category.store"
@@ -57,10 +58,14 @@ export const useCreateProductForm = () => {
           tones: tones
         }
 
-        await saveProduct(product)
+        const token = await getAuthToken()
+        const result = await createProduct(token, product)
+        if (!result.ok) {
+          throw new Error(result.error)
+        }
         router.push(`/admin/productos?categoria=${data.category}`)
         refreshProducts(data.category)
-      } catch {
+      } catch (error) {
         setError("Ocurrio un error al guardar el producto")
       }
 

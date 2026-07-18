@@ -32,6 +32,10 @@ export const adminDb = getFirestore(adminApp)
 export const adminStorage = getStorage(adminApp)
 
 export async function verifyAdminToken(idToken: string) {
+  if (!idToken || typeof idToken !== "string") {
+    throw new Error("Missing or invalid ID token")
+  }
+
   const decoded = await adminAuth.verifyIdToken(idToken)
 
   if (decoded.admin !== true) {

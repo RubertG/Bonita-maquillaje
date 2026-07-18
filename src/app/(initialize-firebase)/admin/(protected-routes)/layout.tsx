@@ -1,19 +1,23 @@
 import { Nav } from "@/components/admin/common/nav"
-import { ProtectedRoute } from "@/components/admin/common/protected-route"
+import { verifyAdminSession } from "@/app/actions/admin/auth"
+import { redirect } from "next/navigation"
 import { ReactNode } from "react"
 
-function AdminLayout({
+async function AdminLayout({
   children
 }: {
   children: ReactNode
 }) {
+  const result = await verifyAdminSession()
+  if (!result.ok) {
+    redirect("/admin")
+  }
+
   return (
-    <ProtectedRoute>
+    <>
       <Nav />
-      {
-        children
-      }
-    </ProtectedRoute >
+      {children}
+    </>
   )
 }
 

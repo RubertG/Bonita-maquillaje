@@ -6,7 +6,13 @@ import { useForm } from "../../common/use-form"
 import { categorySchema } from "@/validations/admin/products/category"
 import { deleteFile, saveFile } from "@/firebase/services/storage"
 import { v4 as uuidv4 } from "uuid"
-import { deleteCategory, getCategory, saveCategory, updateCategory } from "@/firebase/services/categories"
+import { getCategory } from "@/firebase/services/categories"
+import {
+  createCategory,
+  updateCategory as updateCategoryAction,
+  deleteCategory as deleteCategoryAction
+} from "@/app/actions/admin/categories"
+import { getAuthToken } from "@/lib/auth-token"
 import { CategoryInputs, FileStateItem } from "@/types/admin/admin"
 import { Category } from "@/types/db/db"
 import { useStoreCategory } from "@/stores/common/category.store"
@@ -68,16 +74,24 @@ export const useCategoryForm = (id?: string) => {
           }
         }
 
+        const token = await getAuthToken()
+
         if (id) {
           const newCategory = {
             ...category,
             id
           }
           updateStoreCategory(newCategory)
-          await updateCategory(newCategory)
+          const result = await updateCategoryAction(token, newCategory)
+          if (!result.ok) {
+            throw new Error(result.error)
+          }
         } else {
           addCategory(category)
-          await saveCategory(category)
+          const result = await createCategory(token, category)
+          if (!result.ok) {
+            throw new Error(result.error)
+          }
         }
 
         router.push("/admin/productos")
@@ -134,13 +148,15 @@ export const useCategoryForm = (id?: string) => {
     setLoadingDelete(true)
 
     deleteStoreCategory(id)
+    const token = await getAuthToken()
+    const deleteCategoryPromise = deleteCategoryAction(token, id)
     if (imgOld.length > 0) {
       await Promise.all([
-        await deleteFile(`categories/${imgOld[0].name}`),
-        await deleteCategory(id)
+        deleteFile(`categories/${imgOld[0].name}`),
+        deleteCategoryPromise
       ])
     } else {
-      await deleteCategory(id)
+      await deleteCategoryPromise
     }
 
     setImgOld([])
