@@ -7,12 +7,12 @@ import Skeleton from "react-loading-skeleton"
 
 export default function Loading() {
   return (
-    <main
-      className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto"
-    >
+    <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
       <section className="flex items-center gap-3 justify-between">
         <BackButton href="/catalogo" />
-        <p className="text-accent-300 text-xl block w-20 h-6"><Skeleton className="block w-full h-full" /></p>
+        <p className="text-accent-300 text-xl block w-20 h-6">
+          <Skeleton className="block w-full h-full" />
+        </p>
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-[40%_1fr] gap-4 lg:gap-8 mt-6">
@@ -42,7 +42,7 @@ export default function Loading() {
             searchParams={{}}
           />
 
-          <ButtonsProducts 
+          <ButtonsProducts
             className="mt-7"
             searchParams={{}}
             id="loading"

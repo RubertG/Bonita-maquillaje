@@ -1,10 +1,15 @@
-import { Product } from "@/types/db/db"
+import { CatalogProduct } from "@/types/server/catalog"
 import Image from "next/image"
 import { Link } from "next-view-transitions"
 import { domAnimation, LazyMotion } from "motion/react"
 import * as m from "motion/react-m"
 
-export const ProductCard = ({ name, price, imgs, id }: Product) => {
+export const ProductCard = ({
+  name,
+  price,
+  imgs,
+  id
+}: Pick<CatalogProduct, "name" | "price" | "imgs" | "id">) => {
   return (
     <LazyMotion features={domAnimation}>
       <m.div
