@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { motion, AnimatePresence, useReducedMotion, type Transition } from "motion/react"
-import { Menu, X } from "@/components/common/icons"
+import Link from "next/link"
+import { ChevronRight, Menu, X } from "@/components/common/icons"
 import { branch } from "@/fonts/branch/branch"
 import { Category } from "@/types/db/db"
 
@@ -16,6 +17,10 @@ interface MobileMenuProps {
 
 interface MobileMenuItemProps {
   children: ReactNode
+  icon?: ReactNode
+  href?: string
+  onClick?: () => void
+  isActive?: boolean
   className?: string
 }
 
@@ -45,16 +50,32 @@ const itemVariants = {
   visible: { opacity: 1, x: 0 }
 }
 
-export function MobileMenuItem({ children, className }: MobileMenuItemProps) {
+export function MobileMenuItem({ children, icon, href, onClick, isActive, className }: MobileMenuItemProps) {
   const reduced = useReducedMotion()
-  const itemTransition: Transition = reduced ? { duration: 0 } : { duration: 0.3, ease: "easeOut" }
+  const itemTransition: Transition = reduced ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }
+  const itemClasses = `w-full py-2 px-3 text-text-100 font-normal border-b border-principal-300/10 flex items-center gap-3 ${isActive ? "text-principal-400 italic border-b-3 border-principal-300/50" : ""}`
+  const content = (
+    <>
+      {icon}
+      <span className="flex-1 text-left">{children}</span>
+      <ChevronRight className="w-5 h-5" />
+    </>
+  )
   return (
     <motion.li
       variants={itemVariants}
       transition={itemTransition}
       className={className}
     >
-      {children}
+      {href ? (
+        <Link href={href} className={itemClasses}>
+          {content}
+        </Link>
+      ) : (
+        <button type="button" onClick={onClick} className={itemClasses}>
+          {content}
+        </button>
+      )}
     </motion.li>
   )
 }
@@ -66,6 +87,17 @@ export function MobileMenu({ children }: MobileMenuProps) {
   const toggleRef = useRef<HTMLButtonElement>(null)
 
   const close = useCallback(() => setIsOpen(false), [])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden")
+    } else {
+      document.body.classList.remove("overflow-hidden")
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden")
+    }
+  }, [isOpen])
 
   useEffect(() => {
     if (!isOpen) return
@@ -107,7 +139,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
 
   const panelTransition: Transition = reducedMotion
     ? { duration: 0 }
-    : { duration: 0.3, ease: "easeOut" }
+    : { duration: 0.25, ease: "easeOut" }
 
   return (
     <>
@@ -133,7 +165,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
+              transition={reducedMotion ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }}
               onClick={close}
             />
             <motion.aside
@@ -165,7 +197,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
                 variants={listVariants}
                 initial="hidden"
                 animate="visible"
-                transition={reducedMotion ? { delayChildren: 0, staggerChildren: 0 } : undefined}
+                transition={reducedMotion ? { delayChildren: 0, staggerChildren: 0 } : { duration: 0.25, ease: "easeOut" }}
                 className="flex-1 flex flex-col gap-6 overflow-y-auto"
                 onClick={close}
               >
