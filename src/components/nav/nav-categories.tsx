@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Cart, Tag, UserCog } from "@/components/common/icons"
 import { useCartStore } from "@/stores/cart/cart.store"
 import { NavCategory } from "./nav-category-link"
-import { MobileMenuItem } from "./mobile-menu"
+import { MobileMenuItem, MobileMenuSection } from "./mobile-menu"
 
 interface NavCategoriesProps {
   categories: NavCategory[]
@@ -19,16 +19,6 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
 
   return (
     <>
-      {categories.map((category) => (
-        <MobileMenuItem
-          key={category.id}
-          href={`/catalogo?categoria=${encodeURIComponent(category.id)}`}
-          icon={<Tag className="w-5 h-5" />}
-          isActive={activeId === category.id}
-        >
-          {category.name}
-        </MobileMenuItem>
-      ))}
       <MobileMenuItem
         onClick={() => router.push("/carrito")}
         icon={<Cart className="w-5 h-5" />}
@@ -43,10 +33,22 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
         </span>
       </MobileMenuItem>
       {isAdmin && (
-        <MobileMenuItem className="mt-auto" href="/admin" icon={<UserCog className="w-5 h-5" />}>
+        <MobileMenuItem href="/admin" icon={<UserCog className="w-5 h-5" />}>
           Administración
         </MobileMenuItem>
       )}
+      <MobileMenuSection title="Categorías">
+        {categories.map((category) => (
+          <MobileMenuItem
+            key={category.id}
+            href={`/catalogo?categoria=${encodeURIComponent(category.id)}`}
+            icon={<Tag className="w-5 h-5" />}
+            isActive={activeId === category.id}
+          >
+            {category.name}
+          </MobileMenuItem>
+        ))}
+      </MobileMenuSection>
     </>
   )
 }

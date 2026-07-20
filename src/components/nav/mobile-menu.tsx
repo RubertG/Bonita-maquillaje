@@ -24,6 +24,12 @@ interface MobileMenuItemProps {
   className?: string
 }
 
+interface MobileMenuSectionProps {
+  title: string
+  children: ReactNode
+  className?: string
+}
+
 const backdropVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 }
@@ -48,6 +54,31 @@ const listVariants = {
 const itemVariants = {
   hidden: { opacity: 0, x: -20 },
   visible: { opacity: 1, x: 0 }
+}
+
+export function MobileMenuSection({ title, children, className }: MobileMenuSectionProps) {
+  const reduced = useReducedMotion()
+  const itemTransition: Transition = reduced ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }
+  return (
+    <motion.li
+      variants={itemVariants}
+      transition={itemTransition}
+      className={className}
+    >
+      <h3 className="text-xs font-semibold uppercase tracking-wider text-text-100/60 mb-2 px-3">
+        {title}
+      </h3>
+      <motion.ul
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+        transition={reduced ? { delayChildren: 0, staggerChildren: 0 } : { duration: 0.25, ease: "easeOut" }}
+        className="flex flex-col gap-0"
+      >
+        {children}
+      </motion.ul>
+    </motion.li>
+  )
 }
 
 export function MobileMenuItem({ children, icon, href, onClick, isActive, className }: MobileMenuItemProps) {
