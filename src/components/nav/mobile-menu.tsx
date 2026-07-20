@@ -5,13 +5,8 @@ import { motion, AnimatePresence, useReducedMotion, type Transition } from "moti
 import Link from "next/link"
 import { ChevronRight, Menu, X } from "@/components/common/icons"
 import { branch } from "@/fonts/branch/branch"
-import { Category } from "@/types/db/db"
-
-export type NavCategory = Pick<Category, "id" | "name">
 
 interface MobileMenuProps {
-  categories: NavCategory[]
-  isAdmin: boolean
   children: ReactNode
 }
 

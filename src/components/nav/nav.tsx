@@ -35,7 +35,7 @@ export async function Nav() {
       <div className="flex items-center max-w-7xl mx-auto">
         <div className="flex-1 flex items-center justify-start gap-4">
           <div className="lg:hidden">
-            <MobileMenu categories={categories} isAdmin={isAdmin}>
+            <MobileMenu>
               <NavCategories categories={categories} isAdmin={isAdmin} />
             </MobileMenu>
           </div>
