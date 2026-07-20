@@ -60,24 +60,18 @@ export function MobileMenuSection({ title, children, className }: MobileMenuSect
   const reduced = useReducedMotion()
   const itemTransition: Transition = reduced ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }
   return (
-    <motion.li
-      variants={itemVariants}
-      transition={itemTransition}
-      className={className}
-    >
-      <h3 className="text-xs font-semibold uppercase tracking-wider text-text-100/60 mb-2 px-3">
-        {title}
-      </h3>
-      <motion.ul
-        variants={listVariants}
-        initial="hidden"
-        animate="visible"
-        transition={reduced ? { delayChildren: 0, staggerChildren: 0 } : { duration: 0.25, ease: "easeOut" }}
-        className="flex flex-col gap-0"
+    <>
+      <motion.li
+        variants={itemVariants}
+        transition={itemTransition}
+        className={className}
       >
-        {children}
-      </motion.ul>
-    </motion.li>
+        <h3 className="py-2 px-3 text-xs font-semibold uppercase tracking-wider text-text-100/60">
+          {title}
+        </h3>
+      </motion.li>
+      {children}
+    </>
   )
 }
 
@@ -228,7 +222,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
                 variants={listVariants}
                 initial="hidden"
                 animate="visible"
-                transition={reducedMotion ? { delayChildren: 0, staggerChildren: 0 } : { duration: 0.25, ease: "easeOut" }}
+                transition={reducedMotion ? { staggerChildren: 0, delayChildren: 0 } : undefined}
                 className="flex-1 flex flex-col gap-6 overflow-y-auto"
                 onClick={close}
               >
