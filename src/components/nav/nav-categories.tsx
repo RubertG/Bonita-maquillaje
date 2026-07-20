@@ -1,7 +1,7 @@
 "use client"
 
-import { useRouter, useSearchParams } from "next/navigation"
-import { Cart, Tag, UserCog } from "@/components/common/icons"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { Cart, Home, Tag, UserCog } from "@/components/common/icons"
 import { useCartStore } from "@/stores/cart/cart.store"
 import { NavCategory } from "./nav-category-link"
 import { MobileMenuItem, MobileMenuSection } from "./mobile-menu"
@@ -15,13 +15,24 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
   const searchParams = useSearchParams()
   const activeId = searchParams?.get("categoria")
   const router = useRouter()
+  const pathname = usePathname()
   const cartSize = useCartStore((state) => state.items.length)
 
   return (
     <>
       <MobileMenuItem
+        onClick={() => router.push("/catalogo")}
+        icon={<Home className="w-5 h-5" />}
+        isActive={pathname === "/catalogo" && !activeId}
+      >
+        <span className="flex items-center gap-2">
+          Inicio
+        </span>
+      </MobileMenuItem>
+      <MobileMenuItem
         onClick={() => router.push("/carrito")}
         icon={<Cart className="w-5 h-5" />}
+        isActive={pathname === "/carrito"}
       >
         <span className="flex items-center gap-2">
           Carrito

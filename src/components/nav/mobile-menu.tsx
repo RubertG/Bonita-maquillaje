@@ -45,7 +45,7 @@ const listVariants = {
   visible: {
     opacity: 1,
     transition: {
-      delayChildren: 0.25,
+      delayChildren: 0.2,
       staggerChildren: 0.1
     }
   }
@@ -66,7 +66,7 @@ export function MobileMenuSection({ title, children, className }: MobileMenuSect
         transition={itemTransition}
         className={className}
       >
-        <h3 className="py-2 px-3 text-xs font-semibold uppercase tracking-wider text-text-100/60">
+        <h3 className="pt-2 -mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-text-100/60">
           {title}
         </h3>
       </motion.li>
@@ -223,7 +223,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
                 initial="hidden"
                 animate="visible"
                 transition={reducedMotion ? { staggerChildren: 0, delayChildren: 0 } : undefined}
-                className="flex-1 flex flex-col gap-6 overflow-y-auto"
+                className="flex-1 flex flex-col gap-5 overflow-y-auto"
                 onClick={close}
               >
                 {children}
