@@ -19,6 +19,7 @@ export function useForm<Inputs extends FieldValues = FieldValues>({
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors }
   } = useFormReactHook<Inputs>({
     values,
@@ -37,6 +38,7 @@ export function useForm<Inputs extends FieldValues = FieldValues>({
     handleSubmit: handleSubmit(onSubmit),
     setError,
     errors,
-    loading
+    loading,
+    watch
   }
 }
