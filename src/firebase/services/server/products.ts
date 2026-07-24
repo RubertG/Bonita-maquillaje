@@ -11,12 +11,20 @@ interface GetProductsOptions {
   search?: string
 }
 
+function timestampToISOString(
+  timestamp: Product["createdAt"]
+): string | undefined {
+  if (!timestamp || typeof timestamp.toDate !== "function") return undefined
+  return timestamp.toDate().toISOString()
+}
+
 export function toCatalogProduct(product: Product): CatalogProduct {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { stock: _stock, ...rest } = product
+  const { stock: _stock, createdAt: _createdAt, ...rest } = product
   return {
     ...rest,
     id: product.id,
+    createdAt: timestampToISOString(product.createdAt),
     offerPrice: product.offerPrice ?? null,
     isBestSeller: product.isBestSeller ?? false,
     isNew: product.isNew ?? false,
@@ -100,8 +108,8 @@ export async function getProductsByCreatedAt(
   order: "asc" | "desc" = "desc"
 ): Promise<CatalogProduct[]> {
   return (await getProducts()).sort((a, b) => {
-    const aTime = a.createdAt?.toMillis?.() ?? 0
-    const bTime = b.createdAt?.toMillis?.() ?? 0
-    return order === "asc" ? aTime - bTime : bTime - aTime
+    const aTime = a.createdAt ?? ""
+    const bTime = b.createdAt ?? ""
+    return order === "asc" ? aTime.localeCompare(bTime) : bTime.localeCompare(aTime)
   })
 }
