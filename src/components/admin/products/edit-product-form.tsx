@@ -3,18 +3,20 @@
 import { useEditProductForm } from "@/hooks/admin/products/use-edit-product-form"
 import { UploadFile } from "../common/upload-file"
 import { ProductForm } from "./product-form"
+import { Category } from "@/types/db/db"
 
 interface Props {
   className?: string
   id: string
+  categories: Pick<Category, "name" | "id">[]
 }
 
-export const EditProductForm = ({ className, id }: Props) => {
+export const EditProductForm = ({ className, id, categories }: Props) => {
   const { errorImgs, imgs, setImgs, imgsOld, setImgsOld, images, setImages, ...props } = useEditProductForm({ id })
 
   return (
     <section className={`flex flex-col-reverse gap-4 max-w-lg mx-auto lg:grid lg:grid-cols-[55%_1fr] lg:gap-8 lg:max-w-none ${className}`}>
-      <ProductForm {...props} />
+      <ProductForm {...props} categories={categories} />
       <aside>
         <UploadFile
           images={images}

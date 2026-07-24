@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const ProductForm = ({
-  categories, error, errors, register, watch, loading, setTones, tones, onSubmit
+  categories, error, errors, register, watch, loading, setTones, tones, onSubmit, defaultValues
 }: Props) => {
   const price = watch("price") ?? 0
   const offerPrice = watch("offerPrice")
@@ -56,6 +56,7 @@ export const ProductForm = ({
         items={categories}
         id="category"
         placeholder="Categoría"
+        defaultValue={defaultValues?.category ?? ""}
         {...register("category")}
       />
       {errors.category?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.category?.message}</p>}
@@ -74,8 +75,8 @@ export const ProductForm = ({
 
       <div className="mt-5 flex flex-col md:flex-row gap-4 md:gap-6">
         <AnimatedCheckbox
-          label="Es bestseller"
-          description="Destacar en el catálogo"
+          label="Es más vendido"
+          description="Entra en la sección de más vendidos"
           {...register("isBestSeller")}
           checked={watch("isBestSeller") ?? false}
           onChange={(e) => register("isBestSeller").onChange(e)}
@@ -88,7 +89,7 @@ export const ProductForm = ({
         />
         <AnimatedCheckbox
           label="Es nuevo"
-          description="Marcar como novedad"
+          description="Entra en la sección de nuevos"
           {...register("isNew")}
           checked={watch("isNew") ?? false}
           onChange={(e) => register("isNew").onChange(e)}
