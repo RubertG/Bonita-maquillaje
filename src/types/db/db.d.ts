@@ -23,6 +23,11 @@ export interface Product {
   tones: Tone[]
   imgs: FileStateItem[]
   category: Id
+  createdAt?: Timestamp
+  offerPrice?: number | null
+  isBestSeller?: boolean
+  isNew?: boolean
+  salesCount?: number
 }
 
 export interface Order {

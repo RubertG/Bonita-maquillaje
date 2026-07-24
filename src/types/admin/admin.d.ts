@@ -18,6 +18,10 @@ export interface Inputs {
   price: number
   stock: number
   category: string
+  offerPrice?: number | null
+  isBestSeller?: boolean
+  isNew?: boolean
+  salesCount?: number
 }
 
 export interface InputsOrders {
