@@ -159,20 +159,6 @@ export const ProductForm = ({
       />
       {errors.stock?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.stock?.message}</p>}
 
-      <label
-        className="text-text-100 mb-2 block mt-5"
-        htmlFor="salesCount">
-        Ventas
-      </label>
-      <Input
-        type="number"
-        id="salesCount"
-        min={0}
-        placeholder="0"
-        {...register("salesCount")}
-      />
-      {errors.salesCount?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.salesCount?.message}</p>}
-
       <AddTone
         setTones={setTones}
         tones={tones}

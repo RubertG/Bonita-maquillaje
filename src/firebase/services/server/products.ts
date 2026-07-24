@@ -27,8 +27,7 @@ export function toCatalogProduct(product: Product): CatalogProduct {
     createdAt: timestampToISOString(product.createdAt),
     offerPrice: product.offerPrice ?? null,
     isBestSeller: product.isBestSeller ?? false,
-    isNew: product.isNew ?? false,
-    salesCount: product.salesCount ?? 0
+    isNew: product.isNew ?? false
   }
 }
 
@@ -91,16 +90,6 @@ export async function getNewArrivals(): Promise<CatalogProduct[]> {
 export async function getOnOffer(): Promise<CatalogProduct[]> {
   return (await getProducts()).filter(
     product => product.offerPrice != null && product.offerPrice < product.price
-  )
-}
-
-export async function getProductsBySales(
-  order: "asc" | "desc" = "desc"
-): Promise<CatalogProduct[]> {
-  return (await getProducts()).sort((a, b) =>
-    order === "asc"
-      ? (a.salesCount ?? 0) - (b.salesCount ?? 0)
-      : (b.salesCount ?? 0) - (a.salesCount ?? 0)
   )
 }
 

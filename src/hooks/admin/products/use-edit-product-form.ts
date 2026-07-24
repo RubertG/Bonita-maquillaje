@@ -26,8 +26,7 @@ export const useEditProductForm = ({ id }: Props) => {
     category: "",
     offerPrice: null,
     isBestSeller: false,
-    isNew: false,
-    salesCount: 0
+    isNew: false
   })
   const [errorImgs, setErrorImgs] = useState("")
   const [imgsOld, setImgsOld] = useState<FileStateItem[]>([])
@@ -103,8 +102,7 @@ export const useEditProductForm = ({ id }: Props) => {
         category: p.category,
         offerPrice: p.offerPrice ?? null,
         isBestSeller: p.isBestSeller ?? false,
-        isNew: p.isNew ?? false,
-        salesCount: p.salesCount ?? 0
+        isNew: p.isNew ?? false
       })
       setTones(p.tones)
       setImgsOld(p.imgs)

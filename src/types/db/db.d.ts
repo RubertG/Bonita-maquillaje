@@ -27,7 +27,6 @@ export interface Product {
   offerPrice?: number | null
   isBestSeller?: boolean
   isNew?: boolean
-  salesCount?: number
 }
 
 export interface Order {
