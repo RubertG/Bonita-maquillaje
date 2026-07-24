@@ -4,6 +4,7 @@ import { adminDb } from "@/firebase/server"
 import { ROUTES_COLLECTIONS } from "@/consts/db/db"
 import { Id, Product } from "@/types/db/db"
 import { CatalogProduct } from "@/types/server/catalog"
+import { FieldValue } from "firebase-admin/firestore"
 
 interface GetProductsOptions {
   category?: Id
@@ -11,8 +12,16 @@ interface GetProductsOptions {
 }
 
 export function toCatalogProduct(product: Product): CatalogProduct {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { stock: _stock, ...rest } = product
-  return { ...rest, id: product.id }
+  return {
+    ...rest,
+    id: product.id,
+    offerPrice: product.offerPrice ?? null,
+    isBestSeller: product.isBestSeller ?? false,
+    isNew: product.isNew ?? false,
+    salesCount: product.salesCount ?? 0
+  }
 }
 
 export async function getProducts({
@@ -46,7 +55,10 @@ export async function createProduct(product: Product): Promise<void> {
   await adminDb
     .collection(ROUTES_COLLECTIONS.PRODUCTS)
     .doc(product.id)
-    .set(product)
+    .set({
+      ...product,
+      createdAt: FieldValue.serverTimestamp()
+    })
 }
 
 export async function updateProduct(product: Product): Promise<void> {
@@ -58,4 +70,38 @@ export async function updateProduct(product: Product): Promise<void> {
 
 export async function deleteProduct(id: Id): Promise<void> {
   await adminDb.collection(ROUTES_COLLECTIONS.PRODUCTS).doc(id).delete()
+}
+
+export async function getBestSellers(): Promise<CatalogProduct[]> {
+  return (await getProducts()).filter(product => product.isBestSeller)
+}
+
+export async function getNewArrivals(): Promise<CatalogProduct[]> {
+  return (await getProducts()).filter(product => product.isNew)
+}
+
+export async function getOnOffer(): Promise<CatalogProduct[]> {
+  return (await getProducts()).filter(
+    product => product.offerPrice != null && product.offerPrice < product.price
+  )
+}
+
+export async function getProductsBySales(
+  order: "asc" | "desc" = "desc"
+): Promise<CatalogProduct[]> {
+  return (await getProducts()).sort((a, b) =>
+    order === "asc"
+      ? (a.salesCount ?? 0) - (b.salesCount ?? 0)
+      : (b.salesCount ?? 0) - (a.salesCount ?? 0)
+  )
+}
+
+export async function getProductsByCreatedAt(
+  order: "asc" | "desc" = "desc"
+): Promise<CatalogProduct[]> {
+  return (await getProducts()).sort((a, b) => {
+    const aTime = a.createdAt?.toMillis?.() ?? 0
+    const bTime = b.createdAt?.toMillis?.() ?? 0
+    return order === "asc" ? aTime - bTime : bTime - aTime
+  })
 }
