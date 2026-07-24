@@ -1,10 +1,11 @@
 import { Button } from "@/components/common/button"
+import { Checkbox } from "@/components/common/checkbox"
 import { Save, Spinner } from "@/components/common/icons"
 import clsx from "clsx"
 import { AddTone } from "./add-tone"
 import { Input, SelectInput, TextArea } from "@/components/common/input"
 import { Category } from "@/types/db/db"
-import { FieldErrors, UseFormRegister } from "react-hook-form"
+import { FieldErrors, UseFormRegister, UseFormWatch } from "react-hook-form"
 import { Inputs } from "@/types/admin/admin"
 import { Tone as ToneType } from "@/types/db/db"
 import { BaseSyntheticEvent } from "react"
@@ -14,6 +15,7 @@ interface Props {
   error: string
   errors: FieldErrors<Inputs>
   register: UseFormRegister<Inputs>
+  watch: UseFormWatch<Inputs>
   loading: boolean
   setTones: (tones: ToneType[]) => void
   tones: ToneType[]
@@ -22,8 +24,14 @@ interface Props {
 }
 
 export const ProductForm = ({
-  categories, error, errors, register, loading, setTones, tones, onSubmit
+  categories, error, errors, register, watch, loading, setTones, tones, onSubmit
 }: Props) => {
+  const price = watch("price") ?? 0
+  const offerPrice = watch("offerPrice")
+  const discount = offerPrice != null && offerPrice < price
+    ? Math.round((1 - offerPrice / price) * 100)
+    : null
+
   return (
     <form onSubmit={onSubmit}>
       <label
@@ -91,6 +99,61 @@ export const ProductForm = ({
         {...register("stock")}
       />
       {errors.stock?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.stock?.message}</p>}
+
+      <label
+        className="text-text-100 mb-2 block mt-5"
+        htmlFor="offerPrice">
+        Precio de oferta
+      </label>
+      <div className="relative">
+        <Input
+          type="number"
+          id="offerPrice"
+          min={0}
+          placeholder="0"
+          {...register("offerPrice")}
+        />
+        {discount != null && (
+          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm font-light text-text-100 bg-principal-100 px-2 py-0.5 rounded">
+            -{discount}%
+          </span>
+        )}
+      </div>
+      {errors.offerPrice?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.offerPrice?.message}</p>}
+
+      <div className="mt-5 flex flex-col gap-3">
+        <Checkbox
+          label="Es bestseller"
+          {...register("isBestSeller")}
+          checked={watch("isBestSeller") ?? false}
+          onChange={(e) => register("isBestSeller").onChange(e)}
+        />
+        <Checkbox
+          label="Es nuevo"
+          {...register("isNew")}
+          checked={watch("isNew") ?? false}
+          onChange={(e) => register("isNew").onChange(e)}
+        />
+      </div>
+      {(errors.isBestSeller?.message || errors.isNew?.message) && (
+        <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">
+          {errors.isBestSeller?.message || errors.isNew?.message}
+        </p>
+      )}
+
+      <label
+        className="text-text-100 mb-2 block mt-5"
+        htmlFor="salesCount">
+        Ventas
+      </label>
+      <Input
+        type="number"
+        id="salesCount"
+        min={0}
+        placeholder="0"
+        {...register("salesCount")}
+      />
+      {errors.salesCount?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.salesCount?.message}</p>}
 
       <AddTone
         setTones={setTones}
