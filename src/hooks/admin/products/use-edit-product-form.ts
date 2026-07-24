@@ -24,7 +24,11 @@ export const useEditProductForm = ({ id }: Props) => {
     description: "",
     price: 0,
     stock: 0,
-    category: ""
+    category: "",
+    offerPrice: null,
+    isBestSeller: false,
+    isNew: false,
+    salesCount: 0
   })
   const [categories, setCategories] = useState<Pick<Category, "name" | "id">[]>([])
   const [errorImgs, setErrorImgs] = useState("")
@@ -38,7 +42,7 @@ export const useEditProductForm = ({ id }: Props) => {
   const { refreshProducts } = useProductsContext()
 
   const {
-    register, handleSubmit, loading, errors
+    register, handleSubmit, loading, errors, watch
   } = useForm<Inputs>({
     values: defaultValues,
     schema: productSchema,
@@ -100,7 +104,11 @@ export const useEditProductForm = ({ id }: Props) => {
         description: p.description,
         price: p.price,
         stock: p.stock,
-        category: p.category
+        category: p.category,
+        offerPrice: p.offerPrice ?? null,
+        isBestSeller: p.isBestSeller ?? false,
+        isNew: p.isNew ?? false,
+        salesCount: p.salesCount ?? 0
       })
       setTones(p.tones)
       setImgsOld(p.imgs)
@@ -155,6 +163,7 @@ export const useEditProductForm = ({ id }: Props) => {
     imgsOld,
     setImgsOld,
     images,
-    setImages
+    setImages,
+    watch
   }
 }

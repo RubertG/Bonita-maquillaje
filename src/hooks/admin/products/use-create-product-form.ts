@@ -25,7 +25,7 @@ export const useCreateProductForm = () => {
   const { refreshProducts } = useProductsContext()
 
   const {
-    register, handleSubmit, loading, errors
+    register, handleSubmit, loading, errors, watch
   } = useForm<Inputs>({
     schema: productSchema,
     actionSubmit: async (data) => {
@@ -112,6 +112,7 @@ export const useCreateProductForm = () => {
     register,
     loading,
     setTones,
-    tones
+    tones,
+    watch
   }
 }
