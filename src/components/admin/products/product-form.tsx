@@ -1,5 +1,5 @@
 import { Button } from "@/components/common/button"
-import { Checkbox } from "@/components/common/checkbox"
+import { AnimatedCheckbox } from "@/components/common/animated-checkbox"
 import { Save, Spinner } from "@/components/common/icons"
 import clsx from "clsx"
 import { AddTone } from "./add-tone"
@@ -72,9 +72,46 @@ export const ProductForm = ({
       />
       {errors.description?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.description?.message}</p>}
 
+      <div className="mt-5 flex flex-col md:flex-row gap-4 md:gap-6">
+        <AnimatedCheckbox
+          label="Es bestseller"
+          description="Destacar en el catálogo"
+          {...register("isBestSeller")}
+          checked={watch("isBestSeller") ?? false}
+          onChange={(e) => register("isBestSeller").onChange(e)}
+          variant="primary"
+          icon={
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+            </svg>
+          }
+        />
+        <AnimatedCheckbox
+          label="Es nuevo"
+          description="Marcar como novedad"
+          {...register("isNew")}
+          checked={watch("isNew") ?? false}
+          onChange={(e) => register("isNew").onChange(e)}
+          variant="accent"
+          icon={
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 3v18" />
+              <path d="M3 12h18" />
+              <path d="M5.6 5.6l12.8 12.8" />
+              <path d="M18.4 5.6l-12.8 12.8" />
+            </svg>
+          }
+        />
+      </div>
+      {(errors.isBestSeller?.message || errors.isNew?.message) && (
+        <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">
+          {errors.isBestSeller?.message || errors.isNew?.message}
+        </p>
+      )}
+
       <label
         className="text-text-100 mb-2 block mt-5"
-        htmlFor="name">
+        htmlFor="price">
         Precio del producto <span className="text-accent-300">*</span>
       </label>
       <Input
@@ -88,22 +125,8 @@ export const ProductForm = ({
 
       <label
         className="text-text-100 mb-2 block mt-5"
-        htmlFor="name">
-        Cantidad del producto <span className="text-accent-300">*</span>
-      </label>
-      <Input
-        type="number"
-        id="stock"
-        min={0}
-        placeholder="0"
-        {...register("stock")}
-      />
-      {errors.stock?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.stock?.message}</p>}
-
-      <label
-        className="text-text-100 mb-2 block mt-5"
         htmlFor="offerPrice">
-        Precio de oferta
+        Precio con descuento
       </label>
       <div className="relative">
         <Input
@@ -121,25 +144,19 @@ export const ProductForm = ({
       </div>
       {errors.offerPrice?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.offerPrice?.message}</p>}
 
-      <div className="mt-5 flex flex-col gap-3">
-        <Checkbox
-          label="Es bestseller"
-          {...register("isBestSeller")}
-          checked={watch("isBestSeller") ?? false}
-          onChange={(e) => register("isBestSeller").onChange(e)}
-        />
-        <Checkbox
-          label="Es nuevo"
-          {...register("isNew")}
-          checked={watch("isNew") ?? false}
-          onChange={(e) => register("isNew").onChange(e)}
-        />
-      </div>
-      {(errors.isBestSeller?.message || errors.isNew?.message) && (
-        <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">
-          {errors.isBestSeller?.message || errors.isNew?.message}
-        </p>
-      )}
+      <label
+        className="text-text-100 mb-2 block mt-5"
+        htmlFor="stock">
+        Cantidad del producto <span className="text-accent-300">*</span>
+      </label>
+      <Input
+        type="number"
+        id="stock"
+        min={0}
+        placeholder="0"
+        {...register("stock")}
+      />
+      {errors.stock?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.stock?.message}</p>}
 
       <label
         className="text-text-100 mb-2 block mt-5"
