@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "set-admin-claim": "tsx scripts/set-admin-claim.ts"
+    "set-admin-claim": "tsx scripts/set-admin-claim.ts",
+    "backfill-product-created-at": "tsx scripts/backfill-product-created-at.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
