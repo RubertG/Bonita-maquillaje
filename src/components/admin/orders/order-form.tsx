@@ -4,7 +4,7 @@ import { DiscountCodeInput, Input, SelectInput, TextArea } from "@/components/co
 import { PAYMENT_METHODS } from "@/consts/admin/orders"
 import { InputsOrders } from "@/types/admin/admin"
 import clsx from "clsx"
-import { FieldErrors, UseFormRegister } from "react-hook-form"
+import { FieldErrors, UseFormRegister } from "@/hooks/common/use-form"
 
 interface Props {
   handleSubmit: () => Promise<void>

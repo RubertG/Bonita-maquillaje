@@ -2,8 +2,11 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { FieldValues, Resolver, SubmitHandler, useForm as useFormReactHook } from "react-hook-form"
+import { useForm as useFormReactHook } from "react-hook-form"
+import type { FieldValues, Resolver, SubmitHandler } from "react-hook-form"
 import { z } from "zod/v4"
+
+export type { FieldErrors, UseFormRegister, UseFormRegisterReturn, UseFormWatch } from "react-hook-form"
 
 export function useForm<Inputs extends FieldValues = FieldValues>({
   schema,

@@ -1,6 +1,6 @@
 "use client"
 
-import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, LegacyRef } from "react"
+import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react"
 
 interface CheckboxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   label: string
@@ -9,7 +9,7 @@ interface CheckboxProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputE
 
 export const Checkbox = forwardRef(function Checkbox(
   { className, label, error, ...props }: CheckboxProps,
-  ref: LegacyRef<HTMLInputElement> | undefined
+  ref: React.Ref<HTMLInputElement> | undefined
 ) {
   return (
     <label className={`flex items-center gap-3 cursor-pointer ${className}`}>

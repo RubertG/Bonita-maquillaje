@@ -1,6 +1,6 @@
 "use client"
 
-import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, LegacyRef, ReactNode } from "react"
+import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, ReactNode } from "react"
 import clsx from "clsx"
 
 type Variant = "primary" | "accent"
@@ -19,7 +19,7 @@ const trackVariant: Record<Variant, string> = {
 
 export const AnimatedCheckbox = forwardRef(function AnimatedCheckbox(
   { className, label, description, variant = "primary", icon, checked, ...props }: AnimatedCheckboxProps,
-  ref: LegacyRef<HTMLInputElement> | undefined
+  ref: React.Ref<HTMLInputElement> | undefined
 ) {
   const isChecked = checked ?? false
 
