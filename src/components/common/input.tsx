@@ -100,7 +100,7 @@ export const SelectInput = forwardRef(function SelectInput({ className, items, t
     <div className="relative cursor-pointer">
       <select
         className={`w-full rounded-lg px-3.5 py-2.5 border-none focus:outline-bg-200 bg-bg-50 text-text-200 font-light placeholder:text-gray-400 appearance-none shadow-button cursor-pointer ${className}`}
-        defaultValue={title}
+        defaultValue=""
         {...props} {...(ref == undefined) ? {} : { ref }}>
         <option
           className="text-text-300 font-light py-1 bg-bg-50 hover:bg-bg-200"

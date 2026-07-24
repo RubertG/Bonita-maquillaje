@@ -8,7 +8,7 @@ export const getCategories = async () => {
   const categories: Category[] = []
 
   querySnapshot.forEach(doc => {
-    categories.push(doc.data() as Category)
+    categories.push({ ...doc.data(), id: doc.id } as Category)
   })
 
   return categories
