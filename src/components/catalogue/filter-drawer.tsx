@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
+import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { FilterContent } from "./filter-content"
 import { X } from "@/components/common/icons"
 
@@ -10,9 +11,20 @@ interface Props {
   triggerRef?: React.RefObject<HTMLButtonElement | null>
 }
 
+const backdropVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 }
+}
+
+const panelVariants = {
+  hidden: { x: "-100%" },
+  visible: { x: "0%" }
+}
+
 export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
   const drawerRef = useRef<HTMLElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const reducedMotion = useReducedMotion()
 
   const getFocusable = useCallback(() => {
     const drawer = drawerRef.current
@@ -25,83 +37,104 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
   }, [])
 
   useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden")
+    } else {
+      document.body.classList.remove("overflow-hidden")
+    }
+    return () => {
+      document.body.classList.remove("overflow-hidden")
+    }
+  }, [isOpen])
+
+  useEffect(() => {
     if (!isOpen) return
 
-    document.body.style.overflow = "hidden"
+    const drawer = drawerRef.current
+    if (!drawer) return
+
     closeButtonRef.current?.focus()
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        e.preventDefault()
+    const focusableSelector =
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    const focusables = Array.from(drawer.querySelectorAll<HTMLElement>(focusableSelector))
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
         onClose()
+        triggerRef?.current?.focus()
         return
       }
 
-      if (e.key !== "Tab") return
-
-      const focusable = getFocusable()
-      if (focusable.length === 0) {
-        e.preventDefault()
-        return
-      }
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      const active = document.activeElement as HTMLElement
-
-      if (e.shiftKey && active === first) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault()
-        first.focus()
+      if (event.key === "Tab" && focusables.length > 0) {
+        const active = document.activeElement as HTMLElement | null
+        if (event.shiftKey && active === first) {
+          last?.focus()
+          event.preventDefault()
+        } else if (!event.shiftKey && active === last) {
+          first?.focus()
+          event.preventDefault()
+        }
       }
     }
 
     document.addEventListener("keydown", handleKeyDown)
-
     return () => {
-      document.body.style.overflow = ""
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [isOpen, onClose, getFocusable])
+  }, [isOpen, onClose, getFocusable, triggerRef])
 
-  useEffect(() => {
-    if (!isOpen && triggerRef?.current) {
-      triggerRef.current.focus()
-    }
-  }, [isOpen, triggerRef])
-
-  if (!isOpen) return null
+  const transition = reducedMotion
+    ? { duration: 0 }
+    : { duration: 0.25, ease: "easeOut" as const }
 
   return (
-    <div className="fixed inset-0 z-40 lg:hidden">
-      <div
-        className="absolute inset-0 bg-black/30"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      <nav
-        ref={drawerRef}
-        className="absolute top-0 left-0 h-full w-full max-w-sm bg-bg-100 shadow-lg p-4 overflow-y-auto"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Filtros"
-      >
-        <header className="flex items-center justify-between mb-6">
-          <h2 className="text-lg text-text-100">Filtros</h2>
-          <button
-            ref={closeButtonRef}
-            type="button"
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <motion.div
+            key="filter-drawer-backdrop"
+            className="absolute inset-0 bg-black/30"
+            variants={backdropVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={transition}
             onClick={onClose}
-            className="p-2 rounded-lg lg:hover:bg-bg-200 transition-colors"
-            aria-label="Cerrar filtros"
+            aria-hidden="true"
+          />
+          <motion.nav
+            key="filter-drawer-panel"
+            ref={drawerRef}
+            className="absolute top-0 left-0 h-full w-full max-w-sm bg-bg-100 shadow-lg p-4 overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Filtros"
+            variants={panelVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={transition}
           >
-            <X className="w-6 h-6 stroke-text-100" />
-          </button>
-        </header>
-        <FilterContent onClose={onClose} />
-      </nav>
-    </div>
+            <header className="flex items-center justify-between mb-6">
+              <h2 className="text-lg text-text-100">Filtros</h2>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={onClose}
+                className="p-2 rounded-lg lg:hover:bg-bg-200 transition-colors"
+                aria-label="Cerrar filtros"
+              >
+                <X className="w-6 h-6 stroke-text-100" />
+              </button>
+            </header>
+            <FilterContent onClose={onClose} />
+          </motion.nav>
+        </div>
+      )}
+    </AnimatePresence>
   )
 }

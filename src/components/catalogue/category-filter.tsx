@@ -27,7 +27,7 @@ export const CategoryFilter = ({
   return (
     <section className={className}>
       <h2 className="text-text-100 text-sm font-medium mb-3">Categorías</h2>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-1">
         {
           categories.length > 0 && !loading && (
             categories.map(category => (
@@ -35,6 +35,7 @@ export const CategoryFilter = ({
                 key={category.id}
                 {...category}
                 asButton
+                variant="list"
                 onClick={() => onToggle(category.id)}
                 isActive={selected.includes(category.id)}
               />

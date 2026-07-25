@@ -5,12 +5,14 @@ import clsx from "clsx"
 import { Link } from "next-view-transitions"
 import Image from "next/image"
 import { useSearchParams } from "next/navigation"
+import { Check } from "@/components/common/icons"
 
 interface Props extends CategoryType {
   isActive?: boolean
   asButton?: boolean
   onClick?: () => void
   href?: string
+  variant?: "default" | "list"
 }
 
 export const Category = ({
@@ -20,20 +22,40 @@ export const Category = ({
   isActive,
   asButton = false,
   onClick,
-  href
+  href,
+  variant = "default"
 }: Props) => {
   const searchParams = useSearchParams()
   const activeByParam = searchParams.getAll("categoria").includes(id)
   const active = isActive ?? activeByParam
 
+  const isList = variant === "list"
+
   const className = clsx(
-    "p-2 rounded-lg lg:hover:bg-bg-200 transition-colors flex flex-col items-center min-w-[4.5rem]",
+    "rounded-lg lg:hover:bg-bg-200 transition-colors",
     {
-      "bg-bg-200": active
+      "bg-bg-200": active,
+      "p-2 flex flex-col items-center min-w-[4.5rem]": !isList,
+      "w-full flex items-center justify-between px-3 py-2 text-left text-sm text-text-100": isList
     }
   )
 
-  const content = (
+  const content = isList ? (
+    <>
+      <span className="flex-1">{name}</span>
+      <span
+        className={clsx(
+          "flex items-center justify-center w-5 h-5 rounded border transition-colors",
+          active
+            ? "bg-principal-300 border-principal-300 text-white"
+            : "border-bg-200 bg-bg-50"
+        )}
+        aria-hidden="true"
+      >
+        {active && <Check className="w-3.5 h-3.5" />}
+      </span>
+    </>
+  ) : (
     <>
       <Image
         width={70}

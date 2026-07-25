@@ -9,7 +9,7 @@ interface Props {
 export const FilterSidebar = ({ className }: Props) => {
   return (
     <aside
-      className={`hidden lg:block w-64 shrink-0 ${className}`}
+      className={`hidden lg:block w-64 shrink-0 self-start sticky top-20 ${className}`}
     >
       <FilterContent />
     </aside>
