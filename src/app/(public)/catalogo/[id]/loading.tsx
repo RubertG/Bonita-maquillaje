@@ -7,9 +7,9 @@ import Skeleton from "react-loading-skeleton"
 
 export default function Loading() {
   return (
-    <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
+    <main className="px-4 my-20 xl:px-0 max-w-6xl mx-auto">
       <section className="flex items-center gap-3 justify-between">
-        <BackButton href="/catalogo" />
+        <BackButton href="/catalogo/productos" />
         <p className="text-accent-300 text-xl block w-20 h-6">
           <Skeleton className="block w-full h-full" />
         </p>

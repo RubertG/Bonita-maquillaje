@@ -13,7 +13,7 @@ interface NavCategoriesProps {
 
 export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
   const searchParams = useSearchParams()
-  const activeId = searchParams?.get("categoria")
+  const activeId = searchParams?.getAll("categoria")
   const router = useRouter()
   const pathname = usePathname()
   const cartSize = useCartStore((state) => state.items.length)
@@ -23,10 +23,19 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
       <MobileMenuItem
         onClick={() => router.push("/catalogo")}
         icon={<Home className="w-5 h-5" />}
-        isActive={pathname === "/catalogo" && !activeId}
+        isActive={pathname === "/catalogo" && activeId.length === 0}
       >
         <span className="flex items-center gap-2">
           Inicio
+        </span>
+      </MobileMenuItem>
+      <MobileMenuItem
+        onClick={() => router.push("/catalogo/productos")}
+        icon={<Tag className="w-5 h-5" />}
+        isActive={pathname === "/catalogo/productos" && activeId.length === 0}
+      >
+        <span className="flex items-center gap-2">
+          Productos
         </span>
       </MobileMenuItem>
       <MobileMenuItem
@@ -52,9 +61,9 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
         {categories.map((category) => (
           <MobileMenuItem
             key={category.id}
-            href={`/catalogo?categoria=${encodeURIComponent(category.id)}`}
+            href={`/catalogo/productos?categoria=${encodeURIComponent(category.id)}`}
             icon={<Tag className="w-5 h-5" />}
-            isActive={activeId === category.id}
+            isActive={activeId.includes(category.id)}
           >
             {category.name}
           </MobileMenuItem>

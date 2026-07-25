@@ -16,7 +16,7 @@ export const metadata = {
 function CartPage() {
   return (
     <main
-      className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto"
+      className="px-4 my-20 xl:px-0 max-w-6xl mx-auto"
     >
       <Suspense fallback={(
         <BackButton href="/catalogo" />
@@ -24,7 +24,7 @@ function CartPage() {
         <BackButtonCategory />
       </Suspense>
       <H1 className="mb-8 mt-4 lg:mt-0">Resumen del pedido</H1>
-      <OrderFormCart />
+      <OrderFormCart className="mt-4" />
     </main>
   )
 }
