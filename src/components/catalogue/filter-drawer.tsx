@@ -127,6 +127,7 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
             className="absolute top-0 left-0 h-full w-full max-w-sm bg-bg-100 shadow-lg p-4 overflow-y-auto"
             role="dialog"
             aria-modal="true"
+            aria-labelledby="filter-drawer-title"
             variants={panelVariants}
             initial="hidden"
             animate="visible"
@@ -134,7 +135,7 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
             transition={transition}
           >
             <header className="flex items-center justify-between mb-6">
-              <h2 className="text-lg text-text-100">Filtros</h2>
+              <h2 id="filter-drawer-title" className="text-lg text-text-100">Filtros</h2>
               <button
                 ref={closeButtonRef}
                 type="button"

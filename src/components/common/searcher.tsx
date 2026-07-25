@@ -60,7 +60,6 @@ export const Searcher = ({
         ref={inputRef}
         value={search}
         type="text"
-        aria-label="Buscar productos"
       />
       <button type="submit" aria-label="Buscar">
         <Search className="stroke-text-200 w-8" />
