@@ -141,7 +141,7 @@ export const OrderFormCart = ({
     <>
       {
         !loadingProducts && products.length === 0 ? (
-          <section className="flex flex-col items-center justify-center gap-3">
+          <section className={`flex flex-col items-center justify-center gap-3 ${className}`}>
             <p className="text-text-100 font-light">No hay productos en el carrito :(</p>
             <ButtonWithIcon href="/catalogo">
               <Store className="stroke-text-200" />
