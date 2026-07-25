@@ -21,12 +21,21 @@ export function NavCategories({ categories, isAdmin }: NavCategoriesProps) {
   return (
     <>
       <MobileMenuItem
-        onClick={() => router.push("/catalogo/productos")}
+        onClick={() => router.push("/catalogo")}
         icon={<Home className="w-5 h-5" />}
-        isActive={pathname === "/catalogo/productos" && activeId.length === 0}
+        isActive={pathname === "/catalogo" && activeId.length === 0}
       >
         <span className="flex items-center gap-2">
           Inicio
+        </span>
+      </MobileMenuItem>
+      <MobileMenuItem
+        onClick={() => router.push("/catalogo/productos")}
+        icon={<Tag className="w-5 h-5" />}
+        isActive={pathname === "/catalogo/productos" && activeId.length === 0}
+      >
+        <span className="flex items-center gap-2">
+          Productos
         </span>
       </MobileMenuItem>
       <MobileMenuItem

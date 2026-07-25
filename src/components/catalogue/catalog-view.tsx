@@ -15,7 +15,7 @@ export const CatalogView = () => {
 
   return (
     <>
-      <div className="sticky top-0 z-10 bg-bg-50 py-4 lg:static lg:py-0">
+      <div className="py-4 lg:static lg:py-0">
         <Searcher className="max-w-2xl mx-auto" />
 
         <section className="mt-4 flex items-center justify-between lg:hidden">

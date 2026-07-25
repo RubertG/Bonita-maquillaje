@@ -25,7 +25,7 @@ export const metadata = {
 export default function CatalogProductsPage() {
   return (
     <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
-      <H1 className="mb-6">Catálogo</H1>
+      <H1 className="mb-2 pt-4">Catálogo</H1>
       <ProductsSection>
         <CatalogView />
       </ProductsSection>

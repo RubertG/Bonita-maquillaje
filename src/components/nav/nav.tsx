@@ -31,7 +31,7 @@ export async function Nav() {
   const { categories, isAdmin } = await fetchNavData()
 
   return (
-    <nav className="bg-bg-100 lg:bg-bg-transparent lg:backdrop-blur-sm px-4 py-2.5 fixed w-full top-0 left-0 z-30">
+    <nav className="bg-bg-100 lg:bg-bg-transparent lg:backdrop-blur-sm px-4 py-2.5 fixed w-full top-0 left-0 z-30 border-b border-bg-200">
       <div className="flex items-center max-w-7xl mx-auto">
         <div className="flex-1 flex items-center justify-start gap-4">
           <div className="lg:hidden">
