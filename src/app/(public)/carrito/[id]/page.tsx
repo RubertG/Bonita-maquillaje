@@ -1,6 +1,7 @@
 import { OrderFormCart } from "@/components/cart/order-form-cart"
 import { BackButtonCategory } from "@/components/catalogue/back-button-category"
 import { BackButton } from "@/components/common/back-button"
+import { H1 } from "@/components/common/h1"
 import { Suspense } from "react"
 
 interface Props {
@@ -24,6 +25,7 @@ export default async function ProductPage({
       )}>
         <BackButtonCategory />
       </Suspense>
+      <H1 className="mb-8 mt-4 lg:mt-0">Resumen del pedido</H1>
       <OrderFormCart className="mt-4" id={id} colorDefault={color} />
     </main>
   )

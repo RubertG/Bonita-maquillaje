@@ -22,8 +22,9 @@ const panelVariants = {
 }
 
 export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
-  const drawerRef = useRef<HTMLElement>(null)
+  const drawerRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const previousActiveElement = useRef<HTMLElement | null>(null)
   const reducedMotion = useReducedMotion()
 
   const getFocusable = useCallback(() => {
@@ -36,8 +37,23 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
     ).filter(el => !el.hasAttribute("disabled") && el.offsetParent !== null)
   }, [])
 
+  const restoreFocus = useCallback(() => {
+    const trigger = triggerRef?.current
+    if (trigger) {
+      trigger.focus()
+    } else {
+      previousActiveElement.current?.focus()
+    }
+  }, [triggerRef])
+
+  const handleClose = useCallback(() => {
+    onClose()
+    restoreFocus()
+  }, [onClose, restoreFocus])
+
   useEffect(() => {
     if (isOpen) {
+      previousActiveElement.current = document.activeElement as HTMLElement | null
       document.body.classList.add("overflow-hidden")
     } else {
       document.body.classList.remove("overflow-hidden")
@@ -50,34 +66,33 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
   useEffect(() => {
     if (!isOpen) return
 
-    const drawer = drawerRef.current
-    if (!drawer) return
-
     closeButtonRef.current?.focus()
-
-    const focusableSelector =
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    const focusables = Array.from(drawer.querySelectorAll<HTMLElement>(focusableSelector))
-    const first = focusables[0]
-    const last = focusables[focusables.length - 1]
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault()
-        onClose()
-        triggerRef?.current?.focus()
+        handleClose()
         return
       }
 
-      if (event.key === "Tab" && focusables.length > 0) {
-        const active = document.activeElement as HTMLElement | null
-        if (event.shiftKey && active === first) {
-          last?.focus()
-          event.preventDefault()
-        } else if (!event.shiftKey && active === last) {
-          first?.focus()
-          event.preventDefault()
-        }
+      if (event.key !== "Tab") return
+
+      const focusables = getFocusable()
+      if (focusables.length === 0) {
+        event.preventDefault()
+        return
+      }
+
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      const active = document.activeElement as HTMLElement
+
+      if (event.shiftKey && active === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault()
+        first.focus()
       }
     }
 
@@ -85,7 +100,7 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
     }
-  }, [isOpen, onClose, getFocusable, triggerRef])
+  }, [isOpen, getFocusable, handleClose])
 
   const transition = reducedMotion
     ? { duration: 0 }
@@ -103,16 +118,15 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
             animate="visible"
             exit="hidden"
             transition={transition}
-            onClick={onClose}
+            onClick={handleClose}
             aria-hidden="true"
           />
-          <motion.nav
+          <motion.aside
             key="filter-drawer-panel"
             ref={drawerRef}
             className="absolute top-0 left-0 h-full w-full max-w-sm bg-bg-100 shadow-lg p-4 overflow-y-auto"
             role="dialog"
             aria-modal="true"
-            aria-label="Filtros"
             variants={panelVariants}
             initial="hidden"
             animate="visible"
@@ -124,15 +138,15 @@ export const FilterDrawer = ({ isOpen, onClose, triggerRef }: Props) => {
               <button
                 ref={closeButtonRef}
                 type="button"
-                onClick={onClose}
+                onClick={handleClose}
                 className="p-2 rounded-lg lg:hover:bg-bg-200 transition-colors"
                 aria-label="Cerrar filtros"
               >
                 <X className="w-6 h-6 stroke-text-100" />
               </button>
             </header>
-            <FilterContent onClose={onClose} />
-          </motion.nav>
+            <FilterContent onClose={handleClose} />
+          </motion.aside>
         </div>
       )}
     </AnimatePresence>

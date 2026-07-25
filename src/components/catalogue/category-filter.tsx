@@ -1,9 +1,9 @@
 "use client"
 
 import { Category } from "@/components/common/category"
+import { CategoriesSkeletonContainer } from "@/components/catalogue/categories-container"
 import { useStoreCategory } from "@/stores/common/category.store"
 import { useEffect } from "react"
-import { CategoriesSkeletonContainer } from "../admin/categories/categories-skeleton-container"
 
 interface Props {
   selected: string[]

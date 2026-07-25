@@ -14,7 +14,9 @@ export const ProductsContainer = ({
     <section className={className}>
       <ul className="grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2">
         {products.map((product, index) => (
-          <ProductCard key={product.id} {...product} priority={index < 5} />
+          <li key={product.id} className="list-none">
+            <ProductCard {...product} priority={index < 5} />
+          </li>
         ))}
       </ul>
 

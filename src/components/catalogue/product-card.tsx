@@ -13,7 +13,7 @@ export const ProductCard = ({
   priority?: boolean
 }) => {
   return (
-    <div className="lg:p-2.5 rounded-lg hover:bg-bg-200 cursor-pointer transition-color duration-200">
+    <div className="lg:p-2.5 rounded-lg hover:bg-bg-200 cursor-pointer transition-colors duration-200">
       <Link href={`/catalogo/${id}`}>
         {imgs[0]?.url ? (
           <Image

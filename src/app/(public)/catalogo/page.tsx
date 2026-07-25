@@ -1,4 +1,6 @@
+import { Suspense } from "react"
 import { CategoriesSection } from "@/components/catalogue/sections/categories-section"
+import { CategoriesSkeletonContainer } from "@/components/catalogue/categories-container"
 import { H1 } from "@/components/common/h1"
 import { ButtonWithIcon } from "@/components/common/button-with-icon"
 import { Gift, SaveCart, Share } from "@/components/common/icons"
@@ -31,7 +33,9 @@ export default function CataloguePage() {
     <main className="px-4 my-20 xl:px-0 max-w-6xl mx-auto">
       <H1 className="mb-6">Nuestro Catálogo</H1>
 
-      <CategoriesSection baseHref="/catalogo/productos" />
+      <Suspense fallback={<CategoriesSkeletonContainer />}>
+        <CategoriesSection baseHref="/catalogo/productos" />
+      </Suspense>
 
       <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ButtonWithIcon href="/catalogo/productos?tipo=ofertas">

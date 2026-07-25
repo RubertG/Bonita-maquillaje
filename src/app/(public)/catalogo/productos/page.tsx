@@ -1,6 +1,8 @@
+import { Suspense } from "react"
 import { H1 } from "@/components/common/h1"
 import { ProductsSection } from "@/components/catalogue/sections/products-section"
 import { CatalogView } from "@/components/catalogue/catalog-view"
+import { ProductSkeleton } from "@/components/catalogue/product-skeleton"
 
 export const dynamic = "force-dynamic"
 
@@ -22,13 +24,25 @@ export const metadata = {
   }
 }
 
+function ProductsSkeletonGrid() {
+  return (
+    <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2">
+      {Array(10).fill(0).map((_, index) => (
+        <ProductSkeleton key={index} />
+      ))}
+    </ul>
+  )
+}
+
 export default function CatalogProductsPage() {
   return (
     <main className="px-4 my-20 xl:px-0 max-w-6xl mx-auto">
       <H1 className="mb-2">Catálogo</H1>
-      <ProductsSection>
-        <CatalogView />
-      </ProductsSection>
+      <Suspense fallback={<ProductsSkeletonGrid />}>
+        <ProductsSection>
+          <CatalogView />
+        </ProductsSection>
+      </Suspense>
     </main>
   )
 }

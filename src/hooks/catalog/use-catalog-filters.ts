@@ -65,10 +65,6 @@ export const useCatalogFilters = () => {
     router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
   }, [filters, pathname, router])
 
-  const setSearch = useCallback((search: string) => {
-    updateParams({ search })
-  }, [updateParams])
-
   const setCategories = useCallback((categories: string[]) => {
     updateParams({ categories })
   }, [updateParams])
@@ -94,8 +90,6 @@ export const useCatalogFilters = () => {
 
   return {
     filters,
-    setSearch,
-    setCategories,
     toggleCategory,
     setType,
     setSort,

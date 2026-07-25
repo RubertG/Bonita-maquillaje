@@ -1,16 +1,19 @@
-import { getCategories } from "@/firebase/services/server/categories"
+"use client"
+
+import { useSearchParams } from "next/navigation"
 import { BackButton } from "../common/back-button"
 
 interface Props {
   href?: string
 }
 
-export const BackButtonCategory = async ({ href = "/catalogo/productos" }: Props) => {
-  const categories = await getCategories()
+export const BackButtonCategory = ({ href = "/catalogo/productos" }: Props) => {
+  const searchParams = useSearchParams()
+  const categoryId = searchParams.get("categoria")
 
-  if (!categories || categories.length === 0) {
-    return <BackButton href={href} />
-  }
+  const backHref = categoryId
+    ? `${href}?categoria=${encodeURIComponent(categoryId)}`
+    : href
 
-  return <BackButton href={`${href}?categoria=${categories[0].id}`} />
+  return <BackButton href={backHref} />
 }
