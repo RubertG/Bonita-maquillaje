@@ -7,7 +7,7 @@ import { Searcher } from "@/components/common/searcher"
 function OrdesPage() {
   return (
     <main
-      className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto"
+      className="px-4 my-20 xl:px-0 max-w-6xl mx-auto"
     >
       <H1 className="mb-6">Pedidos</H1>
       <section className="sm:flex sm:flex-row sm:justify-center sm:items-center max-w-3xl mx-auto gap-3">

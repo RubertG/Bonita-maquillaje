@@ -54,7 +54,7 @@ export default async function ProductPage({
   if (!product) return notFound()
 
   return (
-    <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
+    <main className="px-4 my-20 xl:px-0 max-w-6xl mx-auto">
       <section className="flex items-center gap-3 justify-between">
         <Suspense fallback={<BackButton href="/catalogo/productos" />}>
           <BackButtonCategory />
