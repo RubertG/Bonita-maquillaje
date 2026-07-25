@@ -14,25 +14,27 @@ export const Searcher = ({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
-  const busqueda = searchParams.get("busqueda")
-  const [search, setSearch] = useState(busqueda)
+  const [search, setSearch] = useState(searchParams.get("busqueda"))
   const router = useRouter()
 
+  const busquedaValue = searchParams.get("busqueda")
+
   useEffect(() => {
-    if (inputRef.current && !busqueda) {
+    if (inputRef.current && !busquedaValue) {
       inputRef.current.value = ""
     }
-  }, [busqueda])
+  }, [busquedaValue])
 
   const handleSearch = () => {
-    const categoriaValue = searchParams.get("categoria")
+    const url = new URLSearchParams(searchParams.toString())
 
-    const url = new URLSearchParams({
-      ...((search) && { busqueda: search }),
-      ...((categoriaValue) && { categoria: categoriaValue })
-    })
+    if (search) {
+      url.set("busqueda", search)
+    } else {
+      url.delete("busqueda")
+    }
 
-    router.replace(`${pathname}?${url.toString()}`)
+    router.replace(url.toString() ? `${pathname}?${url.toString()}` : pathname, { scroll: false })
   }
 
   const handleChange = useDebouncedCallback(handleSearch, 350)

@@ -56,7 +56,7 @@ export default async function ProductPage({
   return (
     <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
       <section className="flex items-center gap-3 justify-between">
-        <Suspense fallback={<BackButton href="/catalogo" />}>
+        <Suspense fallback={<BackButton href="/catalogo/productos" />}>
           <BackButtonCategory />
         </Suspense>
         <p className="text-accent-300 text-xl">${product.price}</p>

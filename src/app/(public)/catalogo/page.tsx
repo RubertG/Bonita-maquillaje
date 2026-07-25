@@ -1,11 +1,7 @@
-import { Suspense } from "react"
-
-import { CategoriesSkeletonContainer } from "@/components/admin/categories/categories-skeleton-container"
-import { ProductSkeleton } from "@/components/catalogue/product-skeleton"
 import { CategoriesSection } from "@/components/catalogue/sections/categories-section"
-import { ProductsSection } from "@/components/catalogue/sections/products-section"
 import { H1 } from "@/components/common/h1"
-import { Searcher } from "@/components/common/searcher"
+import { ButtonWithIcon } from "@/components/common/button-with-icon"
+import { Gift, SaveCart, Share } from "@/components/common/icons"
 
 export const dynamic = "force-dynamic"
 
@@ -18,7 +14,7 @@ export const metadata = {
     url: "https://rubertweb.dev"
   },
   keywords:
-    "Bonita maquillaje, bonita, maquillaje, web, cucuta, tineda virtual, skincare, accesorios.",
+    "Bonita maquillaje, bonita, maquillaje, web, cucuta, tienda virtual, skincare, accesorios.",
   openGraph: {
     title: "Bonita Maquillaje",
     description:
@@ -30,33 +26,30 @@ export const metadata = {
   }
 }
 
-export default async function CataloguePage() {
+export default function CataloguePage() {
   return (
     <main className="px-4 my-16 xl:px-0 lg:mt-20 max-w-6xl mx-auto">
       <H1 className="mb-6">Nuestro Catálogo</H1>
-      <Searcher className="max-w-2xl mx-auto" />
 
-      <Suspense
-        fallback={
-          <CategoriesSkeletonContainer className="mt-6 lg:mt-4" />
-        }
-      >
-        <CategoriesSection />
-      </Suspense>
+      <CategoriesSection baseHref="/catalogo/productos" />
 
-      <Suspense
-        fallback={
-          <ul className="mt-6 grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2">
-            {Array(8)
-              .fill(0)
-              .map((_, index) => (
-                <ProductSkeleton key={index} />
-              ))}
-          </ul>
-        }
-      >
-        <ProductsSection />
-      </Suspense>
+      <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <ButtonWithIcon href="/catalogo/productos?tipo=ofertas">
+          <Gift className="stroke-text-100 w-6 h-6" />
+          Ofertas
+        </ButtonWithIcon>
+        <ButtonWithIcon href="/catalogo/productos?tipo=mas-vendidos">
+          <SaveCart className="stroke-text-100 w-6 h-6" />
+          Más vendidos
+        </ButtonWithIcon>
+        <ButtonWithIcon href="/catalogo/productos?tipo=nuevos">
+          <Share className="stroke-text-100 w-6 h-6" />
+          Nuevos
+        </ButtonWithIcon>
+        <ButtonWithIcon href="/catalogo/productos">
+          Ver todos los productos
+        </ButtonWithIcon>
+      </section>
     </main>
   )
 }

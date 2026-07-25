@@ -7,11 +7,13 @@ import { Category as CategoryType } from "@/types/db/db"
 interface Props {
   className?: string
   initialCategories?: CategoryType[]
+  baseHref?: string
 }
 
 export const CategoriesContainer = ({
   className,
-  initialCategories = []
+  initialCategories = [],
+  baseHref
 }: Props) => {
   const loading = initialCategories.length === 0
 
@@ -21,7 +23,11 @@ export const CategoriesContainer = ({
     >
       {!loading &&
         initialCategories.map(category => (
-          <Category {...category} key={category.id} />
+          <Category
+            {...category}
+            key={category.id}
+            href={baseHref ? `${baseHref}?categoria=${encodeURIComponent(category.id)}` : undefined}
+          />
         ))}
       {loading && <CategoriesSkeletonContainer />}
     </section>

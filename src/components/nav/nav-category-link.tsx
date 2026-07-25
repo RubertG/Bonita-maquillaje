@@ -14,9 +14,9 @@ interface NavCategoryLinkProps {
 
 export function NavCategoryLink({ category, className, closeMenu }: NavCategoryLinkProps) {
   const searchParams = useSearchParams()
-  const activeId = searchParams?.get("categoria")
-  const isActive = activeId === category.id
-  const href = `/catalogo?categoria=${encodeURIComponent(category.id)}`
+  const activeId = searchParams?.getAll("categoria")
+  const isActive = activeId.includes(category.id)
+  const href = `/catalogo/productos?categoria=${encodeURIComponent(category.id)}`
 
   return (
     <Link

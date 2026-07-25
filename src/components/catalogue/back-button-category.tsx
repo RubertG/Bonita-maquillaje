@@ -5,7 +5,7 @@ interface Props {
   href?: string
 }
 
-export const BackButtonCategory = async ({ href = "/catalogo" }: Props) => {
+export const BackButtonCategory = async ({ href = "/catalogo/productos" }: Props) => {
   const categories = await getCategories()
 
   if (!categories || categories.length === 0) {
