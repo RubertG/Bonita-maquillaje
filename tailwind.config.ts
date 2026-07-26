@@ -30,6 +30,15 @@ const config: Config = {
         "text-300": "#6a6363",
         "bg-50": "#fdfdfd",
         "bg-transparent": "rgb(255,244,244,0.5)"
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" }
+        }
+      },
+      animation: {
+        marquee: "marquee 30s linear infinite"
       }
     }
   },
