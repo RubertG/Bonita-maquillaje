@@ -64,7 +64,7 @@ export const BannerCarousel = ({ banners, className }: Props) => {
 
   return (
     <section
-      className={`relative w-full max-w-[1536px] mx-auto 2xl:rounded-2xl 2xl:overflow-hidden ${className}`}
+      className={`relative w-full max-w-[1024px] mx-auto lg:rounded-2xl lg:overflow-hidden ${className}`}
       aria-label="Promociones"
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
@@ -83,15 +83,12 @@ export const BannerCarousel = ({ banners, className }: Props) => {
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={banner.id}>
-            {/* Fixed aspect per breakpoint keeps every slide the same height, so the
-                carousel never resizes between slides and reserves its space before
-                any image loads. Images are cropped to fit rather than letterboxed. */}
-            <div className="relative w-full aspect-[16/9] lg:aspect-[21/9]">
+            <div className="relative w-full aspect-[17/9]">
               <Image
                 src={banner.img.url}
                 alt={banner.alt}
                 fill
-                sizes="(min-width: 1536px) 1536px, 100vw"
+                sizes="(min-width: 1024px) 1024px, 100vw"
                 priority={index === 0}
                 draggable={false}
                 className="object-cover select-none pointer-events-none"

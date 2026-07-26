@@ -34,7 +34,7 @@ export default function CataloguePage() {
     <>
       {/* Rendered outside the constrained <main> so the banner can run edge to edge
           up to its own max width, instead of being clamped to the content column. */}
-      <BannerSection className="mt-[3.8rem] lg:mt-18" />
+      <BannerSection className="mt-[3.8rem] lg:mt-[4.7rem]" />
 
       <main className="px-4 mb-20 mt-10 xl:px-0 max-w-6xl mx-auto">
         <H1 className="mb-6">Nuestro Catálogo</H1>
