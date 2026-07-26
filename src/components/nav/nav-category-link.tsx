@@ -21,7 +21,7 @@ export function NavCategoryLink({ category, className, closeMenu }: NavCategoryL
   return (
     <Link
       href={href}
-      className={`group relative block py-2 px-3 lg:py-1 w-full border-b lg:border-0 font-normal hover:text-principal-300 transition-colors duration-200 ${
+      className={`group relative block py-2 px-3 lg:py-1 w-full border-b shrink-0 grow-0 text-nowrap lg:border-0 font-normal hover:text-principal-300 transition-colors duration-200 ${
         isActive ? "text-principal-300 border-principal-300/50" : "text-text-100 border-principal-300/10"
       } ${className ?? ""}`}
       onClick={() => {
