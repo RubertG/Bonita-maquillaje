@@ -25,7 +25,7 @@ export const BannerForm = ({ className }: Props) => {
       <UploadFile
         images={imgs}
         setImages={setImgs as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
-        aspect="21/9"
+        aspect="17/9"
         limitSize={LIMIT_BANNER_FILE_SIZE}
         classNameError="mt-2 mb-5"
         multiple={false}
