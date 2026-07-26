@@ -94,3 +94,25 @@ textarea {
   --swiper-pagination-bullet-horizontal-gap: 4px;
 }
 
+/* Bullets are hidden by default and revealed on hover or keyboard focus. On touch
+   devices there is no hover state, so they stay hidden and swiping is the only way
+   to change slides. They are also click-blocked while hidden, so an invisible bullet
+   can never swallow a tap. */
+.banner-swiper .swiper-pagination {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.banner-swiper:hover .swiper-pagination,
+.banner-swiper:focus-within .swiper-pagination {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-swiper .swiper-pagination {
+    transition: none;
+  }
+}
+
