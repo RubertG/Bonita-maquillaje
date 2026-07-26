@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import { FileStateItem } from "../admin/admin"
+import { BannerImage, FileStateItem } from "../admin/admin"
 
 export type Id = string
 
@@ -12,6 +12,14 @@ export interface Category {
   id: Id
   name: string
   img: FileStateItem
+}
+
+export interface Banner {
+  id: Id
+  img: BannerImage
+  alt: string
+  order: number
+  active: boolean
 }
 
 export interface Product {

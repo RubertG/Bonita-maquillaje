@@ -21,6 +21,10 @@ const links = [
     href: "/admin/categorias"
   },
   {
+    name: "Banners",
+    href: "/admin/banners"
+  },
+  {
     name: "Pedidos",
     href: "/admin/pedidos"
   },

@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import { BannerSection } from "@/components/catalogue/sections/banner-section"
 import { CategoriesSection } from "@/components/catalogue/sections/categories-section"
 import { CategoriesSkeletonContainer } from "@/components/catalogue/categories-container"
 import { H1 } from "@/components/common/h1"
@@ -30,30 +31,36 @@ export const metadata = {
 
 export default function CataloguePage() {
   return (
-    <main className="px-4 my-20 xl:px-0 max-w-6xl mx-auto">
-      <H1 className="mb-6">Nuestro Catálogo</H1>
+    <>
+      {/* Rendered outside the constrained <main> so the banner can run edge to edge
+          up to its own max width, instead of being clamped to the content column. */}
+      <BannerSection className="mt-[3.8rem] lg:mt-18" />
 
-      <Suspense fallback={<CategoriesSkeletonContainer />}>
-        <CategoriesSection baseHref="/catalogo/productos" />
-      </Suspense>
+      <main className="px-4 mb-20 mt-10 xl:px-0 max-w-6xl mx-auto">
+        <H1 className="mb-6">Nuestro Catálogo</H1>
 
-      <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <ButtonWithIcon href="/catalogo/productos?tipo=ofertas">
-          <Gift className="stroke-text-100 w-6 h-6" />
-          Ofertas
-        </ButtonWithIcon>
-        <ButtonWithIcon href="/catalogo/productos?tipo=mas-vendidos">
-          <SaveCart className="stroke-text-100 w-6 h-6" />
-          Más vendidos
-        </ButtonWithIcon>
-        <ButtonWithIcon href="/catalogo/productos?tipo=nuevos">
-          <Share className="stroke-text-100 w-6 h-6" />
-          Nuevos
-        </ButtonWithIcon>
-        <ButtonWithIcon href="/catalogo/productos">
-          Ver todos los productos
-        </ButtonWithIcon>
-      </section>
-    </main>
+        <Suspense fallback={<CategoriesSkeletonContainer />}>
+          <CategoriesSection baseHref="/catalogo/productos" />
+        </Suspense>
+
+        <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <ButtonWithIcon href="/catalogo/productos?tipo=ofertas">
+            <Gift className="stroke-text-100 w-6 h-6" />
+            Ofertas
+          </ButtonWithIcon>
+          <ButtonWithIcon href="/catalogo/productos?tipo=mas-vendidos">
+            <SaveCart className="stroke-text-100 w-6 h-6" />
+            Más vendidos
+          </ButtonWithIcon>
+          <ButtonWithIcon href="/catalogo/productos?tipo=nuevos">
+            <Share className="stroke-text-100 w-6 h-6" />
+            Nuevos
+          </ButtonWithIcon>
+          <ButtonWithIcon href="/catalogo/productos">
+            Ver todos los productos
+          </ButtonWithIcon>
+        </section>
+      </main>
+    </>
   )
 }

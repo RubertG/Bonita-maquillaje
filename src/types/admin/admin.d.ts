@@ -12,6 +12,15 @@ export interface CategoryInputs {
   name: string
 }
 
+export interface BannerImage extends FileStateItem {
+  width: number
+  height: number
+}
+
+export interface BannerInputs {
+  alt: string
+}
+
 export interface Inputs {
   name: string
   description: string
