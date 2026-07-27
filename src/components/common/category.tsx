@@ -30,7 +30,7 @@ export const Category = ({
     "rounded-lg lg:hover:bg-bg-200 transition-colors",
     {
       "bg-bg-200": isActive,
-      "p-2 flex flex-col items-center min-w-[4.5rem]": !isList,
+      "p-2 flex flex-col items-center min-w-[4.5rem]": variant === "default",
       "w-full flex items-center justify-between px-3 py-2 text-left text-sm text-text-100": isList
     }
   )

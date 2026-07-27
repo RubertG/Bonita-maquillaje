@@ -5,6 +5,7 @@ import { ROUTES_COLLECTIONS } from "@/consts/db/db"
 import { Id, Product } from "@/types/db/db"
 import { CatalogProduct } from "@/types/server/catalog"
 import { FieldValue } from "firebase-admin/firestore"
+import { cache } from "react"
 
 interface GetProductsOptions {
   category?: Id
@@ -31,24 +32,23 @@ export function toCatalogProduct(product: Product): CatalogProduct {
   }
 }
 
+const getAllProducts = cache(async (): Promise<CatalogProduct[]> => {
+  const snapshot = await adminDb.collection(ROUTES_COLLECTIONS.PRODUCTS).get()
+  return snapshot.docs.map(doc => toCatalogProduct({ ...doc.data(), id: doc.id } as Product))
+})
+
 export async function getProducts({
   category,
   search
 }: GetProductsOptions = {}): Promise<CatalogProduct[]> {
-  const snapshot = await adminDb.collection(ROUTES_COLLECTIONS.PRODUCTS).get()
-  const products = snapshot.docs.map(
-    doc => ({ ...doc.data(), id: doc.id }) as Product
-  )
-
+  const products = await getAllProducts()
   const lowerSearch = search?.toLowerCase()
 
-  return products
-    .filter(product => {
-      if (category && product.category !== category) return false
-      if (lowerSearch && !product.name.toLowerCase().includes(lowerSearch)) return false
-      return true
-    })
-    .map(toCatalogProduct)
+  return products.filter(product => {
+    if (category && product.category !== category) return false
+    if (lowerSearch && !product.name.toLowerCase().includes(lowerSearch)) return false
+    return true
+  })
 }
 
 export async function getProduct(id: Id): Promise<CatalogProduct | null> {

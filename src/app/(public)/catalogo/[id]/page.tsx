@@ -5,6 +5,7 @@ import { ButtonShare } from "@/components/catalogue/button-share"
 import { ButtonsProducts } from "@/components/catalogue/buttons-products"
 import { CounterProduct } from "@/components/catalogue/counter-product"
 import { ImgsContainer } from "@/components/catalogue/imgs-container"
+import { PriceBlock } from "@/components/common/price-block"
 import { Tones } from "@/components/catalogue/tones"
 import { BackButton } from "@/components/common/back-button"
 import { getProduct, getProducts } from "@/firebase/services/server/products"
@@ -59,7 +60,7 @@ export default async function ProductPage({
         <Suspense fallback={<BackButton href="/catalogo/productos" />}>
           <BackButtonCategory />
         </Suspense>
-        <p className="text-accent-300 text-xl">${product.price}</p>
+        <PriceBlock price={product.price} offerPrice={product.offerPrice} className="text-xl" />
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-[40%_1fr] gap-4 lg:gap-8 mt-6">
@@ -97,6 +98,7 @@ export default async function ProductPage({
           <CounterProduct
             className="mt-3"
             price={product.price}
+            offerPrice={product.offerPrice}
             searchParams={searchParamsResolved}
           />
 

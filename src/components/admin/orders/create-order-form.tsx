@@ -8,6 +8,7 @@ import { Timestamp } from "firebase/firestore"
 import { saveOrder } from "@/firebase/services/orders"
 import { useRouter } from "next/navigation"
 import { removeStorage } from "@/utils/orders-storage"
+import { toOrderLine } from "@/utils/order-line"
 import { useOrderForm } from "@/hooks/admin/orders/use-order-form"
 
 export const CreateOrderForm = () => {
@@ -28,12 +29,7 @@ export const CreateOrderForm = () => {
         const order: Order = {
           ...inputs,
           id: uuidv4(),
-          products: products.map(p => ({
-            id: p.id,
-            amount: p.amount,
-            ...(p.discountCode ? { discountCode: p.discountCode } : {}),
-            ...(p.tone ? { tone: p.tone } : {})
-          })),
+          products: products.map(toOrderLine),
           create_at: Timestamp.now(),
           phone: Number(inputs.phone),
           state: false

@@ -1,11 +1,11 @@
 import { Suspense } from "react"
 import { BannerSection } from "@/components/catalogue/sections/banner-section"
 import { MarqueeSection } from "@/components/catalogue/sections/marquee-section"
-import { CategoriesSection } from "@/components/catalogue/sections/categories-section"
-import { CategoriesSkeletonContainer } from "@/components/catalogue/categories-container"
-import { H1 } from "@/components/common/h1"
-import { ButtonWithIcon } from "@/components/common/button-with-icon"
-import { Gift, SaveCart, Share } from "@/components/common/icons"
+import { OffersSection } from "@/components/catalogue/sections/offers-section"
+import { BestSellersSection } from "@/components/catalogue/sections/best-sellers-section"
+import { NewArrivalsSection } from "@/components/catalogue/sections/new-arrivals-section"
+import { CategoryShowcaseSection } from "@/components/catalogue/sections/category-showcase-section"
+import { CatalogLandingSkeleton } from "@/components/catalogue/catalog-landing-skeleton"
 
 export const dynamic = "force-dynamic"
 
@@ -37,29 +37,16 @@ export default function CataloguePage() {
       <BannerSection className="lg:mt-4" />
 
       <main className="px-4 mb-20 mt-10 xl:px-0 max-w-6xl mx-auto">
-        <H1 className="mb-6">Nuestro Catálogo</H1>
+        <h1 className="sr-only">Nuestro Catálogo</h1>
 
-        <Suspense fallback={<CategoriesSkeletonContainer />}>
-          <CategoriesSection baseHref="/catalogo/productos" />
-        </Suspense>
-
-        <section className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <ButtonWithIcon href="/catalogo/productos?tipo=ofertas">
-            <Gift className="stroke-text-100 w-6 h-6" />
-            Ofertas
-          </ButtonWithIcon>
-          <ButtonWithIcon href="/catalogo/productos?tipo=mas-vendidos">
-            <SaveCart className="stroke-text-100 w-6 h-6" />
-            Más vendidos
-          </ButtonWithIcon>
-          <ButtonWithIcon href="/catalogo/productos?tipo=nuevos">
-            <Share className="stroke-text-100 w-6 h-6" />
-            Nuevos
-          </ButtonWithIcon>
-          <ButtonWithIcon href="/catalogo/productos">
-            Ver todos los productos
-          </ButtonWithIcon>
-        </section>
+        <div className="flex flex-col gap-12 lg:gap-16">
+          <Suspense fallback={<CatalogLandingSkeleton />}>
+            <OffersSection />
+            <BestSellersSection />
+            <NewArrivalsSection />
+            <CategoryShowcaseSection />
+          </Suspense>
+        </div>
       </main>
     </>
   )

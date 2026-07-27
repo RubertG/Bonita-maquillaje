@@ -4,6 +4,7 @@ import { Counter } from "@/components/common/counter"
 import { Plus } from "@/components/common/icons"
 import { Product } from "@/types/admin/admin"
 import { Tone } from "@/types/db/db"
+import { PriceBlock } from "@/components/common/price-block"
 import clsx from "clsx"
 import Image from "next/image"
 import Link from "next/link"
@@ -62,12 +63,10 @@ export const AddProductCard = ({
               count={count}
               handleSubtract={handleSubstract}
               handleSum={handleSum} />
-            <p
-              className="text-accent-300"
-              title={`$${product.price}`}
-            >
-              ${product.price}
-            </p>
+            <PriceBlock
+              price={product.price}
+              offerPrice={product.offerPrice}
+            />
 
             <div className="flex items-center gap-1.5 px-1">
               {

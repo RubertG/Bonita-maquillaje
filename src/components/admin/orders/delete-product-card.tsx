@@ -2,6 +2,7 @@
 
 import { Delete } from "@/components/common/icons"
 import { Product } from "@/types/admin/admin"
+import { PriceBlock } from "@/components/common/price-block"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -64,12 +65,11 @@ export const DeleteProductCard = ({
                 <span className="w-3.5 h-[2px] bg-text-300 rounded-lg block rotate-90 -translate-y-full" />
               </button>
             </div>
-            <p
-              className="text-accent-300"
-              title={`$${product.price}`}
-            >
-              ${product.price}
-            </p>
+            <PriceBlock
+              price={product.price}
+              offerPrice={product.offerPrice}
+              discountPercent={product.discountCode?.discount}
+            />
             {
               product.tone && (
                 <span

@@ -3,13 +3,14 @@ import "server-only"
 import { adminDb } from "@/firebase/server"
 import { ROUTES_COLLECTIONS } from "@/consts/db/db"
 import { Category, Id } from "@/types/db/db"
+import { cache } from "react"
 
-export async function getCategories(): Promise<Category[]> {
+export const getCategories = cache(async (): Promise<Category[]> => {
   const snapshot = await adminDb.collection(ROUTES_COLLECTIONS.CATEGORIES).get()
   return snapshot.docs.map(
     doc => ({ ...doc.data(), id: doc.id }) as Category
   )
-}
+})
 
 export async function getCategory(id: Id): Promise<Category | null> {
   const doc = await adminDb.collection(ROUTES_COLLECTIONS.CATEGORIES).doc(id).get()

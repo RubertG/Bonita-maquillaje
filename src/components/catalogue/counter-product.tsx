@@ -3,14 +3,17 @@
 import { useState } from "react"
 import { Counter } from "../common/counter"
 import { useRouter } from "next/navigation"
+import { PriceBlock } from "@/components/common/price-block"
 
 export const CounterProduct = ({
   className,
   price,
+  offerPrice,
   searchParams: { color, cantidad }
 }: {
   className?: string,
   price: number
+  offerPrice?: number | null
   searchParams: {
     [key: string]: string | undefined
   }
@@ -52,7 +55,12 @@ export const CounterProduct = ({
       />
       {
         count > 0 && (
-          <p className="entry text-lg text-accent-300">${Math.ceil(price * count)}</p>
+          <PriceBlock
+            className="entry text-lg"
+            price={price}
+            offerPrice={offerPrice}
+            amount={count}
+          />
         )
       }
     </div>

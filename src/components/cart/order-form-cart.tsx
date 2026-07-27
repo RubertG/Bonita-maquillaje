@@ -5,6 +5,9 @@ import { v4 as uuidv4 } from 'uuid'
 import { Timestamp } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { removeStorage } from "@/utils/orders-storage"
+import { toOrderLine } from "@/utils/order-line"
+import { formatCurrency } from "@/utils/format-currency"
+import { getDiscountPercent, getPayableUnitPrice, resolveOfferPrice } from "@/utils/offer-price"
 import { useOrderForm } from "@/hooks/admin/orders/use-order-form"
 import { OrderForm } from "../admin/orders/order-form"
 import { ProductsContainer } from "./products-container"
@@ -44,12 +47,7 @@ export const OrderFormCart = ({
         const order: Order = {
           ...inputs,
           id: uuidv4(),
-          products: products.map(p => ({
-            id: p.id,
-            amount: p.amount,
-            ...(p.discountCode ? { discountCode: p.discountCode } : {}),
-            ...(p.tone ? { tone: p.tone } : {})
-          })),
+          products: products.map(toOrderLine),
           create_at: Timestamp.now(),
           phone: Number(inputs.phone),
           state: false
@@ -60,21 +58,22 @@ export const OrderFormCart = ({
 
         for (let i = 0; i < products.length; i++) {
           const product = products[i]
+          const offer = resolveOfferPrice(product.price, product.offerPrice)
+          const payableUnit = getPayableUnitPrice(
+            product.price,
+            product.offerPrice,
+            product.discountCode?.discount
+          )
+          const lineTotal = parseInt((payableUnit * product.amount).toFixed(0))
+
           subTotal += product.price * product.amount
-          let discount = 0
+          total += payableUnit * product.amount
 
-          if (product.discountCode) {
-            discount = parseInt((product.price * product.amount * ((100 - product.discountCode.discount) / 100)).toFixed(0))
-            total += discount
-          } else {
-            total += product.price * product.amount
-          }
-
-          productsParser += `%0A      ${i + 1}. ${product.name} x ${product.amount} = $${product.price * product.amount}
+          productsParser += `%0A      ${i + 1}. ${product.name} x ${product.amount} = ${formatCurrency(lineTotal)}
           ${product.tone ? `%0A         Tono: ${product.tone.name}` : ""}
-          %0A         Precio: $${product.price}
+          %0A         Precio: ${formatCurrency(offer ?? product.price)}
+          ${offer !== null ? `%0A         Antes: ${formatCurrency(product.price)} - Oferta ${getDiscountPercent(product.price, offer)}%25` : ""}
           ${product.discountCode ? `%0A         Descuento: ${product.discountCode.code} - ${product.discountCode.discount}%25` : ""}
-          ${discount > 0 ? `%0A         Total: $${discount}` : ""}
           `
         }
 
@@ -99,8 +98,8 @@ export const OrderFormCart = ({
           %0A   Productos:
           ${productsParser}
           %0A   
-          %0A   Subtotal: $${parseInt(subTotal.toFixed(0))}
-          %0A   Total: $${parseInt(total.toFixed(0))}
+          %0A   Subtotal: ${formatCurrency(parseInt(subTotal.toFixed(0)))}
+          %0A   Total: ${formatCurrency(parseInt(total.toFixed(0)))}
         `
         const url = `https://api.whatsapp.com/send?phone=57${process.env.NEXT_PUBLIC_PHONE_NUMBER}&text=${message}`
 
@@ -195,4 +194,4 @@ export const OrderFormCart = ({
       }
     </>
   )
-}
+}

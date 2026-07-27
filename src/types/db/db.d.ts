@@ -55,6 +55,11 @@ export interface Order {
     }
     tone?: Tone
     amount: number
+    // Prices frozen at purchase time. Optional because orders created before this
+    // field existed do not carry them, and those fall back to the product's current
+    // price when the order is read.
+    price?: number
+    offerPrice?: number | null
   }[]
   create_at: Timestamp
 }
