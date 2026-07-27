@@ -5,7 +5,7 @@ const ROW_ITEM_CLASSNAME = "w-40 shrink-0 sm:w-[11.5rem] lg:w-52"
 
 const RowSkeleton = () => (
   <section>
-    <header className="flex items-baseline justify-between gap-3">
+    <header className="flex items-center justify-between gap-3">
       <Skeleton className="h-8 w-48" />
       <Skeleton className="h-4 w-20" />
     </header>

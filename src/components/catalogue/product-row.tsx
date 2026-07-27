@@ -16,7 +16,7 @@ interface Props {
 
 export const ProductRow = ({ title, products, viewAllHref, eagerImages = 0, className }: Props) => (
   <section className={className}>
-    <header className="flex items-baseline justify-between gap-3">
+    <header className="flex items-center justify-between gap-3">
       <h2 className={`text-2xl lg:text-3xl text-text-50 ${branch.className}`}>{title}</h2>
       <Link href={viewAllHref}
         className="shrink-0 text-sm text-accent-300 underline underline-offset-4 lg:hover:text-principal-300 lg:transition-colors">
