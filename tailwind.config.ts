@@ -29,7 +29,8 @@ const config: Config = {
         "accent-200": "#ffc1d5",
         "text-300": "#6a6363",
         "bg-50": "#fdfdfd",
-        "bg-transparent": "rgb(255,244,244,0.5)"
+        "bg-transparent": "rgb(255,244,244,0.5)",
+        "discount-100": "#aa1850"
       },
       keyframes: {
         marquee: {

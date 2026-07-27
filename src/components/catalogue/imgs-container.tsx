@@ -5,6 +5,7 @@ import clsx from "clsx"
 import { useState } from "react"
 import { Photo, Search, X } from "../common/icons"
 import { Popup } from "../common/popup"
+import { ScrollRow } from "@/components/common/scroll-row"
 import Image from "next/image"
 
 export const ImgsContainer = ({
@@ -47,9 +48,13 @@ export const ImgsContainer = ({
           </div>
         )}
       </picture>
-      <footer className="mt-2.5 flex gap-2 items-center overflow-auto pb-1 scrollbar-hide-sm">
-        {
-          imgs.length > 1 && (
+      {imgs.length > 1 && (
+        <ScrollRow
+          className="mt-2.5"
+          slideClassName="!w-auto"
+          spaceBetween={8}
+        >
+          {
             imgs.filter(img => img.url).map((img, i) => (
               <Image
                 width={120}
@@ -66,9 +71,9 @@ export const ImgsContainer = ({
                 })}
               />
             ))
-          )
-        }
-      </footer>
+          }
+        </ScrollRow>
+      )}
       {
         popup && imgs[imgActive]?.url && (
           <Popup>
