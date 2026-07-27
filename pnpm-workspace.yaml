@@ -1,3 +1,10 @@
+# Single-package repo. This field is redundant for pnpm 10+, which reads this file as
+# its settings file, but pnpm 9 treats any pnpm-workspace.yaml as a workspace root and
+# fails with "packages field missing or empty" without it — which is what Vercel runs
+# unless corepack is enabled.
+packages:
+  - '.'
+
 allowBuilds:
   '@firebase/util': true
   esbuild: true
