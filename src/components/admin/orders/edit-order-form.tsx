@@ -9,6 +9,7 @@ import { Timestamp } from "firebase/firestore"
 import { getOrder, updateOrder } from "@/firebase/services/orders"
 import { useRouter } from "next/navigation"
 import { removeStorage } from "@/utils/orders-storage"
+import { toOrderLine } from "@/utils/order-line"
 import clsx from "clsx"
 import { useOrderForm } from "@/hooks/admin/orders/use-order-form"
 
@@ -46,12 +47,7 @@ export const EditOrderForm = ({
         const order: Order = {
           ...inputs,
           id,
-          products: products.map(p => ({
-            id: p.id,
-            amount: p.amount,
-            ...(p.discountCode ? { discountCode: p.discountCode } : {}),
-            ...(p.tone ? { tone: p.tone } : {})
-          })),
+          products: products.map(toOrderLine),
           create_at: create_at,
           phone: Number(inputs.phone),
           state: isOrder
