@@ -18,8 +18,15 @@ export const useBannerForm = () => {
   const [error, setError] = useState("")
 
   const {
-    imgs, setImgs, imgOld, setImgOld,
-    resolveDimensions, errorImgs, setErrorImgs
+    imgs: imgsMobile, setImgs: setImgsMobile, imgOld: imgOldMobile,
+    setImgOld: setImgOldMobile, resolveDimensions: resolveDimensionsMobile,
+    errorImgs: errorImgsMobile, setErrorImgs: setErrorImgsMobile
+  } = useBannerImage()
+
+  const {
+    imgs: imgsDesktop, setImgs: setImgsDesktop, imgOld: imgOldDesktop,
+    setImgOld: setImgOldDesktop, resolveDimensions: resolveDimensionsDesktop,
+    errorImgs: errorImgsDesktop, setErrorImgs: setErrorImgsDesktop
   } = useBannerImage()
 
   const { banners, addBanner, deleteBanner: deleteStoreBanner } = useBannerAdmin()
@@ -29,35 +36,56 @@ export const useBannerForm = () => {
     values: EMPTY_VALUES,
     actionSubmit: async (data) => {
       setError("")
+      setErrorImgsMobile("")
+      setErrorImgsDesktop("")
 
-      if (imgs.length === 0) {
-        setErrorImgs("Se requiere cargar una imagen")
+      if (imgsMobile.length === 0) {
+        setErrorImgsMobile("Se requiere cargar una imagen")
         return
       }
 
       const bannerId = uuidv4()
-      let dimensions
+      let mobileDimensions
 
-      // Dimensions are read before the upload so an undecodable file never costs
-      // a Storage write.
       try {
-        dimensions = await resolveDimensions(imgs[0])
+        mobileDimensions = await resolveDimensionsMobile(imgsMobile[0])
       } catch {
-        setErrorImgs("No se pudo leer el tamaño de la imagen. Prueba con otro archivo.")
+        setErrorImgsMobile("No se pudo leer el tamaño de la imagen. Prueba con otro archivo.")
         return
+      }
+
+      let desktopDimensions
+      if (imgsDesktop.length > 0) {
+        try {
+          desktopDimensions = await resolveDimensionsDesktop(imgsDesktop[0])
+        } catch {
+          setErrorImgsDesktop("No se pudo leer el tamaño de la imagen. Prueba con otro archivo.")
+          return
+        }
       }
 
       let banner: Banner | undefined
 
       try {
-        const { url, name } = await saveFile(imgs[0], bannerId, "/banners")
+        const { url, name } = await saveFile(imgsMobile[0], bannerId, "/banners")
 
         banner = {
           id: bannerId,
           alt: data.alt,
-          img: { name, url, size: imgs[0].size, width: dimensions.width, height: dimensions.height },
+          img: { name, url, size: imgsMobile[0].size, width: mobileDimensions.width, height: mobileDimensions.height },
           order: banners.length,
           active: true
+        }
+
+        if (imgsDesktop.length > 0 && desktopDimensions) {
+          const { url: urlDesktop, name: nameDesktop } = await saveFile(imgsDesktop[0], bannerId, "/banners")
+          banner.imgDesktop = {
+            name: nameDesktop,
+            url: urlDesktop,
+            size: imgsDesktop[0].size,
+            width: desktopDimensions.width,
+            height: desktopDimensions.height
+          }
         }
 
         addBanner(banner)
@@ -69,9 +97,12 @@ export const useBannerForm = () => {
           throw new Error(result.error)
         }
 
-        setImgs([])
-        setImgOld([])
-        setErrorImgs("")
+        setImgsMobile([])
+        setImgOldMobile([])
+        setErrorImgsMobile("")
+        setImgsDesktop([])
+        setImgOldDesktop([])
+        setErrorImgsDesktop("")
         reset(EMPTY_VALUES)
       } catch {
         if (banner) deleteStoreBanner(banner.id)
@@ -83,8 +114,8 @@ export const useBannerForm = () => {
   const onSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
 
-    if (imgs.length === 0) {
-      setErrorImgs("Se requiere cargar una imagen")
+    if (imgsMobile.length === 0) {
+      setErrorImgsMobile("Se requiere cargar una imagen")
     }
 
     await handleSubmit(e)
@@ -92,14 +123,19 @@ export const useBannerForm = () => {
 
   return {
     error,
-    errorImgs,
+    errorImgsMobile,
+    errorImgsDesktop,
     errors,
-    imgs,
-    imgOld,
+    imgsMobile,
+    imgsDesktop,
+    imgOldMobile,
+    imgOldDesktop,
     loading,
     onSubmit,
     register,
-    setImgs,
-    setImgOld
+    setImgsMobile,
+    setImgsDesktop,
+    setImgOldMobile,
+    setImgOldDesktop
   }
 }

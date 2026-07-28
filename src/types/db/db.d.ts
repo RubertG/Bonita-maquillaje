@@ -17,6 +17,7 @@ export interface Category {
 export interface Banner {
   id: Id
   img: BannerImage
+  imgDesktop?: BannerImage
   alt: string
   order: number
   active: boolean

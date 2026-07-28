@@ -15,26 +15,41 @@ interface Props {
 
 export const BannerForm = ({ className }: Props) => {
   const {
-    error, errorImgs, errors,
-    imgs, loading, onSubmit,
-    register, setImgs, imgOld, setImgOld
+    error, errorImgsDesktop, errorImgsMobile, errors,
+    imgsDesktop, imgsMobile, loading, onSubmit,
+    register, setImgsDesktop, setImgsMobile, imgOldDesktop,
+    imgOldMobile, setImgOldDesktop, setImgOldMobile
   } = useBannerForm()
 
   return (
     <section className={`max-w-xl mx-auto ${className}`}>
       <UploadFile
-        images={imgs}
-        setImages={setImgs as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
+        images={imgsMobile}
+        setImages={setImgsMobile as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
         aspect="17/9"
         limitSize={LIMIT_BANNER_FILE_SIZE}
         classNameError="mt-2 mb-5"
         multiple={false}
-        setImgsOld={setImgOld as (imgs: FileStateItem[]) => void}
-        items={imgs}
+        setImgsOld={setImgOldMobile as (imgs: FileStateItem[]) => void}
+        items={imgsMobile}
         refCollection="banners"
-        imgsOld={imgOld as FileStateItem[]}
-        setItems={setImgs} />
-      {(errorImgs) && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{errorImgs}</p>}
+        imgsOld={imgOldMobile as FileStateItem[]}
+        setItems={setImgsMobile} />
+      {(errorImgsMobile) && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{errorImgsMobile}</p>}
+
+      <UploadFile
+        images={imgsDesktop}
+        setImages={setImgsDesktop as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
+        aspect="21/9"
+        limitSize={LIMIT_BANNER_FILE_SIZE}
+        classNameError="mt-2 mb-5"
+        multiple={false}
+        setImgsOld={setImgOldDesktop as (imgs: FileStateItem[]) => void}
+        items={imgsDesktop}
+        refCollection="banners"
+        imgsOld={imgOldDesktop as FileStateItem[]}
+        setItems={setImgsDesktop} />
+      {(errorImgsDesktop) && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{errorImgsDesktop}</p>}
 
       <form
         onSubmit={onSubmit}
