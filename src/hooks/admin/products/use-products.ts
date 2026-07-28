@@ -37,8 +37,13 @@ export const useProducts = () => {
 
     if (!category) {
 
-      const [first] = await getCategories()
-      const c = first.id
+      const categories = await getCategories()
+      if (categories.length === 0) {
+        setLoading(false)
+        return
+      }
+
+      const c = categories[0].id
       p = await getProducts({ category: c })
 
       setProducts({

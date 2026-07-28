@@ -40,6 +40,7 @@ export function Nav() {
   useEffect(() => {
     const getFirstCategory = async () => {
       const category = await getCategories()
+      if (category.length === 0) return
       setFirstCategory(category[0].id)
     }
     getFirstCategory()

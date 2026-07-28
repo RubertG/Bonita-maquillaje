@@ -8,10 +8,10 @@ interface Props {
 export const BackButtonCategory = async ({ href = "/catalogo"}: Props) => {
   const categories = await getCategories()
 
-  if (!categories) return (
+  if (!categories || categories.length === 0) return (
     <BackButton href={href} />
   )
- 
+
   return (
     <BackButton href={`${href}?categoria=${categories[0].id}`} />
   )
