@@ -170,7 +170,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
         aria-expanded={isOpen}
         aria-controls="mobile-menu-panel"
         aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
-        className="flex items-center justify-center py-2 text-text-100 lg:hidden"
+        className="flex items-center justify-center py-2 text-text-100"
       >
         <Menu className="w-6 h-6" />
       </button>
@@ -180,7 +180,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
           <>
             <motion.div
               key="mobile-menu-backdrop"
-              className="fixed inset-0 z-40 bg-black/30"
+              className="fixed inset-x-0 top-0 h-screen z-40 bg-black/30"
               variants={backdropVariants}
               initial="hidden"
               animate="visible"
@@ -195,7 +195,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
               role="dialog"
               aria-modal="true"
               aria-label="Menú de navegación"
-              className="fixed top-0 left-0 h-full w-full max-w-sm bg-bg-100 z-50 flex flex-col p-4"
+              className="fixed top-0 left-0 h-screen w-full max-w-sm bg-bg-100 z-50 flex flex-col p-4"
               variants={panelVariants}
               initial="hidden"
               animate="visible"

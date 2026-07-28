@@ -4,6 +4,7 @@ import { useBannerAdmin } from "@/contexts/admin/banners/banners-context"
 import { BannerRow } from "./banner-row"
 import { DndContext, DragEndEvent, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from "@dnd-kit/core"
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import { useEffect, useState } from "react"
 
 interface Props {
   className?: string
@@ -11,6 +12,11 @@ interface Props {
 
 export const BannersContainer = ({ className }: Props) => {
   const { banners, reorderBanners, reordering } = useBannerAdmin()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -52,22 +58,39 @@ export const BannersContainer = ({ className }: Props) => {
 
   return (
     <ul className={`grid gap-3 ${className}`}>
-      <DndContext
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}
-      >
-        <SortableContext
-          items={banners.map(banner => banner.id)}
-          strategy={verticalListSortingStrategy}
+      {mounted ? (
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
-          {
-            banners.map((banner) => (
-              <BannerRow key={banner.id} banner={banner} disabled={reordering} />
-            ))
-          }
-        </SortableContext>
-      </DndContext>
+          <SortableContext
+            items={banners.map(banner => banner.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {
+              banners.map((banner) => (
+                <BannerRow key={banner.id} banner={banner} disabled={reordering} />
+              ))
+            }
+          </SortableContext>
+        </DndContext>
+      ) : (
+        banners.map((banner) => (
+          <li
+            key={banner.id}
+            className="rounded-lg bg-bg-50 shadow-button p-2.5"
+          >
+            <div className="flex gap-3 items-center">
+              <div className="w-4 h-4 shrink-0" />
+              <div className="flex gap-2 shrink-0">
+                <div className="w-16 h-16 rounded-lg bg-bg-100" />
+              </div>
+              <p className="font-light text-text-200 truncate flex-1">{banner.alt}</p>
+            </div>
+          </li>
+        ))
+      )}
     </ul>
   )
 }

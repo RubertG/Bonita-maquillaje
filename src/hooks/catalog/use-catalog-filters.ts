@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useMemo } from "react"
 
-export type CatalogFilterType = "mas-vendidos" | "ofertas" | "nuevos"
+export type CatalogFilterType = "ofertas" | "nuevos"
 export type CatalogSort = "precio-asc" | "precio-desc"
 
 export interface CatalogFilters {
@@ -13,7 +13,7 @@ export interface CatalogFilters {
   sort: CatalogSort | null
 }
 
-const FILTER_TYPES: CatalogFilterType[] = ["mas-vendidos", "ofertas", "nuevos"]
+const FILTER_TYPES: CatalogFilterType[] = ["ofertas", "nuevos"]
 const SORT_OPTIONS: CatalogSort[] = ["precio-asc", "precio-desc"]
 
 const isFilterType = (value: string): value is CatalogFilterType =>

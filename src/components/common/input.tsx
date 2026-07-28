@@ -1,6 +1,6 @@
 "use client"
 
-import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, LegacyRef, useState } from "react"
+import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, LegacyRef, useId, useState } from "react"
 import { Eye, EyeOff, Selector, Spinner, Upload } from "./icons"
 import clsx from "clsx"
 import { branch } from "@/fonts/branch/branch"
@@ -68,16 +68,18 @@ export const PasswordInput = forwardRef(function PasswordInput({ className, ...p
 })
 
 export const FileInput = forwardRef(function FileInput({ className, multiple, ...props }: InputProps, ref: LegacyRef<HTMLInputElement> | undefined) {
+  const id = useId()
+
   return (
     <button className={`block w-full ${className}`}>
       <label
         className={`relative w-full inline-flex items-center justify-center py-2.5 px-3.5 rounded-lg bg-accent-200 text-text-100 gap-2 text-center text-xl shadow-button lg:hover:bg-principal-100 lg:transition-colors cursor-pointer ${branch.className}`}
-        htmlFor="file">
+        htmlFor={id}>
         <Upload className="absolute top-1/2 -translate-y-1/2 left-0 ml-3.5 stroke-text-100 w-6 h-6" />
         Cargar {multiple ? "imágenes" : "imagen"}
         <input
           type="file"
-          id="file"
+          id={id}
           accept="image/*"
           multiple={multiple}
           className="hidden"

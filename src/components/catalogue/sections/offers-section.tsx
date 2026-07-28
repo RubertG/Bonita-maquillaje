@@ -17,6 +17,7 @@ export async function OffersSection({ className }: Props) {
       products={products}
       viewAllHref="/catalogo/productos?tipo=ofertas"
       eagerImages={3}
+      direction="right-to-left"
     />
   )
 }

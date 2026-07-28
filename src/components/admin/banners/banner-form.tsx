@@ -6,7 +6,7 @@ import { Button } from "@/components/common/button"
 import { Save, Spinner } from "@/components/common/icons"
 import clsx from "clsx"
 import { useBannerForm } from "@/hooks/admin/banner/use-banner-form"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useMemo } from "react"
 import { FileStateItem } from "@/types/admin/admin"
 
 interface Props {
@@ -21,35 +21,49 @@ export const BannerForm = ({ className }: Props) => {
     imgOldMobile, setImgOldDesktop, setImgOldMobile
   } = useBannerForm()
 
+  const imageFields = useMemo(() => [
+    {
+      key: "mobile",
+      label: "Imagen para móvil",
+      aspect: "17/9",
+      imgs: imgsMobile,
+      setImgs: setImgsMobile,
+      imgsOld: imgOldMobile,
+      setImgsOld: setImgOldMobile,
+      error: errorImgsMobile
+    },
+    {
+      key: "desktop",
+      label: "Imagen para escritorio",
+      aspect: "28/9",
+      imgs: imgsDesktop,
+      setImgs: setImgsDesktop,
+      imgsOld: imgOldDesktop,
+      setImgsOld: setImgOldDesktop,
+      error: errorImgsDesktop
+    }
+  ], [imgsMobile, imgsDesktop, imgOldMobile, imgOldDesktop, errorImgsMobile, errorImgsDesktop, setImgsMobile, setImgsDesktop, setImgOldMobile, setImgOldDesktop])
+
   return (
     <section className={`max-w-xl mx-auto ${className}`}>
-      <UploadFile
-        images={imgsMobile}
-        setImages={setImgsMobile as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
-        aspect="17/9"
-        limitSize={LIMIT_BANNER_FILE_SIZE}
-        classNameError="mt-2 mb-5"
-        multiple={false}
-        setImgsOld={setImgOldMobile as (imgs: FileStateItem[]) => void}
-        items={imgsMobile}
-        refCollection="banners"
-        imgsOld={imgOldMobile as FileStateItem[]}
-        setItems={setImgsMobile} />
-      {(errorImgsMobile) && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{errorImgsMobile}</p>}
-
-      <UploadFile
-        images={imgsDesktop}
-        setImages={setImgsDesktop as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
-        aspect="21/9"
-        limitSize={LIMIT_BANNER_FILE_SIZE}
-        classNameError="mt-2 mb-5"
-        multiple={false}
-        setImgsOld={setImgOldDesktop as (imgs: FileStateItem[]) => void}
-        items={imgsDesktop}
-        refCollection="banners"
-        imgsOld={imgOldDesktop as FileStateItem[]}
-        setItems={setImgsDesktop} />
-      {(errorImgsDesktop) && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{errorImgsDesktop}</p>}
+      {imageFields.map((field) => (
+        <div key={field.key}>
+          <UploadFile
+            label={field.label}
+            images={field.imgs}
+            setImages={field.setImgs as Dispatch<SetStateAction<(File | FileStateItem)[]>>}
+            aspect={field.aspect}
+            limitSize={LIMIT_BANNER_FILE_SIZE}
+            classNameError="mt-2 mb-5"
+            multiple={false}
+            setImgsOld={field.setImgsOld as (imgs: FileStateItem[]) => void}
+            items={field.imgs}
+            refCollection="banners"
+            imgsOld={field.imgsOld as FileStateItem[]}
+            setItems={field.setImgs} />
+          {field.error && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{field.error}</p>}
+        </div>
+      ))}
 
       <form
         onSubmit={onSubmit}

@@ -17,9 +17,10 @@ export async function NewArrivalsSection({ className }: Props) {
   return (
     <ProductRow
       className={className}
-      title="⏰ Los más nuevos"
+      title="⏰ Productos nuevos"
       products={products}
       viewAllHref="/catalogo/productos?tipo=nuevos"
+      direction="right-to-left"
     />
   )
 }

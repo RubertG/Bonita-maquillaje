@@ -16,7 +16,6 @@ export const useCatalogProductFilter = () => {
 
     if (filters.type) {
       result = result.filter(product => {
-        if (filters.type === "mas-vendidos") return product.isBestSeller
         if (filters.type === "ofertas") return product.offerPrice !== null && product.offerPrice !== undefined && product.offerPrice < product.price
         if (filters.type === "nuevos") return product.isNew
         return true

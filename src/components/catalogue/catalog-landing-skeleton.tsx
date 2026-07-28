@@ -9,11 +9,13 @@ const RowSkeleton = () => (
       <Skeleton className="h-8 w-48" />
       <Skeleton className="h-4 w-20" />
     </header>
-    <ul className="mt-3 flex gap-3 overflow-hidden -mx-4 px-4">
-      {Array(5).fill(0).map((_, index) => (
-        <ProductSkeleton key={index} className={ROW_ITEM_CLASSNAME} />
-      ))}
-    </ul>
+    <div className="mt-3 overflow-hidden -mx-4">
+      <ul className="flex gap-3 px-4">
+        {Array(5).fill(0).map((_, index) => (
+          <ProductSkeleton key={index} className={ROW_ITEM_CLASSNAME} />
+        ))}
+      </ul>
+    </div>
   </section>
 )
 

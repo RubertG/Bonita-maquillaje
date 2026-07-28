@@ -10,7 +10,6 @@ interface Props {
 }
 
 const OPTIONS: { value: CatalogFilterType; label: string }[] = [
-  { value: "mas-vendidos", label: "Más vendidos" },
   { value: "ofertas", label: "Ofertas" },
   { value: "nuevos", label: "Nuevos" }
 ]

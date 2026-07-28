@@ -15,6 +15,8 @@ import { CSS } from "@dnd-kit/utilities"
 import Image from "next/image"
 import { useState } from "react"
 
+type PreviewVariant = "mobile" | "desktop"
+
 interface Props {
   banner: Banner
   disabled?: boolean
@@ -24,6 +26,7 @@ export const BannerRow = ({ banner, disabled }: Props) => {
   const { updateBanner } = useBannerAdmin()
   const [togglingActive, setTogglingActive] = useState(false)
   const [preview, setPreview] = useState(false)
+  const [previewVariant, setPreviewVariant] = useState<PreviewVariant>("mobile")
   const { loading, popup, error, handlePopup, handleDelete } = useBannerDelete(banner)
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: banner.id })
 
@@ -55,52 +58,91 @@ export const BannerRow = ({ banner, disabled }: Props) => {
       ref={setNodeRef}
       className="rounded-lg bg-bg-50 shadow-button p-2.5"
     >
-      <div className="flex w-full gap-3 items-center justify-between">
-        <button
-          {...attributes}
-          {...listeners}
-          className="shrink-0 cursor-grab"
-          aria-label="Reordenar banner"
-          type="button"
-        >
-          <Selector className="stroke-text-300" />
-        </button>
-        <button
-          type="button"
-          onClick={() => setPreview(true)}
-          aria-label={`Ver ${banner.alt} en grande`}
-          className="shrink-0 rounded-lg lg:hover:scale-105 lg:transition-transform"
-        >
-          <Image
-            width={64}
-            height={64}
-            className="w-16 h-16 object-cover rounded-lg"
-            loading="lazy"
-            src={banner.img.url}
-            alt=""
+      <div className="flex w-full flex-wrap sm:flex-nowrap gap-3 items-center justify-between">
+        <div className="flex w-full sm:w-auto gap-3 items-center min-w-0">
+          <button
+            {...attributes}
+            {...listeners}
+            className="shrink-0 cursor-grab"
+            aria-label="Reordenar banner"
+            type="button"
+          >
+            <Selector className="stroke-text-300" />
+          </button>
+          <div className="flex gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                setPreviewVariant("mobile")
+                setPreview(true)
+              }}
+              aria-label={`Ver ${banner.alt} móvil en grande`}
+              className="relative rounded-lg lg:hover:scale-105 lg:transition-transform"
+            >
+              <Image
+                width={64}
+                height={64}
+                className="w-16 h-16 object-cover rounded-lg"
+                loading="lazy"
+                src={banner.img.url}
+                alt=""
+              />
+              <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-bg-50/90 text-[10px] text-text-200 font-light">
+                M
+              </span>
+            </button>
+            {banner.imgDesktop ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setPreviewVariant("desktop")
+                  setPreview(true)
+                }}
+                aria-label={`Ver ${banner.alt} escritorio en grande`}
+                className="relative rounded-lg lg:hover:scale-105 lg:transition-transform"
+              >
+                <Image
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 object-cover rounded-lg"
+                  loading="lazy"
+                  src={banner.imgDesktop.url}
+                  alt=""
+                />
+                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-bg-50/90 text-[10px] text-text-200 font-light">
+                  D
+                </span>
+              </button>
+            ) : (
+              <div className="w-16 h-16 rounded-lg bg-bg-100 flex items-center justify-center text-[10px] text-text-300 font-light text-center px-2">
+                Sin desktop
+              </div>
+            )}
+          </div>
+          <BannerAltField banner={banner} disabled={disabled} />
+        </div>
+        <div className="flex gap-3 items-center shrink-0 ml-auto">
+          <AnimatedCheckbox
+            className="shrink-0"
+            label="Activo"
+            checked={banner.active}
+            disabled={disabled || togglingActive}
+            onChange={handleToggleActive}
           />
-        </button>
-        <BannerAltField banner={banner} disabled={disabled} />
-        <AnimatedCheckbox
-          className="shrink-0"
-          label="Activo"
-          checked={banner.active}
-          disabled={disabled || togglingActive}
-          onChange={handleToggleActive}
-        />
-        <button
-          type="button"
-          onClick={handlePopup}
-          aria-label={`Borrar ${banner.alt}`}
-          className="shrink-0"
-        >
-          <Delete className="stroke-text-300 lg:hover:stroke-accent-300 lg:transition-colors" />
-        </button>
+          <button
+            type="button"
+            onClick={handlePopup}
+            aria-label={`Borrar ${banner.alt}`}
+            className="shrink-0"
+          >
+            <Delete className="stroke-text-300 lg:hover:stroke-accent-300 lg:transition-colors" />
+          </button>
+        </div>
       </div>
       {error && <p className="text-red-500 font-light text-sm mt-2">{error}</p>}
       {
         preview && (
-          <BannerPreview banner={banner} onClose={() => setPreview(false)} />
+          <BannerPreview banner={banner} initialVariant={previewVariant} onClose={() => setPreview(false)} />
         )
       }
       {
