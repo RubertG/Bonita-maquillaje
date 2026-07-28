@@ -64,7 +64,7 @@ export const BannerCarousel = ({ banners, className }: Props) => {
 
   return (
     <section
-      className={`relative w-full max-w-[1024px] mx-auto lg:rounded-2xl lg:overflow-hidden ${className}`}
+      className={`relative w-full ${className}`}
       aria-label="Promociones"
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
@@ -83,16 +83,31 @@ export const BannerCarousel = ({ banners, className }: Props) => {
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={banner.id}>
-            <div className="relative w-full aspect-[17/9]">
-              <Image
-                src={banner.img.url}
-                alt={banner.alt}
-                fill
-                sizes="(min-width: 1024px) 1024px, 100vw"
-                priority={index === 0}
-                draggable={false}
-                className="object-cover select-none pointer-events-none"
-              />
+            <div className={`relative w-full ${banner.imgDesktop ? "aspect-[17/9] lg:aspect-[21/9]" : "aspect-[17/9]"}`}>
+              {banner.imgDesktop ? (
+                <picture>
+                  <source media="(min-width: 1024px)" srcSet={banner.imgDesktop.url} />
+                  <Image
+                    src={banner.img.url}
+                    alt={banner.alt}
+                    fill
+                    sizes="100vw"
+                    priority={index === 0}
+                    draggable={false}
+                    className="object-cover select-none pointer-events-none"
+                  />
+                </picture>
+              ) : (
+                <Image
+                  src={banner.img.url}
+                  alt={banner.alt}
+                  fill
+                  sizes="100vw"
+                  priority={index === 0}
+                  draggable={false}
+                  className="object-cover select-none pointer-events-none"
+                />
+              )}
             </div>
           </SwiperSlide>
         ))}
