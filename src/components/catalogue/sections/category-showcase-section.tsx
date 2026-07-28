@@ -7,7 +7,7 @@ interface Props {
 }
 
 export async function CategoryShowcaseSection({ className }: Props) {
-  const categories = await getCategories()
+  const categories = await getCategories({ publicOnly: true })
 
   if (categories.length === 0) return null
 

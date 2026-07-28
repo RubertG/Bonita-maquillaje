@@ -55,7 +55,7 @@ export const Category = ({
       <Image
         width={70}
         height={70}
-        src={img.url}
+        src={img.url?.trim() || "/logo.webp"}
         className="w-14 h-14 object-cover m-auto mb-1 aspect-square rounded-lg"
         title={`${name} - Bonita Maquillaje`}
         loading="lazy"

@@ -2,6 +2,8 @@ import { collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "
 import { db } from "../initializeApp"
 import { ROUTES_COLLECTIONS } from "@/consts/db/db"
 import { Category, Id } from "@/types/db/db"
+import { filterPublicCategories } from "@/lib/category-filter"
+import { getAppEnv } from "@/lib/env"
 
 export const getCategories = async () => {
   const querySnapshot = await getDocs(collection(db, ROUTES_COLLECTIONS.CATEGORIES))
@@ -12,6 +14,11 @@ export const getCategories = async () => {
   })
 
   return categories
+}
+
+export const getPublicCategories = async () => {
+  const categories = await getCategories()
+  return filterPublicCategories(categories, getAppEnv())
 }
 
 export const getCategory = async (id: string) => {

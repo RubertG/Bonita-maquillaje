@@ -15,7 +15,7 @@ export const CategoryShowcaseCard = ({ category: { id, name, img }, className }:
     className={clsx("group block relative aspect-square overflow-hidden border border-bg-300 rounded-xl", className)}
   >
     <Image
-      src={img.url}
+      src={img.url?.trim() || "/logo.webp"}
       alt={`${name} - Bonita Maquillaje`}
       fill
       sizes="(min-width: 1024px) 352px, 50vw"

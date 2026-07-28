@@ -10,8 +10,8 @@ import { NavCategory } from "@/components/nav/nav-category-link"
 
 async function fetchNavData(): Promise<{ categories: NavCategory[]; isAdmin: boolean }> {
   try {
-    const [categoriesResult, adminResult] = await Promise.all([
-      getCategories(),
+      const [categoriesResult, adminResult] = await Promise.all([
+      getCategories({ publicOnly: true }),
       verifyAdminSession()
     ])
     return {

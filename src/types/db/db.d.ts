@@ -12,6 +12,7 @@ export interface Category {
   id: Id
   name: string
   img: FileStateItem
+  isStagingOnly?: boolean
 }
 
 export interface Banner {

@@ -10,6 +10,7 @@ export interface FileStateItem {
 
 export interface CategoryInputs {
   name: string
+  isStagingOnly: boolean
 }
 
 export interface BannerImage extends FileStateItem {

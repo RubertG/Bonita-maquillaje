@@ -5,6 +5,7 @@ import { LIMIT_FILE_SIZE } from "@/consts/admin/admin"
 import { Button } from "@/components/common/button"
 import { Save, Spinner } from "@/components/common/icons"
 import clsx from "clsx"
+import { AnimatedCheckbox } from "@/components/common/animated-checkbox"
 import { useCategoryForm } from "@/hooks/admin/category/use-category-form"
 import { PopupDelete } from "../common/popup-delete"
 import { Dispatch, SetStateAction } from "react"
@@ -22,7 +23,8 @@ export const CategoryForm = ({
     error, errorImgs, errors,
     imgs, loading, onSubmit,
     register, setImgs, imgOld, setImgOld,
-    handleDelete, handlePopup, loadingDelete, popup
+    handleDelete, handlePopup, loadingDelete, popup,
+    isStagingOnly, setIsStagingOnly
   } = useCategoryForm(id)
 
   return (
@@ -56,6 +58,14 @@ export const CategoryForm = ({
           {...register("name")}
         />
         {errors.name?.message && <p className="text-red-500 font-light px-3.5 mb-4 mt-2 text-sm">{errors.name?.message}</p>}
+
+        <AnimatedCheckbox
+          className="mt-5"
+          label="Solo visible en staging"
+          description="Oculta esta categoría en producción"
+          checked={isStagingOnly}
+          onChange={event => setIsStagingOnly(event.target.checked)}
+        />
 
         <Button
           className="w-full mt-5"

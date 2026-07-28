@@ -19,7 +19,8 @@ import { useStoreCategory } from "@/stores/common/category.store"
 
 export const useCategoryForm = (id?: string) => {
   const [defaultValues, setDefaultValues] = useState<CategoryInputs>({
-    name: ""
+    name: "",
+    isStagingOnly: false
   })
   const [imgOld, setImgOld] = useState<FileStateItem[]>([])
   const [imgs, setImgs] = useState<File[]>([])
@@ -33,17 +34,12 @@ export const useCategoryForm = (id?: string) => {
   const deleteStoreCategory = useStoreCategory(state => state.deleteCategory)
 
   const router = useRouter()
-  const { errors, handleSubmit, loading, register } = useForm<CategoryInputs>({
+  const { errors, handleSubmit, loading, register, setValue, watch } = useForm<CategoryInputs>({
     schema: categorySchema,
     values: defaultValues,
     actionSubmit: async (data) => {
       setError("")
       setErrorImgs("")
-
-      if (imgs.length === 0 && imgOld.length === 0) {
-        setErrorImgs("Se requiere cargar imagenes")
-        return
-      }
 
       try {
         const categoryId = id ?? uuidv4()
@@ -54,7 +50,8 @@ export const useCategoryForm = (id?: string) => {
             name: "",
             url: "",
             size: 0
-          }
+          },
+          isStagingOnly: data.isStagingOnly
         }
 
         if (imgs.length > 0) {
@@ -67,7 +64,7 @@ export const useCategoryForm = (id?: string) => {
               size: imgs[0].size
             }
           }
-        } else {
+        } else if (imgOld.length > 0) {
           category = {
             ...category,
             img: imgOld[0]
@@ -113,14 +110,15 @@ export const useCategoryForm = (id?: string) => {
 
         setImgOld([category.img])
         setDefaultValues({
-          name: category.name
+          name: category.name,
+          isStagingOnly: category.isStagingOnly ?? false
         })
       }
       getC()
       return
     }
 
-    setDefaultValues({ name: "" })
+    setDefaultValues({ name: "", isStagingOnly: false })
   }, [id])
 
   useEffect(() => {
@@ -129,10 +127,6 @@ export const useCategoryForm = (id?: string) => {
 
   const onSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
-
-    if (imgs.length === 0 && imgOld.length === 0) {
-      setErrorImgs("Se requiere cargar imagenes")
-    }
 
     await handleSubmit(e)
   }
@@ -164,6 +158,9 @@ export const useCategoryForm = (id?: string) => {
 
   const handlePopup = () => setPopup(!popup)
 
+  const isStagingOnly = watch("isStagingOnly")
+  const setIsStagingOnly = (value: boolean) => setValue("isStagingOnly", value)
+
   return {
     error,
     errorImgs,
@@ -178,6 +175,8 @@ export const useCategoryForm = (id?: string) => {
     loadingDelete,
     handlePopup,
     handleDelete,
-    setImgOld
+    setImgOld,
+    isStagingOnly,
+    setIsStagingOnly
   }
 }

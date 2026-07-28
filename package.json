@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint .",
     "set-admin-claim": "tsx scripts/set-admin-claim.ts",
-    "backfill-product-created-at": "tsx scripts/backfill-product-created-at.ts"
+    "backfill-product-created-at": "tsx scripts/backfill-product-created-at.ts",
+    "seed-categories": "tsx scripts/seed-categories.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

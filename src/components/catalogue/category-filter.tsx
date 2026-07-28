@@ -21,7 +21,7 @@ export const CategoryFilter = ({
   const fetchCategories = useStoreCategory(state => state.fetchCategories)
 
   useEffect(() => {
-    fetchCategories()
+    fetchCategories({ publicOnly: true })
   }, [fetchCategories])
 
   return (

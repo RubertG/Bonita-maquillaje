@@ -1,13 +1,17 @@
-import { getCategories } from "@/firebase/services/categories"
+import { getCategories, getPublicCategories } from "@/firebase/services/categories"
 import { Category } from "@/types/db/db"
 import { create, StateCreator } from "zustand"
+
+interface FetchCategoriesOptions {
+  publicOnly?: boolean
+}
 
 interface CategoryState {
   categories: Category[]
   loading: boolean
 
   setLoading: (loading: boolean) => void
-  fetchCategories: () => Promise<void>
+  fetchCategories: (options?: FetchCategoriesOptions) => Promise<void>
   deleteCategory: (id: string) => void
   addCategory: (category: Category) => void
   updateCategory: (category: Category) => void
@@ -18,11 +22,14 @@ const storeApi: StateCreator<CategoryState> = (set, get) => ({
   loading: true,
 
   setLoading: (loading: boolean) => set({ loading }),
-  fetchCategories: async () => {
+  fetchCategories: async (options = {}) => {
     if (get().categories.length > 0) return
 
+    const { publicOnly = false } = options
     get().setLoading(true)
-    const categories = await getCategories()
+    const categories = publicOnly
+      ? await getPublicCategories()
+      : await getCategories()
 
     if (!categories) return
 
