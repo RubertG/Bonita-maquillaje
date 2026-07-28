@@ -6,8 +6,7 @@ import { branch } from "@/fonts/branch/branch"
 import { CartButton } from "@/components/catalogue/cart-button"
 import { MobileMenu } from "@/components/nav/mobile-menu"
 import { NavCategories } from "@/components/nav/nav-categories"
-import { NavCategoryLink, NavCategory } from "@/components/nav/nav-category-link"
-import { AdminNavLink } from "@/components/nav/admin-nav-link"
+import { NavCategory } from "@/components/nav/nav-category-link"
 
 async function fetchNavData(): Promise<{ categories: NavCategory[]; isAdmin: boolean }> {
   try {
@@ -31,33 +30,18 @@ export async function Nav() {
   const { categories, isAdmin } = await fetchNavData()
 
   return (
-    <nav className="bg-bg-100 lg:bg-bg-transparent lg:backdrop-blur-sm px-4 py-2.5 fixed w-full top-0 left-0 z-30 border-b border-bg-200">
+    <nav className="bg-bg-100 lg:bg-bg-transparent lg:backdrop-blur-sm px-4 py-2.5 fixed w-full top-0 left-0 z-[60] border-b border-bg-200">
       <div className="flex items-center max-w-7xl mx-auto">
         <div className="flex-1 flex items-center justify-start gap-4 min-w-0">
-          <div className="lg:hidden">
+          <div>
             <MobileMenu>
               <NavCategories categories={categories} isAdmin={isAdmin} />
             </MobileMenu>
           </div>
-          <Link
-            className="hidden lg:flex items-center justify-center gap-1"
-            href="/"
-          >
-            <Image
-              width={40}
-              height={40}
-              src="/logo-2.webp"
-              alt="Logo de Bonita Maquillaje"
-              className="h-10 object-cover"
-            />
-            <span className={`text-xl lg:text-2xl ${branch.className}`}>
-              Bonita maquillaje
-            </span>
-          </Link>
         </div>
 
         <Link
-          className="flex-1 flex items-center justify-center lg:hidden"
+          className="flex-1 flex items-center justify-center gap-1"
           href="/"
         >
           <Image
@@ -67,20 +51,10 @@ export async function Nav() {
             alt="Logo de Bonita Maquillaje"
             className="h-10 object-cover"
           />
+          <span className={`hidden lg:block lg:text-2xl ${branch.className}`}>
+            Bonita maquillaje
+          </span>
         </Link>
-
-        <ul className="hidden lg:flex flex-1 items-center justify-center gap-4 text-text-100 font-normal">
-          {categories.map((category) => (
-            <li key={category.id}>
-              <NavCategoryLink category={category} />
-            </li>
-          ))}
-          {isAdmin && (
-            <li>
-              <AdminNavLink />
-            </li>
-          )}
-        </ul>
 
         <div className="flex-1 flex items-center justify-end min-w-0">
           <CartButton />
