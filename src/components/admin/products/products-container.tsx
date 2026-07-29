@@ -1,9 +1,8 @@
 "use client"
 
 import { Product } from "./product"
-import { ButtonWithIcon } from "@/components/common/button-with-icon"
-import { Delete } from "@/components/common/icons"
-import { useProductsContext } from "@/hooks/admin/products/use-products-context"
+import { ResetFilters } from "@/components/catalogue/reset-filters"
+import { useAdminProductFilters } from "@/hooks/admin/products/use-admin-product-filters"
 import { ProductSkeleton } from "./product-skeleton"
 
 export const ProductsContainer = ({
@@ -11,14 +10,14 @@ export const ProductsContainer = ({
 }: {
   className?: string
 }) => {
-  const { loading, products, searchParams } = useProductsContext()
+  const { loading, filteredProducts, resetFilters } = useAdminProductFilters()
 
   return (
     <>
       {
         !loading && (
           <p className="text-text-300 font-light text-end mt-3">
-            <span className="font-normal">{products.length}</span> {products.length === 1 ? "Producto" : "Productos"}
+            <span className="font-normal">{filteredProducts.length}</span> {filteredProducts.length === 1 ? "Producto" : "Productos"}
           </p>
         )
       }
@@ -29,7 +28,7 @@ export const ProductsContainer = ({
               <ProductSkeleton key={index} />
             ))
           ) : (
-            products.map(product => (
+            filteredProducts.map(product => (
               <Product
                 key={product.id}
                 {...product}
@@ -40,20 +39,13 @@ export const ProductsContainer = ({
       </ul>
 
       {
-        ((!products || products.length === 0) && !loading) && (
-          <section className={`${className} text-center text-text-300`}>
+        ((filteredProducts.length === 0) && !loading) && (
+          <section className={`${className} text-center text-text-300 mt-6`}>
+            <p>No se encontraron productos con los filtros seleccionados.</p>
             <article className="mt-3 mx-auto">
-              {
-                (searchParams.busqueda) && (
-                  <ButtonWithIcon
-                    href={`/admin/productos?${new URLSearchParams({
-                      categoria: searchParams.categoria || ""
-                    }).toString()}`}>
-                    <Delete className="stroke-text-100" />
-                    Quitar filtros
-                  </ButtonWithIcon>
-                )
-              }
+              <ResetFilters
+                onClick={resetFilters}
+              />
             </article>
           </section>
         )
