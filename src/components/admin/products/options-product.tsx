@@ -9,12 +9,10 @@ import { useState } from "react"
 import { PopupDelete } from "../common/popup-delete"
 import Link from "next/link"
 import { useProductsContext } from "@/hooks/admin/products/use-products-context"
-import { useSearchParams } from "next/navigation"
 
 export const OptionsProduct = ({ id, imgs }: Pick<Product, "id" | "imgs">) => {
   const [popup, setPopup] = useState(false)
   const [loading, setLoading] = useState(false)
-  const searchParams = useSearchParams()
   const { refreshProducts } = useProductsContext()
 
   const handleDelete = async () => {
@@ -27,7 +25,7 @@ export const OptionsProduct = ({ id, imgs }: Pick<Product, "id" | "imgs">) => {
       return
     }
     await Promise.all(imgs.map(img => deleteFile(`products/${img.name}`)))
-    refreshProducts(searchParams.get("categoria") || "")
+    refreshProducts()
     setLoading(false)
     setPopup(false)
   }

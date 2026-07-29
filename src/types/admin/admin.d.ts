@@ -1,5 +1,4 @@
 import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore"
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
 import { Order, Product as ProductDB, Tone } from "../db/db"
 
 export interface FileStateItem {
@@ -45,9 +44,8 @@ export interface InputsOrders {
 
 export interface ProductsContext {
   products: ProductDB[]
-  refreshProducts: (category: string) => Promise<void>
+  refreshProducts: () => Promise<void>
   loading: boolean
-  searchParams: Params
 }
 
 export interface OrdersManagementStorage {

@@ -58,8 +58,8 @@ export const useCreateProductForm = () => {
         if (!result.ok) {
           throw new Error(result.error)
         }
-        router.push(`/admin/productos?categoria=${data.category}`)
-        refreshProducts(data.category)
+        router.push("/admin/productos")
+        refreshProducts()
       } catch (error) {
         setError("Ocurrio un error al guardar el producto")
       }

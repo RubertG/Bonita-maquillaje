@@ -1,21 +1,33 @@
 "use client"
 
-import { useProducts } from "@/hooks/admin/products/use-products"
+import { getAllProducts } from "@/firebase/services/products"
+import { Product } from "@/types/db/db"
 import { ProductsContext } from "@/types/admin/admin"
-import { createContext } from "react"
+import { createContext, useCallback, useEffect, useState } from "react"
 
 export const productsContext = createContext<ProductsContext>({
   products: [],
   refreshProducts: async () => { },
-  loading: true,
-  searchParams: {}
+  loading: true
 })
 
 export const ProductsAdminProvider = ({ children }: { children: React.ReactNode }) => {
-  const data = useProducts()
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const refreshProducts = useCallback(async () => {
+    setLoading(true)
+    const allProducts = await getAllProducts()
+    setProducts(allProducts)
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    refreshProducts()
+  }, [refreshProducts])
 
   return (
-    <productsContext.Provider value={data}>
+    <productsContext.Provider value={{ products, refreshProducts, loading }}>
       {children}
     </productsContext.Provider>
   )
