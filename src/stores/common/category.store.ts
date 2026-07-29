@@ -9,6 +9,7 @@ interface FetchCategoriesOptions {
 interface CategoryState {
   categories: Category[]
   loading: boolean
+  loadedPublicOnly: boolean | null
 
   setLoading: (loading: boolean) => void
   fetchCategories: (options?: FetchCategoriesOptions) => Promise<void>
@@ -20,20 +21,26 @@ interface CategoryState {
 const storeApi: StateCreator<CategoryState> = (set, get) => ({
   categories: [],
   loading: true,
+  loadedPublicOnly: null,
 
   setLoading: (loading: boolean) => set({ loading }),
   fetchCategories: async (options = {}) => {
-    if (get().categories.length > 0) return
-
     const { publicOnly = false } = options
+    const { categories, loadedPublicOnly } = get()
+
+    if (categories.length > 0 && loadedPublicOnly === publicOnly) return
+
     get().setLoading(true)
-    const categories = publicOnly
+    const newCategories = publicOnly
       ? await getPublicCategories()
       : await getCategories()
 
-    if (!categories) return
+    if (!newCategories) {
+      get().setLoading(false)
+      return
+    }
 
-    set({ categories })
+    set({ categories: newCategories, loadedPublicOnly: publicOnly })
     get().setLoading(false)
   },
   deleteCategory: (id: string) => {

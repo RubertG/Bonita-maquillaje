@@ -9,20 +9,22 @@ interface Props {
   selected: string[]
   onToggle: (id: string) => void
   className?: string
+  publicOnly?: boolean
 }
 
 export const CategoryFilter = ({
   selected,
   onToggle,
-  className
+  className,
+  publicOnly = true
 }: Props) => {
   const categories = useStoreCategory(state => state.categories)
   const loading = useStoreCategory(state => state.loading)
   const fetchCategories = useStoreCategory(state => state.fetchCategories)
 
   useEffect(() => {
-    fetchCategories({ publicOnly: true })
-  }, [fetchCategories])
+    fetchCategories({ publicOnly })
+  }, [fetchCategories, publicOnly])
 
   return (
     <section className={className}>

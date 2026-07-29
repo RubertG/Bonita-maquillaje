@@ -5,25 +5,37 @@ import { Search } from "./icons"
 import { useEffect, useState, useRef } from "react"
 import { useDebouncedCallback } from "use-debounce"
 
-export const Searcher = ({
-  className, placeholder
-}: {
-  className?: string,
+interface Props {
+  className?: string
   placeholder?: string
-}) => {
+  value?: string
+  onChange?: (value: string) => void
+}
+
+export const Searcher = ({
+  className, placeholder, value: controlledValue, onChange
+}: Props) => {
+  const isControlled = controlledValue !== undefined
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
-  const [search, setSearch] = useState(searchParams.get("busqueda") || "")
   const router = useRouter()
+  const [search, setSearch] = useState(() => {
+    if (isControlled) return controlledValue ?? ""
+    return searchParams.get("busqueda") || ""
+  })
 
   const busquedaValue = searchParams.get("busqueda") || ""
 
   useEffect(() => {
-    setSearch(busquedaValue)
-  }, [busquedaValue])
+    if (isControlled) {
+      setSearch(controlledValue ?? "")
+    } else {
+      setSearch(busquedaValue)
+    }
+  }, [busquedaValue, controlledValue, isControlled])
 
-  const handleSearch = useDebouncedCallback(() => {
+  const handleUrlSearch = useDebouncedCallback(() => {
     const url = new URLSearchParams(searchParams.toString())
 
     if (search) {
@@ -35,16 +47,28 @@ export const Searcher = ({
     router.replace(url.toString() ? `${pathname}?${url.toString()}` : pathname, { scroll: false })
   }, 350)
 
+  const handleControlledSearch = useDebouncedCallback((value: string) => {
+    onChange?.(value)
+  }, 350)
+
   const handleChange = (value: string) => {
     setSearch(value)
-    handleSearch()
+    if (isControlled) {
+      handleControlledSearch(value)
+    } else {
+      handleUrlSearch()
+    }
   }
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault()
-        handleSearch.flush()
+        if (isControlled) {
+          handleControlledSearch.flush()
+        } else {
+          handleUrlSearch.flush()
+        }
       }}
       className={`flex items-center justify-between w-full bg-bg-50 rounded-lg pr-2.5 gap-1.5 shadow-button ${className} max-w-2xl mx-auto`}>
       <label htmlFor="catalog-search" className="sr-only">
