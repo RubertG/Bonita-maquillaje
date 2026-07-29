@@ -80,7 +80,7 @@ export const useEditProductForm = ({ id }: Props) => {
         }
         router.push("/admin/productos")
         refreshProducts()
-      } catch (error) {
+      } catch {
         setError("Ocurrio un error al guardar el producto")
       }
     }

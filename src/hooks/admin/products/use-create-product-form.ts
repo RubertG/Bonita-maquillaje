@@ -60,7 +60,7 @@ export const useCreateProductForm = () => {
         }
         router.push("/admin/productos")
         refreshProducts()
-      } catch (error) {
+      } catch {
         setError("Ocurrio un error al guardar el producto")
       }
 
