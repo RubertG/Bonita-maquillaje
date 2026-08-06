@@ -19,7 +19,7 @@ export const CategoriesContainer = ({ className }: Props) => {
   }, [])
 
   return (
-    <section className={`${className} flex gap-2 items-center overflow-x-auto scrollbar-hide md:justify-center`}>
+    <section className={`${className} flex gap-2 items-center overflow-x-auto scrollbar-hide`}>
       {
         categories.length > 0 && !loading && (
           categories.map(category => (
