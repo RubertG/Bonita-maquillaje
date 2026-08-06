@@ -35,13 +35,14 @@ export const CategoriesContainer = ({ className }: Props) => {
       {categories.map(category => (
         <Category {...category} key={category.id} />
       ))}
+      {/* Same square footprint as Category so the row stays even. */}
       <Link
-        className="p-2 rounded-lg lg:hover:bg-bg-200 transition-colors block"
+        className="p-2 rounded-lg lg:hover:bg-bg-200 transition-colors flex flex-col items-center justify-center gap-1 w-24 shrink-0 aspect-square overflow-hidden"
         href={`/admin/categorias`}
       >
-        <Delete className="w-14 h-14 object-cover m-auto stroke-accent-300 mb-1 stroke-1" />
+        <Delete className="w-12 h-12 shrink-0 object-cover stroke-accent-300 stroke-1" />
         <h2
-          className="text-sm text-accent-300 text-center font-light"
+          className="text-xs leading-tight text-accent-300 text-center font-light line-clamp-2"
         >Quitar filtros</h2>
       </Link>
     </ScrollRow>

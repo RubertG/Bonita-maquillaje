@@ -12,7 +12,7 @@ interface Props {
 export const CategoryShowcaseCard = ({ category: { id, name, img }, className }: Props) => (
   <Link
     href={`/catalogo/productos?categoria=${encodeURIComponent(id)}`}
-    className={clsx("group block relative aspect-square overflow-hidden border border-bg-300 rounded-xl", className)}
+    className={clsx("group block relative w-full h-full aspect-square overflow-hidden border border-bg-300 rounded-xl", className)}
   >
     <Image
       src={img.url?.trim() || "/logo.webp"}
