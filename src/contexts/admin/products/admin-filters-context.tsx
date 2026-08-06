@@ -15,13 +15,13 @@ const adminFiltersContext = createContext<AdminFiltersContextValue | undefined>(
 
 export const AdminFiltersProvider = ({ children }: { children: React.ReactNode }) => {
   const [filters, setFilters] = useState<AdminProductFilters>({
-    quick: "all",
+    quick: null,
     categories: [],
     search: ""
   })
 
   const setQuick = useCallback((quick: AdminQuickFilter | null) => {
-    setFilters(prev => ({ ...prev, quick: quick ?? "all" }))
+    setFilters(prev => ({ ...prev, quick }))
   }, [])
 
   const toggleCategory = useCallback((id: string) => {
@@ -39,7 +39,7 @@ export const AdminFiltersProvider = ({ children }: { children: React.ReactNode }
 
   const resetFilters = useCallback(() => {
     setFilters({
-      quick: "all",
+      quick: null,
       categories: [],
       search: ""
     })

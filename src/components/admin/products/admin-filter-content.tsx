@@ -1,6 +1,5 @@
 "use client"
 
-import { Searcher } from "@/components/common/searcher"
 import { ToggleFilter } from "@/components/catalogue/toggle-filter"
 import { CategoryFilter } from "@/components/catalogue/category-filter"
 import { ResetFilters } from "@/components/catalogue/reset-filters"
@@ -11,22 +10,16 @@ interface Props {
 }
 
 const QUICK_OPTIONS = [
-  { value: "all" as const, label: "Todos" },
   { value: "discount" as const, label: "Con descuento" },
   { value: "bestSeller" as const, label: "Más vendidos" },
   { value: "new" as const, label: "Nuevos" }
 ]
 
 export const AdminFilterContent = ({ className }: Props) => {
-  const { filters, setQuick, toggleCategory, setSearch, resetFilters } = useAdminProductFilters()
+  const { filters, setQuick, toggleCategory, resetFilters } = useAdminProductFilters()
 
   return (
     <div className={`flex flex-col gap-6 ${className}`}>
-      <Searcher
-        value={filters.search}
-        onChange={setSearch}
-        placeholder="Buscar por nombre..."
-      />
       <ToggleFilter
         title="Productos"
         value={filters.quick}

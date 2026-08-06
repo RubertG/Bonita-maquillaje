@@ -5,15 +5,15 @@ import { useProductsContext } from "@/hooks/admin/products/use-products-context"
 import { Product } from "@/types/db/db"
 import { useMemo } from "react"
 
-export type AdminQuickFilter = "all" | "discount" | "bestSeller" | "new"
+export type AdminQuickFilter = "discount" | "bestSeller" | "new"
 
 export interface AdminProductFilters {
-  quick: AdminQuickFilter
+  quick: AdminQuickFilter | null
   categories: string[]
   search: string
 }
 
-const matchesQuick = (product: Product, quick: AdminQuickFilter): boolean => {
+const matchesQuick = (product: Product, quick: AdminQuickFilter | null): boolean => {
   if (quick === "discount") return product.offerPrice != null
   if (quick === "bestSeller") return product.isBestSeller === true
   if (quick === "new") return product.isNew === true
