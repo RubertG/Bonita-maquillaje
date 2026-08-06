@@ -33,7 +33,6 @@ function ProductsPageContent() {
             value={filters.search}
             onChange={setSearch}
             placeholder="Buscar por nombre..."
-            className="sm:max-w-xs"
           />
           <ButtonWithIcon
             className="w-full sm:w-auto whitespace-nowrap"
