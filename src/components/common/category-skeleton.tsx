@@ -3,12 +3,13 @@ import Skeleton from "react-loading-skeleton"
 export const CategorySkeleton = () => {
   return (
     <article
-      className="rounded-lg min-w-20"
+      className="rounded-lg p-2 flex flex-col items-center justify-center gap-1 w-24 shrink-0 aspect-square overflow-hidden"
     >
       <Skeleton
-        className="w-14 h-14 m-auto mb-1 aspect-square" />
+        className="w-12 h-12 aspect-square" />
       <Skeleton
-        className="text-sm"
+        className="text-xs"
+        width="100%"
       />
     </article>
   )
