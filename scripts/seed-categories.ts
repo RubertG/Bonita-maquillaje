@@ -1,31 +1,54 @@
 import { config } from "dotenv"
 config({ path: ".env.local" })
 
+import { randomUUID } from "node:crypto"
+import { existsSync, readFileSync, statSync } from "node:fs"
+import { extname, join, resolve } from "node:path"
 import { initializeApp, cert, getApps } from "firebase-admin/app"
 import { getFirestore } from "firebase-admin/firestore"
+import { getStorage } from "firebase-admin/storage"
 import { ROUTES_COLLECTIONS } from "../src/consts/db/db"
+import { FileStateItem } from "../src/types/admin/admin"
+
+// Local folder holding the category artwork. File names are the category id,
+// except where `imageFile` says otherwise.
+const IMAGES_DIR = resolve(process.cwd(), "imagenes-nuevas/categorias")
+
+// Storage folder the admin panel uploads category images into. See
+// use-category-form.ts — saveFile(imgs[0], categoryId, "/categories").
+const CATEGORIES_STORAGE_FOLDER = "categories"
+
+const CONTENT_TYPES: Record<string, string> = {
+  ".webp": "image/webp",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".svg": "image/svg+xml"
+}
 
 const CATEGORIES = [
-  { id: "liquidacion", name: "Liquidación", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "combos", name: "Combos", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "cuidado-facial", name: "Cuidado facial", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "bases-y-correctores", name: "Bases y correctores", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "polvos-sueltos-y-compactos", name: "Polvos sueltos y compactos", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "bronzer-y-contornos", name: "Bronzer y contornos", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "sombras", name: "Sombras", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "rubor-e-iluminador", name: "Rubor e iluminador", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "labios", name: "Labios", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "ojos", name: "Ojos", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "fijador-y-primer", name: "Fijador y primer", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "brochas", name: "Brochas", img: { name: "", url: "", size: 0 }, isStagingOnly: true },
-  { id: "accesorios-de-maquillaje", name: "Accesorios de maquillaje", img: { name: "", url: "", size: 0 }, isStagingOnly: true }
+  { id: "cajas-de-maquillaje", name: "Cajas de maquillaje", imageFile: "cajas-de-maquillaje.webp", isStagingOnly: false },
+  { id: "cuidado-facial", name: "Cuidado facial", imageFile: "cuidado-facial.webp", isStagingOnly: false },
+  { id: "bases-y-correctores", name: "Bases y correctores", imageFile: "bases-y-correctores.webp", isStagingOnly: false },
+  { id: "polvos-sueltos-y-compactos", name: "Polvos sueltos y compactos", imageFile: "polvos-sueltos-y-compactos.webp", isStagingOnly: false },
+  { id: "bronzer-y-contornos", name: "Bronzer y contornos", imageFile: "bronzer-y-contornos.webp", isStagingOnly: false },
+  { id: "sombras", name: "Sombras", imageFile: "sombras.webp", isStagingOnly: false },
+  { id: "rubor-e-iluminador", name: "Rubor e iluminador", imageFile: "rubor-e-iluminador.webp", isStagingOnly: false },
+  { id: "labios", name: "Labios", imageFile: "labios.webp", isStagingOnly: false },
+  { id: "ojos", name: "Ojos", imageFile: "ojos.webp", isStagingOnly: false },
+  // The artwork is named after the sheet's "PRIMER Y FIJADOR" wording, while the
+  // category id keeps the order the codebase already uses.
+  { id: "fijador-y-primer", name: "Fijador y primer", imageFile: "primer-y-fijador.webp", isStagingOnly: false },
+  { id: "brochas", name: "Brochas", imageFile: "brochas.webp", isStagingOnly: false },
+  { id: "accesorios-de-maquillaje", name: "Accesorios de maquillaje", imageFile: "accesorios-de-maquillaje.webp", isStagingOnly: false }
 ]
 
-const STAGING_IDS = new Set(CATEGORIES.map(category => category.id))
+const NEW_CATEGORY_IDS = new Set(CATEGORIES.map(category => category.id))
 
 const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID
 const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL
 const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n")
+const storageBucket = process.env.NEXT_PUBLIC_STORAGE_BUCKET
 
 if (!projectId || !clientEmail || !privateKey) {
   console.error(
@@ -34,74 +57,178 @@ if (!projectId || !clientEmail || !privateKey) {
   process.exit(1)
 }
 
+if (!storageBucket) {
+  console.error("Missing NEXT_PUBLIC_STORAGE_BUCKET in .env.local — category images cannot be uploaded without it.")
+  process.exit(1)
+}
+
 const existingApp = getApps().at(0)
 const app = existingApp || initializeApp({
   credential: cert({ projectId, clientEmail, privateKey }),
-  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET
+  storageBucket
 })
 
 const db = getFirestore(app)
+const bucket = getStorage(app).bucket()
+
+// Mirrors what getDownloadURL() returns on the web SDK, so category images carry
+// the same URL shape as the product images already stored in Firestore.
+function buildDownloadUrl(path: string, token: string) {
+  return `https://firebasestorage.googleapis.com/v0/b/${storageBucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`
+}
+
+async function uploadCategoryImage(
+  categoryId: string,
+  imageFile: string
+): Promise<FileStateItem> {
+  const localPath = join(IMAGES_DIR, imageFile)
+  const extension = extname(imageFile).toLowerCase()
+  const contentType = CONTENT_TYPES[extension]
+
+  if (!contentType) {
+    throw new Error(`unsupported image extension "${extension}" for ${imageFile}`)
+  }
+
+  // Deterministic object name: re-running overwrites the same object instead of
+  // piling up orphans in Storage.
+  const name = `${categoryId}${extension}`
+  const path = `${CATEGORIES_STORAGE_FOLDER}/${name}`
+  const token = randomUUID()
+
+  await bucket.file(path).save(readFileSync(localPath), {
+    contentType,
+    metadata: {
+      metadata: {
+        firebaseStorageDownloadTokens: token
+      }
+    }
+  })
+
+  return {
+    name,
+    url: buildDownloadUrl(path, token),
+    size: statSync(localPath).size
+  }
+}
 
 async function seedCategories() {
   const dryRun = process.argv.includes("--dry-run")
+  const forceImages = process.argv.includes("--force-images")
   const collection = db.collection(ROUTES_COLLECTIONS.CATEGORIES)
   const existing = await collection.get()
-  const existingIds = new Set(existing.docs.map(doc => doc.id))
+  const existingDocs = new Map(existing.docs.map(doc => [doc.id, doc]))
 
-  const missing = CATEGORIES.filter(category => !existingIds.has(category.id))
+  const errors: string[] = []
 
-  console.log(`Found ${missing.length} categories to create out of ${CATEGORIES.length}`)
-
-  if (missing.length > 0) {
-    console.log("Categories to create:")
-    missing.forEach(category => {
-      console.log(`  - ${category.id}: ${category.name}`)
+  // Every category must have its artwork on disk before anything is written.
+  if (!existsSync(IMAGES_DIR)) {
+    errors.push(`images folder not found: ${IMAGES_DIR}`)
+  } else {
+    CATEGORIES.forEach(category => {
+      const localPath = join(IMAGES_DIR, category.imageFile)
+      if (!existsSync(localPath)) errors.push(`missing image for "${category.id}": ${localPath}`)
+      else if (!CONTENT_TYPES[extname(category.imageFile).toLowerCase()]) {
+        errors.push(`unsupported image extension for "${category.id}": ${category.imageFile}`)
+      }
     })
   }
 
+  const missing = CATEGORIES.filter(category => !existingDocs.has(category.id))
+
+  // A category already holding an image keeps it, unless --force-images is passed.
+  const needsImage = CATEGORIES.filter(category => {
+    if (!existingDocs.has(category.id)) return true
+    if (forceImages) return true
+    const img = existingDocs.get(category.id)?.data().img as FileStateItem | undefined
+    return !img?.url
+  })
+
+  // The legacy categories (cat1/cat2/cat3) end up empty once products move to the
+  // new taxonomy, so they are hidden from production rather than deleted. Flipping
+  // the boolean back is all it takes to undo it.
   const backfillDocs = existing.docs.filter(doc => doc.data().isStagingOnly === undefined)
+  const hideFromProduction = (id: string) => !NEW_CATEGORY_IDS.has(id)
+
+  console.log(`Images folder: ${IMAGES_DIR}`)
+  console.log(`\n${missing.length} category(ies) to create out of ${CATEGORIES.length}:`)
+  missing.forEach(category => console.log(`  - ${category.id}: ${category.name}`))
+
+  console.log(`\n${needsImage.length} image(s) to upload:`)
+  needsImage.forEach(category =>
+    console.log(`  - ${category.imageFile} -> ${CATEGORIES_STORAGE_FOLDER}/${category.id}${extname(category.imageFile).toLowerCase()}`)
+  )
 
   if (backfillDocs.length > 0) {
-    console.log(`Found ${backfillDocs.length} categories to backfill isStagingOnly`)
-    backfillDocs.forEach(doc => {
-      const value = STAGING_IDS.has(doc.id) ? "true" : "false"
-      console.log(`  - ${doc.id}: isStagingOnly = ${value}`)
-    })
+    console.log(`\n${backfillDocs.length} category(ies) to backfill isStagingOnly:`)
+    backfillDocs.forEach(doc =>
+      console.log(`  - ${doc.id}: isStagingOnly = ${hideFromProduction(doc.id)}`)
+    )
+  }
+
+  if (errors.length > 0) {
+    console.error(`\n${errors.length} error(s) — nothing was written:`)
+    errors.forEach(error => console.error(`  x ${error}`))
+    process.exit(1)
   }
 
   if (dryRun) {
-    console.log("Dry run complete. No writes were committed.")
+    console.log("\nDry run complete. No writes were committed and no images were uploaded.")
     return
+  }
+
+  if (missing.length === 0 && needsImage.length === 0 && backfillDocs.length === 0) {
+    console.log("\nEverything is already seeded. Nothing to do.")
+    return
+  }
+
+  // Images go up before Firestore, so a document never points at an object that
+  // does not exist yet. A failed batch leaves overwritable objects behind.
+  const uploaded = new Map<string, FileStateItem>()
+  for (const category of needsImage) {
+    const img = await uploadCategoryImage(category.id, category.imageFile)
+    uploaded.set(category.id, img)
+    console.log(`Uploaded ${CATEGORIES_STORAGE_FOLDER}/${img.name} (${img.size} bytes)`)
   }
 
   const batch = db.batch()
   let writes = 0
 
-  if (missing.length > 0) {
-    missing.forEach(category => {
-      const ref = collection.doc(category.id)
-      batch.set(ref, category)
-      writes++
+  missing.forEach(category => {
+    batch.set(collection.doc(category.id), {
+      id: category.id,
+      name: category.name,
+      img: uploaded.get(category.id) ?? { name: "", url: "", size: 0 },
+      isStagingOnly: category.isStagingOnly
     })
-  }
+    writes++
+  })
 
-  if (backfillDocs.length > 0) {
-    backfillDocs.forEach(doc => {
-      const ref = collection.doc(doc.id)
-      batch.update(ref, {
-        isStagingOnly: STAGING_IDS.has(doc.id)
-      })
+  // Categories that already existed only get their image refreshed.
+  needsImage
+    .filter(category => existingDocs.has(category.id))
+    .forEach(category => {
+      const img = uploaded.get(category.id)
+      if (!img) return
+      batch.update(collection.doc(category.id), { img })
       writes++
     })
-  }
+
+  backfillDocs
+    .filter(doc => !missing.some(category => category.id === doc.id))
+    .forEach(doc => {
+      batch.update(collection.doc(doc.id), { isStagingOnly: hideFromProduction(doc.id) })
+      writes++
+    })
 
   if (writes === 0) {
-    console.log("All staging categories exist and all categories have isStagingOnly. Nothing to do.")
+    console.log("Nothing to commit.")
     return
   }
 
   await batch.commit()
-  console.log(`Created ${missing.length} staging categories and backfilled ${backfillDocs.length} existing categories`)
+  console.log(
+    `\nCreated ${missing.length} category(ies), uploaded ${uploaded.size} image(s), backfilled ${backfillDocs.length}.`
+  )
 }
 
 seedCategories().catch(error => {

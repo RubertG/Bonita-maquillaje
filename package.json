@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "set-admin-claim": "tsx scripts/set-admin-claim.ts",
     "backfill-product-created-at": "tsx scripts/backfill-product-created-at.ts",
-    "seed-categories": "tsx scripts/seed-categories.ts"
+    "seed-categories": "tsx scripts/seed-categories.ts",
+    "sync-products-from-inventory": "tsx scripts/sync-products-from-inventory.ts",
+    "restore-products-backup": "tsx scripts/restore-products-backup.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
