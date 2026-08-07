@@ -1,5 +1,5 @@
 import { getProduct } from "@/firebase/services/products"
-import { Product } from "@/types/admin/admin"
+import { Product } from "@/types/cart/checkout"
 import { ItemCart } from "@/types/catalogue/cart"
 import { create, StateCreator } from "zustand"
 import { persist } from "zustand/middleware"

@@ -25,14 +25,6 @@ const links = [
     href: "/admin/banners"
   },
   {
-    name: "Pedidos",
-    href: "/admin/pedidos"
-  },
-  {
-    name: "Ventas",
-    href: "/admin/ventas"
-  },
-  {
     name: "Códigos de descuento",
     href: "/admin/codigos-de-descuento"
   }

@@ -1,5 +1,4 @@
-import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore"
-import { Order, Product as ProductDB, Tone } from "../db/db"
+import { Product } from "../db/db"
 
 export interface FileStateItem {
   name: string
@@ -32,34 +31,8 @@ export interface Inputs {
   isNew?: boolean
 }
 
-export interface InputsOrders {
-  name: string,
-  department: string,
-  city: string,
-  address: string,
-  email: string,
-  paymentMethod: string,
-  phone: string
-}
-
 export interface ProductsContext {
-  products: ProductDB[]
+  products: Product[]
   refreshProducts: () => Promise<void>
   loading: boolean
-}
-
-export interface OrdersManagementStorage {
-  orders: Order[] | undefined
-  loading: boolean
-  lastVisible: QueryDocumentSnapshot<DocumentData, DocumentData>
-  hasNext: boolean
-}
-
-export interface Product extends ProductDB {
-  amount: number
-  discountCode?: {
-    code: Id
-    discount: number
-  }
-  tone?: Tone
 }

@@ -24,9 +24,5 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
-
-    match /orders/{document=**} {
-      allow read, write: if isAdmin();
-    }
   }
 }

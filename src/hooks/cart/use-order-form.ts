@@ -1,10 +1,10 @@
 "use client"
 
-import { ALL_CATEGORY } from "@/consts/admin/orders"
+import { ALL_CATEGORY } from "@/consts/categories"
 import { getDiscountCode } from "@/firebase/services/discount-codes"
 import { useForm } from "@/hooks/common/use-form"
-import { InputsOrders, Product } from "@/types/admin/admin"
-import { orderSchema } from "@/validations/admin/orders/order-schema"
+import { InputsOrders, Product } from "@/types/cart/checkout"
+import { orderSchema } from "@/validations/cart/order-schema"
 import { useEffect, useState } from "react"
 
 interface Props {
@@ -93,7 +93,7 @@ export const useOrderForm = ({
     register,
     loading,
     handleClickDiscountCode,
-    setErrorProducts, 
+    setErrorProducts,
     setErrorSubmit,
     setErrorDiscountCode
   }

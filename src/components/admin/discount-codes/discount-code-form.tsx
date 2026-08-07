@@ -3,7 +3,7 @@
 import { Button } from "@/components/common/button"
 import { Save, Spinner } from "@/components/common/icons"
 import { Input, SelectInput } from "@/components/common/input"
-import { ALL_CATEGORY } from "@/consts/admin/orders"
+import { ALL_CATEGORY } from "@/consts/categories"
 import { useDiscountForm } from "@/hooks/admin/discount-code/use-discount-form"
 import clsx from "clsx"
 

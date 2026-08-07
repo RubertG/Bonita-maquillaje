@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import { ALL_CATEGORY } from "@/consts/admin/orders"
+import { ALL_CATEGORY } from "@/consts/categories"
 import { getCategories } from "@/firebase/services/server/categories"
 import { getProducts } from "@/firebase/services/server/products"
 

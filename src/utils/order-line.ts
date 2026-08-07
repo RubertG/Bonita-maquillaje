@@ -1,4 +1,4 @@
-import { Product } from "@/types/admin/admin"
+import { Product } from "@/types/cart/checkout"
 import { Order } from "@/types/db/db"
 
 type OrderLine = Order["products"][number]

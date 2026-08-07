@@ -1,7 +1,7 @@
 "use client"
 
 import { Delete } from "@/components/common/icons"
-import { Product } from "@/types/admin/admin"
+import { Product } from "@/types/cart/checkout"
 import { PriceBlock } from "@/components/common/price-block"
 import Image from "next/image"
 import Link from "next/link"

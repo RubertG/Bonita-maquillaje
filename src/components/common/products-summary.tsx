@@ -1,4 +1,4 @@
-import { Product } from "@/types/admin/admin"
+import { Product } from "@/types/cart/checkout"
 import { formatCurrency } from "@/utils/format-currency"
 import { getPayableUnitPrice } from "@/utils/offer-price"
 import { PriceBlock } from "@/components/common/price-block"

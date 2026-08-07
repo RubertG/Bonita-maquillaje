@@ -1,8 +1,8 @@
 import { Button } from "@/components/common/button"
 import { Save, Spinner } from "@/components/common/icons"
 import { DiscountCodeInput, Input, SelectInput, TextArea } from "@/components/common/input"
-import { PAYMENT_METHODS } from "@/consts/admin/orders"
-import { InputsOrders } from "@/types/admin/admin"
+import { PAYMENT_METHODS } from "@/consts/checkout"
+import { InputsOrders } from "@/types/cart/checkout"
 import clsx from "clsx"
 import { FieldErrors, UseFormRegister } from "@/hooks/common/use-form"
 
