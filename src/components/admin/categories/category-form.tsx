@@ -38,7 +38,6 @@ export const CategoryForm = ({
         multiple={false}
         setImgsOld={setImgOld}
         items={imgs}
-        refCollection="categories"
         imgsOld={imgOld}
         setItems={setImgs} />
       {(errorImgs) && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{errorImgs}</p>}

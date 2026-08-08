@@ -32,14 +32,10 @@ export const useBannerDelete = (banner: Banner) => {
 
       // The Storage object is only removed once the document is gone, so a failed
       // document delete never leaves a banner pointing at a missing image.
-      await deleteFile(`banners/${banner.img.name}`)
+      await deleteFile(banner.img.url)
 
-      if (banner.imgDesktop) {
-        try {
-          await deleteFile(`banners/${banner.imgDesktop.name}`)
-        } catch {
-          // Ignore a missing desktop object so legacy banners still delete cleanly.
-        }
+      if (banner.imgDesktop?.url) {
+        await deleteFile(banner.imgDesktop.url)
       }
 
       setPopup(false)

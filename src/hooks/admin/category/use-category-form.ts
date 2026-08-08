@@ -139,9 +139,9 @@ export const useCategoryForm = (id?: string) => {
     deleteStoreCategory(id)
     const token = await getAuthToken()
     const deleteCategoryPromise = deleteCategoryAction(token, id)
-    if (imgOld.length > 0) {
+    if (imgOld.length > 0 && imgOld[0].url) {
       await Promise.all([
-        deleteFile(`categories/${imgOld[0].name}`),
+        deleteFile(imgOld[0].url),
         deleteCategoryPromise
       ])
     } else {

@@ -18,7 +18,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   imgsOld?: FileStateItem[]
   setImgsOld?: (imgs: FileStateItem[]) => void
   setItems: (items: File[]) => void
-  refCollection?: string
   fixedSize?: number
   images: Array<File | FileStateItem>
   setImages: Dispatch<SetStateAction<Array<File | FileStateItem>>>
@@ -35,7 +34,6 @@ export const UploadFile = ({
   imgsOld,
   setImgsOld,
   multiple = true,
-  refCollection = "products",
   images,
   setImages,
   ...props
@@ -47,7 +45,6 @@ export const UploadFile = ({
     imgsOld,
     setImgsOld,
     multiple,
-    refCollection,
     images,
     setImages
   })

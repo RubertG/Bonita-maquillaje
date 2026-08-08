@@ -9,11 +9,10 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "reac
 
 interface Props {
   limitSize: number
-  items: File[] 
+  items: File[]
   imgsOld?: FileStateItem[]
   setImgsOld?: (imgs: FileStateItem[]) => void
   setItems: (items: File[]) => void
-  refCollection: string
   multiple: boolean
   images: Array<File | FileStateItem>
   setImages: Dispatch<SetStateAction<Array<File | FileStateItem>>>
@@ -26,7 +25,6 @@ export const useUploadFile = ({
   imgsOld,
   setImgsOld,
   multiple,
-  refCollection,
   setImages
 }: Props) => {
   const [error, setError] = useState("")
@@ -105,7 +103,7 @@ export const useUploadFile = ({
   const handleDeleteOld = async (item: FileStateItem) => {
     setError("")
     setTotalSize((totalSize - item.size) < 0 ? 0 : (totalSize - item.size))
-    await deleteFile(`${refCollection}/${item.name}`)
+    await deleteFile(item.url)
 
     if (setImgsOld && imgsOld) {
       setImgsOld(imgsOld.filter((it) => it.name !== item.name))

@@ -58,7 +58,6 @@ export const BannerForm = ({ className }: Props) => {
             multiple={false}
             setImgsOld={field.setImgsOld as (imgs: FileStateItem[]) => void}
             items={field.imgs}
-            refCollection="banners"
             imgsOld={field.imgsOld as FileStateItem[]}
             setItems={field.setImgs} />
           {field.error && <p className="text-red-500 font-light px-3.5 -mt-5 mb-4 text-sm">{field.error}</p>}

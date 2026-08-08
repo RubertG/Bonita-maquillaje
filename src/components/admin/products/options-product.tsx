@@ -24,7 +24,7 @@ export const OptionsProduct = ({ id, imgs }: Pick<Product, "id" | "imgs">) => {
       setPopup(false)
       return
     }
-    await Promise.all(imgs.map(img => deleteFile(`products/${img.name}`)))
+    await Promise.all(imgs.map(img => deleteFile(img.url)))
     refreshProducts()
     setLoading(false)
     setPopup(false)

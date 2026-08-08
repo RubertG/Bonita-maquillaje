@@ -43,5 +43,13 @@ export const saveFile = async (
 
 export const deleteFile = async (path: string) => {
   const storageRef = ref(storage, path)
-  await deleteObject(storageRef)
+  try {
+    await deleteObject(storageRef)
+  } catch (error) {
+    const code = (error as { code?: string }).code
+    if (code === "storage/object-not-found") {
+      return
+    }
+    throw error
+  }
 }
