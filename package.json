@@ -12,6 +12,10 @@
     "backfill-product-created-at": "tsx scripts/backfill-product-created-at.ts",
     "seed-categories": "tsx scripts/seed-categories.ts",
     "sync-products-from-inventory": "tsx scripts/sync-products-from-inventory.ts",
+    "audit-product-images": "tsx scripts/audit-product-images.ts",
+    "replace-product-images": "tsx scripts/replace-product-images.ts",
+    "delete-orphan-product-images": "tsx scripts/delete-orphan-product-images.ts",
+    "restore-deleted-bronzer": "tsx scripts/restore-deleted-bronzer.ts",
     "restore-products-backup": "tsx scripts/restore-products-backup.ts"
   },
   "dependencies": {

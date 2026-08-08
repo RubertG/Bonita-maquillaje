@@ -35,7 +35,7 @@ export default function CataloguePage() {
       <MarqueeSection className="mt-[3.8rem]" />
       <BannerSection />
 
-      <main className="px-4 mb-20 mt-10 xl:px-0 max-w-6xl mx-auto">
+      <main className="px-4 my-10 xl:px-0 max-w-6xl mx-auto">
         <h1 className="sr-only">Nuestro Catálogo</h1>
 
         <div className="flex flex-col gap-12 lg:gap-16">

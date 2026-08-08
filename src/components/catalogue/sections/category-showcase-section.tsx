@@ -17,7 +17,7 @@ export async function CategoryShowcaseSection({ className }: Props) {
       {/* items-start keeps flex from stretching the items and breaking aspect-square. */}
       <ul className="mt-4 flex flex-wrap items-start justify-center gap-4">
         {categories.map(category => (
-          <li key={category.id} className="w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px] aspect-square">
+          <li key={category.id} className="w-full max-w-[170px] sm:max-w-[220px] md:max-w-[260px] aspect-square">
             <CategoryShowcaseCard category={category} />
           </li>
         ))}
