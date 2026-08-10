@@ -11,6 +11,7 @@
     "set-admin-claim": "tsx scripts/set-admin-claim.ts",
     "backfill-product-created-at": "tsx scripts/backfill-product-created-at.ts",
     "seed-categories": "tsx scripts/seed-categories.ts",
+    "backfill-category-order": "tsx scripts/backfill-category-order.ts",
     "sync-products-from-inventory": "tsx scripts/sync-products-from-inventory.ts",
     "audit-product-images": "tsx scripts/audit-product-images.ts",
     "replace-product-images": "tsx scripts/replace-product-images.ts",

@@ -9,6 +9,7 @@ import { getFirestore } from "firebase-admin/firestore"
 import { getStorage } from "firebase-admin/storage"
 import { ROUTES_COLLECTIONS } from "../src/consts/db/db"
 import { FileStateItem } from "../src/types/admin/admin"
+import { CANONICAL_CATEGORIES } from "./canonical-categories"
 
 // Local folder holding the category artwork. File names are the category id,
 // except where `imageFile` says otherwise.
@@ -26,24 +27,7 @@ const CONTENT_TYPES: Record<string, string> = {
   ".svg": "image/svg+xml"
 }
 
-const CATEGORIES = [
-  { id: "cajas-de-maquillaje", name: "Cajas de maquillaje", imageFile: "cajas-de-maquillaje.webp", isStagingOnly: false },
-  { id: "cuidado-facial", name: "Cuidado facial", imageFile: "cuidado-facial.webp", isStagingOnly: false },
-  { id: "bases-y-correctores", name: "Bases y correctores", imageFile: "bases-y-correctores.webp", isStagingOnly: false },
-  { id: "polvos-sueltos-y-compactos", name: "Polvos sueltos y compactos", imageFile: "polvos-sueltos-y-compactos.webp", isStagingOnly: false },
-  { id: "bronzer-y-contornos", name: "Bronzer y contornos", imageFile: "bronzer-y-contornos.webp", isStagingOnly: false },
-  { id: "sombras", name: "Sombras", imageFile: "sombras.webp", isStagingOnly: false },
-  { id: "rubor-e-iluminador", name: "Rubor e iluminador", imageFile: "rubor-e-iluminador.webp", isStagingOnly: false },
-  { id: "labios", name: "Labios", imageFile: "labios.webp", isStagingOnly: false },
-  { id: "ojos", name: "Ojos", imageFile: "ojos.webp", isStagingOnly: false },
-  // The artwork is named after the sheet's "PRIMER Y FIJADOR" wording, while the
-  // category id keeps the order the codebase already uses.
-  { id: "fijador-y-primer", name: "Fijador y primer", imageFile: "primer-y-fijador.webp", isStagingOnly: false },
-  { id: "brochas", name: "Brochas", imageFile: "brochas.webp", isStagingOnly: false },
-  { id: "accesorios-de-maquillaje", name: "Accesorios de maquillaje", imageFile: "accesorios-de-maquillaje.webp", isStagingOnly: false }
-]
-
-const NEW_CATEGORY_IDS = new Set(CATEGORIES.map(category => category.id))
+const NEW_CATEGORY_IDS = new Set(CANONICAL_CATEGORIES.map(category => category.id))
 
 const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID
 const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL
@@ -124,7 +108,7 @@ async function seedCategories() {
   if (!existsSync(IMAGES_DIR)) {
     errors.push(`images folder not found: ${IMAGES_DIR}`)
   } else {
-    CATEGORIES.forEach(category => {
+    CANONICAL_CATEGORIES.forEach(category => {
       const localPath = join(IMAGES_DIR, category.imageFile)
       if (!existsSync(localPath)) errors.push(`missing image for "${category.id}": ${localPath}`)
       else if (!CONTENT_TYPES[extname(category.imageFile).toLowerCase()]) {
@@ -133,10 +117,10 @@ async function seedCategories() {
     })
   }
 
-  const missing = CATEGORIES.filter(category => !existingDocs.has(category.id))
+  const missing = CANONICAL_CATEGORIES.filter(category => !existingDocs.has(category.id))
 
   // A category already holding an image keeps it, unless --force-images is passed.
-  const needsImage = CATEGORIES.filter(category => {
+  const needsImage = CANONICAL_CATEGORIES.filter(category => {
     if (!existingDocs.has(category.id)) return true
     if (forceImages) return true
     const img = existingDocs.get(category.id)?.data().img as FileStateItem | undefined
@@ -150,8 +134,11 @@ async function seedCategories() {
   const hideFromProduction = (id: string) => !NEW_CATEGORY_IDS.has(id)
 
   console.log(`Images folder: ${IMAGES_DIR}`)
-  console.log(`\n${missing.length} category(ies) to create out of ${CATEGORIES.length}:`)
-  missing.forEach(category => console.log(`  - ${category.id}: ${category.name}`))
+  console.log(`\n${missing.length} category(ies) to create out of ${CANONICAL_CATEGORIES.length}:`)
+  missing.forEach(category => {
+    const order = CANONICAL_CATEGORIES.findIndex(entry => entry.id === category.id)
+    console.log(`  - ${category.id}: ${category.name} (order: ${order})`)
+  })
 
   console.log(`\n${needsImage.length} image(s) to upload:`)
   needsImage.forEach(category =>
@@ -194,11 +181,17 @@ async function seedCategories() {
   let writes = 0
 
   missing.forEach(category => {
+    // The canonical position, never the loop index: seeding a partially seeded
+    // collection would otherwise write 0..missing.length-1 and misorder every
+    // category that already existed.
+    const order = CANONICAL_CATEGORIES.findIndex(entry => entry.id === category.id)
+
     batch.set(collection.doc(category.id), {
       id: category.id,
       name: category.name,
       img: uploaded.get(category.id) ?? { name: "", url: "", size: 0 },
-      isStagingOnly: category.isStagingOnly
+      isStagingOnly: category.isStagingOnly,
+      order
     })
     writes++
   })
