@@ -15,9 +15,9 @@ export async function CategoryShowcaseSection({ className }: Props) {
     <section className={className}>
       <h2 className={`text-2xl lg:text-3xl text-text-50 text-center ${branch.className}`}>Nuestras categorías</h2>
       {/* items-start keeps flex from stretching the items and breaking aspect-square. */}
-      <ul className="mt-4 flex flex-wrap items-start justify-center gap-4">
+      <ul className="mt-4 grid grid-cols-2 items-center sm:flex sm:flex-wrap sm:justify-center gap-4 md:gap-6">
         {categories.map(category => (
-          <li key={category.id} className="w-full max-w-[170px] sm:max-w-[220px] md:max-w-[260px] aspect-square">
+          <li key={category.id} className="w-full sm:max-w-[220px] md:max-w-[260px] aspect-square">
             <CategoryShowcaseCard category={category} />
           </li>
         ))}
