@@ -13,6 +13,7 @@ export interface Category {
   name: string
   img: FileStateItem
   isStagingOnly?: boolean
+  order?: number
 }
 
 export interface Banner {
