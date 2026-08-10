@@ -13,6 +13,7 @@ import {
   deleteCategory as deleteCategoryAction
 } from "@/app/actions/admin/categories"
 import { getAuthToken } from "@/lib/auth-token"
+import { nextCategoryOrder } from "@/lib/category-order"
 import { CategoryInputs, FileStateItem } from "@/types/admin/admin"
 import { Category } from "@/types/db/db"
 import { useStoreCategory } from "@/stores/common/category.store"
@@ -28,7 +29,8 @@ export const useCategoryForm = (id?: string) => {
   const [error, setError] = useState("")
   const [loadingDelete, setLoadingDelete] = useState(false)
   const [popup, setPopup] = useState(false)
-  
+  const [existingOrder, setExistingOrder] = useState<number | undefined>(undefined)
+
   const addCategory = useStoreCategory(state => state.addCategory)
   const updateStoreCategory = useStoreCategory(state => state.updateCategory)
   const deleteStoreCategory = useStoreCategory(state => state.deleteCategory)
@@ -71,6 +73,15 @@ export const useCategoryForm = (id?: string) => {
           }
         }
 
+        // `order` is added as a key only when it is a number: the Admin SDK
+        // rejects `undefined` values, and omitting the key lets
+        // `.set(..., { merge: true })` keep whatever Firestore already holds.
+        const order = id
+          ? existingOrder
+          : nextCategoryOrder(useStoreCategory.getState().categories)
+
+        if (typeof order === "number") category = { ...category, order }
+
         const token = await getAuthToken()
 
         if (id) {
@@ -100,7 +111,11 @@ export const useCategoryForm = (id?: string) => {
     setImgs([])
     setErrorImgs("")
     setError("")
-    
+    // Stale is worse than absent here: without this reset, editing category A
+    // (order: 3), switching to category B before B's fetch resolves, and
+    // submitting would still carry A's `existingOrder` and overwrite B's order.
+    setExistingOrder(undefined)
+
     if (id) {
 
       const getC = async () => {
@@ -113,6 +128,7 @@ export const useCategoryForm = (id?: string) => {
           name: category.name,
           isStagingOnly: category.isStagingOnly ?? false
         })
+        setExistingOrder(category.order)
       }
       getC()
       return
