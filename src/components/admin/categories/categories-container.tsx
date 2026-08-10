@@ -82,7 +82,7 @@ export const CategoriesContainer = ({ className, initialCategories, editingId }:
 
   return (
     <div className={className}>
-      <header className="max-w-2xl mx-auto flex flex-wrap items-center justify-between gap-3 mb-3">
+      <header className="flex flex-wrap items-center justify-between gap-3 mb-3">
         <p
           aria-live="polite"
           className={clsx("text-xs sm:text-sm font-light", reorderError ? "text-red-500" : "text-text-300")}
@@ -113,7 +113,7 @@ export const CategoriesContainer = ({ className, initialCategories, editingId }:
             Aún no hay categorías creadas.
           </p>
         ) : (
-          <ul className="grid gap-3 max-w-2xl mx-auto">
+          <ul className="grid gap-3">
             {
               mounted ? (
                 <DndContext
