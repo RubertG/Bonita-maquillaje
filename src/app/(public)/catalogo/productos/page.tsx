@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { H1 } from "@/components/common/h1"
 import { ProductsSection } from "@/components/catalogue/sections/products-section"
 import { CatalogView } from "@/components/catalogue/catalog-view"
+import { CatalogFiltersProvider } from "@/contexts/catalog/catalog-filters-context"
 import { ProductSkeleton } from "@/components/catalogue/product-skeleton"
 
 export const dynamic = "force-dynamic"
@@ -40,7 +41,9 @@ export default function CatalogProductsPage() {
       <H1 className="mb-2">Catálogo</H1>
       <Suspense fallback={<ProductsSkeletonGrid />}>
         <ProductsSection>
-          <CatalogView />
+          <CatalogFiltersProvider>
+            <CatalogView />
+          </CatalogFiltersProvider>
         </ProductsSection>
       </Suspense>
     </main>

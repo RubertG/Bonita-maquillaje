@@ -7,16 +7,22 @@ import { ProductsContainer } from "@/components/catalogue/products-container"
 import { FilterSidebar } from "@/components/catalogue/filter-sidebar"
 import { FilterDrawer } from "@/components/catalogue/filter-drawer"
 import { useCatalogProductFilter } from "@/hooks/catalog/use-catalog-product-filter"
+import { useCatalogFilters } from "@/hooks/catalog/use-catalog-filters"
 
 export const CatalogView = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const filterButtonRef = useRef<HTMLButtonElement>(null)
   const { count, total } = useCatalogProductFilter()
+  const { filters, setSearch } = useCatalogFilters()
 
   return (
     <>
       <div className="py-4 lg:static lg:py-0">
-        <Searcher className="max-w-2xl mx-auto" />
+        <Searcher
+          className="max-w-2xl mx-auto"
+          value={filters.search}
+          onChange={setSearch}
+        />
 
         <section className="mt-4 flex items-center justify-between lg:hidden">
           <p className="text-sm text-text-300">
