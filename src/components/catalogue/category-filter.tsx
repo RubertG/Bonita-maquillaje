@@ -1,7 +1,7 @@
 "use client"
 
 import { Category } from "@/components/common/category"
-import { CategoriesSkeletonContainer } from "@/components/catalogue/categories-container"
+import { CategoriesSkeletonContainer } from "@/components/catalogue/categories-skeleton-container"
 import { useStoreCategory } from "@/stores/common/category.store"
 import { useEffect } from "react"
 
@@ -46,7 +46,7 @@ export const CategoryFilter = ({
         }
         {
           loading && (
-            <CategoriesSkeletonContainer />
+            <CategoriesSkeletonContainer variant="list" />
           )
         }
       </div>
