@@ -1,7 +1,7 @@
 "use client"
 
-import { DeleteProductCard } from "../admin/orders/product-card"
-import { Product } from "@/types/admin/admin"
+import { DeleteProductCard } from "@/components/cart/delete-product-card"
+import { Product } from "@/types/cart/checkout"
 import Skeleton from "react-loading-skeleton"
 import { Delete } from "../common/icons"
 import { useCartStore } from "@/stores/cart/cart.store"

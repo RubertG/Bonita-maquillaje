@@ -4,7 +4,8 @@ import { Delete } from "@/components/common/icons"
 import { useState } from "react"
 import { PopupDelete } from "../common/popup-delete"
 import { useRouter } from "next/navigation"
-import { deleteDiscountCode } from "@/firebase/services/discount-codes"
+import { deleteDiscountCode } from "@/app/actions/admin/discount-codes"
+import { getAuthToken } from "@/lib/auth-token"
 
 interface Props {
   code: string
@@ -17,7 +18,13 @@ export const OptionsDCCard = ({ code }: Props) => {
 
   const handleDelete = async () => {
     setLoading(true)
-    await deleteDiscountCode(code)
+    const token = await getAuthToken()
+    const result = await deleteDiscountCode(token, code)
+    if (!result.ok) {
+      setLoading(false)
+      setPopup(false)
+      return
+    }
     router.refresh()
     setLoading(false)
     setPopup(false)

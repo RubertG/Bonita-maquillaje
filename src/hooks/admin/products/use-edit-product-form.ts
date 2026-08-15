@@ -1,15 +1,16 @@
 "use client"
 
 import { FileStateItem, Inputs } from "@/types/admin/admin"
-import { Category, Product, Tone as ToneType } from "@/types/db/db"
+import { Product, Tone as ToneType } from "@/types/db/db"
 import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useEffect, useState } from "react"
 import { useForm } from "../../common/use-form"
 import { productSchema } from "@/validations/admin/products/product-schema"
-import { getProduct, updateProduct } from "@/firebase/services/products"
+import { getProduct } from "@/firebase/services/products"
+import { updateProduct } from "@/app/actions/admin/products"
+import { getAuthToken } from "@/lib/auth-token"
 import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
-import { useStoreCategory } from "@/stores/common/category.store"
 
 interface Props {
   id: string
@@ -20,23 +21,23 @@ export const useEditProductForm = ({ id }: Props) => {
   const [defaultValues, setDefaultValues] = useState<Inputs>({
     name: "",
     description: "",
-    price: "",
-    stock: "",
-    category: ""
+    price: 0,
+    stock: 0,
+    category: "",
+    offerPrice: null,
+    isBestSeller: false,
+    isNew: false
   })
-  const [categories, setCategories] = useState<Pick<Category, "name" | "id">[]>([])
   const [errorImgs, setErrorImgs] = useState("")
   const [imgsOld, setImgsOld] = useState<FileStateItem[]>([])
   const [tones, setTones] = useState<ToneType[]>([])
   const [error, setError] = useState<string>("")
   const [images, setImages] = useState<Array<File | FileStateItem>>([])
-  const storeCategories = useStoreCategory(state => state.categories)
-  const fetchCategories = useStoreCategory(state => state.fetchCategories)
   const router = useRouter()
   const { refreshProducts } = useProductsContext()
 
   const {
-    register, handleSubmit, loading, errors
+    register, handleSubmit, loading, errors, watch
   } = useForm<Inputs>({
     values: defaultValues,
     schema: productSchema,
@@ -53,9 +54,9 @@ export const useEditProductForm = ({ id }: Props) => {
         const newImgs: FileStateItem[] = await Promise.all(
           images.map(async (img) => {
             if (img instanceof File) {
-              const url = await saveFile(img as File, "/products")
+              const { url, name } = await saveFile(img as File, id, "/products")
               return {
-                name: img.name,
+                name,
                 url,
                 size: img.size
               }
@@ -69,15 +70,17 @@ export const useEditProductForm = ({ id }: Props) => {
           ...data,
           id,
           imgs: newImgs,
-          tones,
-          price: parseFloat(data.price),
-          stock: parseInt(data.stock)
+          tones
         }
 
-        await updateProduct(product)
-        router.push(`/admin/productos?categoria=${data.category}`)
-        refreshProducts(data.category)
-      } catch (error) {
+        const token = await getAuthToken()
+        const result = await updateProduct(token, product)
+        if (!result.ok) {
+          throw new Error(result.error)
+        }
+        router.push("/admin/productos")
+        refreshProducts()
+      } catch {
         setError("Ocurrio un error al guardar el producto")
       }
     }
@@ -94,31 +97,18 @@ export const useEditProductForm = ({ id }: Props) => {
       setDefaultValues({
         name: p.name,
         description: p.description,
-        price: p.price.toString(),
-        stock: p.stock.toString(),
-        category: p.category
+        price: p.price,
+        stock: p.stock,
+        category: p.category,
+        offerPrice: p.offerPrice ?? null,
+        isBestSeller: p.isBestSeller ?? false,
+        isNew: p.isNew ?? false
       })
       setTones(p.tones)
       setImgsOld(p.imgs)
     }
     getP()
-  }, [])
-
-  useEffect(() => {
-    const getC = async () => {
-
-      if (storeCategories.length === 0) {
-        await fetchCategories()
-      }
-
-      setCategories(storeCategories.map(category => ({
-        name: category.name,
-        id: category.id
-      })))
-    }
-
-    getC()
-  }, [storeCategories])
+  }, [id])
 
   useEffect(() => {
     setErrorImgs("")
@@ -136,7 +126,6 @@ export const useEditProductForm = ({ id }: Props) => {
   }
 
   return {
-    categories,
     onSubmit,
     error,
     errorImgs,
@@ -151,6 +140,7 @@ export const useEditProductForm = ({ id }: Props) => {
     imgsOld,
     setImgsOld,
     images,
-    setImages
+    setImages,
+    watch
   }
 }

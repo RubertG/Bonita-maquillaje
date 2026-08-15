@@ -2,7 +2,6 @@ import type { Config } from "tailwindcss"
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}"
   ],
@@ -30,7 +29,17 @@ const config: Config = {
         "accent-200": "#ffc1d5",
         "text-300": "#6a6363",
         "bg-50": "#fdfdfd",
-        "bg-transparent": "rgb(255,244,244,0.5)"
+        "bg-transparent": "rgb(255,244,244,0.5)",
+        "discount-100": "#aa1850"
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" }
+        }
+      },
+      animation: {
+        marquee: "marquee 30s linear infinite"
       }
     }
   },

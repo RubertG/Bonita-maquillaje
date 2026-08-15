@@ -11,13 +11,13 @@ import { ImagesContainer } from "./images-container"
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
   classNameError?: string
+  label?: string
   limitSize?: number
   items: File[]
   aspect?: string
   imgsOld?: FileStateItem[]
   setImgsOld?: (imgs: FileStateItem[]) => void
   setItems: (items: File[]) => void
-  refCollection?: string
   fixedSize?: number
   images: Array<File | FileStateItem>
   setImages: Dispatch<SetStateAction<Array<File | FileStateItem>>>
@@ -26,6 +26,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 export const UploadFile = ({
   className,
   classNameError = "mt-3",
+  label,
   items,
   aspect = "3/4",
   limitSize = LIMIT_FILES_SIZE,
@@ -33,7 +34,6 @@ export const UploadFile = ({
   imgsOld,
   setImgsOld,
   multiple = true,
-  refCollection = "products",
   images,
   setImages,
   ...props
@@ -45,16 +45,20 @@ export const UploadFile = ({
     imgsOld,
     setImgsOld,
     multiple,
-    refCollection,
     images,
     setImages
   })
 
   return (
     <section className={`${className}`}>
+      {label && (
+        <p className="text-text-100 mb-2 block">
+          {label}
+        </p>
+      )}
       <p
         className="text-sm text-text-100 mb-3 font-light">
-        Por recomendación y optimización, sube {multiple ? "las imágenes" : "la imagen"} en formato <span className="text-accent-300 font-medium">3/4</span> y que el peso {multiple ? "total de todas estas no superen" : "no supere"} los <span className="text-accent-300 font-medium">{returnFileSize(limitSize)}</span>.
+        Por recomendación y optimización, sube {multiple ? "las imágenes" : "la imagen"} en formato <span className="text-accent-300 font-medium">{aspect}</span> y que el peso {multiple ? "total de todas estas no superen" : "no supere"} los <span className="text-accent-300 font-medium">{returnFileSize(limitSize)}</span>.
       </p>
       <FileInput
         multiple={multiple}

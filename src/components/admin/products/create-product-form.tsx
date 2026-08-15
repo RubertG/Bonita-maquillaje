@@ -3,15 +3,20 @@
 import { UploadFile } from "../common/upload-file"
 import { useCreateProductForm } from "@/hooks/admin/products/use-create-product-form"
 import { ProductForm } from "./product-form"
+import { Category } from "@/types/db/db"
 import { Dispatch, SetStateAction } from "react"
 import { FileStateItem } from "@/types/admin/admin"
 
-export const CreateProductForm = () => {
+interface Props {
+  categories: Pick<Category, "name" | "id">[]
+}
+
+export const CreateProductForm = ({ categories }: Props) => {
   const { errorImgs, imgs, setImgs, ...props } = useCreateProductForm()
 
   return (
     <section className="flex flex-col-reverse gap-4 max-w-lg mx-auto lg:grid lg:grid-cols-[55%_1fr] lg:gap-8 lg:max-w-none">
-      <ProductForm {...props} />
+      <ProductForm {...props} categories={categories} />
       <aside>
         <UploadFile
           items={imgs as File[]}

@@ -3,7 +3,7 @@ import { db } from "../initializeApp"
 import { DiscountCode, Id } from "@/types/db/db"
 import { ROUTES_COLLECTIONS } from "@/consts/db/db"
 import { getCategory } from "./categories"
-import { ALL_CATEGORY } from "@/consts/admin/orders"
+import { ALL_CATEGORY } from "@/consts/categories"
 
 export const getDiscountCodes = async () => {
   const q = query(collection(db, ROUTES_COLLECTIONS.DISCOUNT_CODES), orderBy('expiration', 'desc'))

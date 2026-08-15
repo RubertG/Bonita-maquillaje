@@ -5,7 +5,7 @@ export const branch = localFont ({
     {
       path: './Branch.otf',
       weight: '400',
-      style: 'normal',
-    },
+      style: 'normal'
+    }
   ]
 })

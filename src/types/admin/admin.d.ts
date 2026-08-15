@@ -1,6 +1,4 @@
-import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore"
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher"
-import { Order, Product as ProductDB, Tone } from "../db/db"
+import { Product } from "../db/db"
 
 export interface FileStateItem {
   name: string
@@ -10,45 +8,31 @@ export interface FileStateItem {
 
 export interface CategoryInputs {
   name: string
+  isStagingOnly: boolean
+}
+
+export interface BannerImage extends FileStateItem {
+  width: number
+  height: number
+}
+
+export interface BannerInputs {
+  alt: string
 }
 
 export interface Inputs {
   name: string
   description: string
-  price: string
-  stock: string
+  price: number
+  stock: number
   category: string
-}
-
-export interface InputsOrders {
-  name: string,
-  department: string,
-  city: string,
-  address: string,
-  email: string,
-  paymentMethod: string,
-  phone: string
+  offerPrice?: number | null
+  isBestSeller?: boolean
+  isNew?: boolean
 }
 
 export interface ProductsContext {
-  products: ProductDB[]
-  refreshProducts: (category: string) => Promise<void>
+  products: Product[]
+  refreshProducts: () => Promise<void>
   loading: boolean
-  searchParams: Params
-}
-
-export interface OrdersManagementStorage {
-  orders: Order[] | undefined
-  loading: boolean
-  lastVisible: QueryDocumentSnapshot<DocumentData, DocumentData>
-  hasNext: boolean
-}
-
-export interface Product extends ProductDB {
-  amount: number
-  discountCode?: {
-    code: Id
-    discount: number
-  }
-  tone?: Tone
 }

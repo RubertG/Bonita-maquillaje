@@ -1,11 +1,11 @@
 "use client"
 
-import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, LegacyRef, useState } from "react"
+import { DetailedHTMLProps, forwardRef, InputHTMLAttributes, LegacyRef, useId, useState } from "react"
 import { Eye, EyeOff, Selector, Spinner, Upload } from "./icons"
 import clsx from "clsx"
 import { branch } from "@/fonts/branch/branch"
 
-interface InputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> { }
+type InputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
 export const Input = forwardRef(function Input({ className, ...props }: InputProps, ref: LegacyRef<HTMLInputElement> | undefined) {
   return (
@@ -31,7 +31,7 @@ export const DiscountCodeInput = ({ className, onClickButton, loading, setError,
       <input
         className={`w-full rounded-l-lg px-3.5 py-2.5 focus:outline-bg-200 bg-bg-50 text-text-200 font-light placeholder:text-gray-400 ${className}`}
         onChange={(e) => {
-          setError && setError("")
+          if (setError) setError("")
           setCode(e.target.value)
         }}
         {...props} />
@@ -68,16 +68,18 @@ export const PasswordInput = forwardRef(function PasswordInput({ className, ...p
 })
 
 export const FileInput = forwardRef(function FileInput({ className, multiple, ...props }: InputProps, ref: LegacyRef<HTMLInputElement> | undefined) {
+  const id = useId()
+
   return (
     <button className={`block w-full ${className}`}>
       <label
         className={`relative w-full inline-flex items-center justify-center py-2.5 px-3.5 rounded-lg bg-accent-200 text-text-100 gap-2 text-center text-xl shadow-button lg:hover:bg-principal-100 lg:transition-colors cursor-pointer ${branch.className}`}
-        htmlFor="file">
+        htmlFor={id}>
         <Upload className="absolute top-1/2 -translate-y-1/2 left-0 ml-3.5 stroke-text-100 w-6 h-6" />
         Cargar {multiple ? "imágenes" : "imagen"}
         <input
           type="file"
-          id="file"
+          id={id}
           accept="image/*"
           multiple={multiple}
           className="hidden"
@@ -100,13 +102,11 @@ export const SelectInput = forwardRef(function SelectInput({ className, items, t
     <div className="relative cursor-pointer">
       <select
         className={`w-full rounded-lg px-3.5 py-2.5 border-none focus:outline-bg-200 bg-bg-50 text-text-200 font-light placeholder:text-gray-400 appearance-none shadow-button cursor-pointer ${className}`}
-        defaultValue={title}
+        defaultValue=""
         {...props} {...(ref == undefined) ? {} : { ref }}>
         <option
           className="text-text-300 font-light py-1 bg-bg-50 hover:bg-bg-200"
           disabled
-          selected
-          aria-selected
           value="">{title}</option>
         {items?.map((item) => (
           <option
@@ -120,7 +120,7 @@ export const SelectInput = forwardRef(function SelectInput({ className, items, t
   )
 })
 
-interface TextAreaProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> { }
+type TextAreaProps = DetailedHTMLProps<InputHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
 
 export const TextArea = forwardRef(function TextArea({ className, ...props }: TextAreaProps, ref: LegacyRef<HTMLTextAreaElement> | undefined) {
   return (

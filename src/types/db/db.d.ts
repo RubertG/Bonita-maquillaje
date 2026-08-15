@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore"
-import { FileStateItem } from "../admin/admin"
+import { BannerImage, FileStateItem } from "../admin/admin"
 
 export type Id = string
 
@@ -13,6 +13,16 @@ export interface Category {
   name: string
   img: FileStateItem
   isStagingOnly?: boolean
+  order?: number
+}
+
+export interface Banner {
+  id: Id
+  img: BannerImage
+  imgDesktop?: BannerImage
+  alt: string
+  order: number
+  active: boolean
 }
 
 export interface Product {
@@ -24,6 +34,10 @@ export interface Product {
   tones: Tone[]
   imgs: FileStateItem[]
   category: Id
+  createdAt?: Timestamp
+  offerPrice?: number | null
+  isBestSeller?: boolean
+  isNew?: boolean
 }
 
 export interface Order {
@@ -44,6 +58,11 @@ export interface Order {
     }
     tone?: Tone
     amount: number
+    // Prices frozen at purchase time. Optional because orders created before this
+    // field existed do not carry them, and those fall back to the product's current
+    // price when the order is read.
+    price?: number
+    offerPrice?: number | null
   }[]
   create_at: Timestamp
 }

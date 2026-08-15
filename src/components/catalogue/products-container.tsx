@@ -1,9 +1,6 @@
 "use client"
 
-import { ButtonWithIcon } from "@/components/common/button-with-icon"
-import { Delete } from "@/components/common/icons"
-import { useProductsContext } from "@/hooks/admin/products/use-products-context"
-import { ProductSkeleton } from "./product-skeleton"
+import { useCatalogProductFilter } from "@/hooks/catalog/use-catalog-product-filter"
 import { ProductCard } from "./product-card"
 
 export const ProductsContainer = ({
@@ -11,46 +8,25 @@ export const ProductsContainer = ({
 }: {
   className?: string
 }) => {
-  const { loading, products, searchParams } = useProductsContext()
+  const { products, count } = useCatalogProductFilter()
 
   return (
-    <>
-      <ul className={`${className} grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2`}>
-        {
-          loading ? (
-            Array(8).fill(0).map((_, index) => (
-              <ProductSkeleton key={index} />
-            ))
-          ) : (
-            products.map(product => (
-              <ProductCard
-                key={product.id}
-                {...product}
-              />
-            ))
-          )
-        }
-      </ul>
+    <section className={className}>
+      {products.length > 0 && (
+        <ul className="grid items-start grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-5 lg:gap-2 list-none">
+          {products.map((product, index) => (
+            <li key={product.id}>
+              <ProductCard {...product} priority={index < 5} />
+            </li>
+          ))}
+        </ul>
+      )}
 
-      {
-        ((!products || products.length === 0) && !loading) && (
-          <section className={`${className} text-center text-text-300`}>
-            <article className="mt-3 mx-auto">
-              {
-                (searchParams.busqueda) && (
-                  <ButtonWithIcon
-                    href={`/catalogo?${new URLSearchParams({
-                      categoria: searchParams.categoria || ""
-                    }).toString()}`}>
-                    <Delete className="stroke-text-100" />
-                    Quitar filtros
-                  </ButtonWithIcon>
-                )
-              }
-            </article>
-          </section>
-        )
-      }
-    </>
+      {count === 0 && (
+        <p className="text-center text-text-300 mt-6">
+          No se encontraron productos con los filtros seleccionados.
+        </p>
+      )}
+    </section>
   )
 }

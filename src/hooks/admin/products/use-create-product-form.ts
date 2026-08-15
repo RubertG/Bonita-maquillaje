@@ -1,22 +1,19 @@
 "use client"
 
 import { FileStateItem, Inputs } from "@/types/admin/admin"
-import { Category, Product, Tone as ToneType } from "@/types/db/db"
+import { Product, Tone as ToneType } from "@/types/db/db"
 import { useRouter } from "next/navigation"
 import { BaseSyntheticEvent, useEffect, useState } from "react"
 import { useForm } from "../../common/use-form"
 import { productSchema } from "@/validations/admin/products/product-schema"
 import { v4 as uuidv4 } from 'uuid'
-import { saveProduct } from "@/firebase/services/products"
+import { createProduct } from "@/app/actions/admin/products"
+import { getAuthToken } from "@/lib/auth-token"
 import { saveFile } from "@/firebase/services/storage"
 import { useProductsContext } from "./use-products-context"
-import { useStoreCategory } from "@/stores/common/category.store"
 
 export const useCreateProductForm = () => {
   const [imgs, setImgs] = useState<File[] | FileStateItem[]>([])
-  const [categories, setCategories] = useState<Pick<Category, "name" | "id">[]>([])
-  const storeCategories = useStoreCategory(state => state.categories)
-  const fetchCategories = useStoreCategory(state => state.fetchCategories)
   const [errorImgs, setErrorImgs] = useState("")
   const [tones, setTones] = useState<ToneType[]>([])
   const [error, setError] = useState<string>("")
@@ -24,7 +21,7 @@ export const useCreateProductForm = () => {
   const { refreshProducts } = useProductsContext()
 
   const {
-    register, handleSubmit, loading, errors
+    register, handleSubmit, loading, errors, watch
   } = useForm<Inputs>({
     schema: productSchema,
     actionSubmit: async (data) => {
@@ -36,12 +33,13 @@ export const useCreateProductForm = () => {
       }
 
       try {
+        const productId = uuidv4()
         const newImgs: FileStateItem[] = await Promise.all(
           imgs.map(async (img) => {
-            const url = await saveFile(img as File, "/products")
+            const { url, name } = await saveFile(img as File, productId, "/products")
 
             return {
-              name: img.name,
+              name,
               url,
               size: img.size
             }
@@ -50,38 +48,24 @@ export const useCreateProductForm = () => {
 
         const product: Product = {
           ...data,
-          id: uuidv4(),
+          id: productId,
           imgs: newImgs,
-          stock: parseInt(data.stock),
-          price: parseFloat(data.price),
-          tones: tones
+          tones
         }
 
-        await saveProduct(product)
-        router.push(`/admin/productos?categoria=${data.category}`)
-        refreshProducts(data.category)
-      } catch (error) {
+        const token = await getAuthToken()
+        const result = await createProduct(token, product)
+        if (!result.ok) {
+          throw new Error(result.error)
+        }
+        router.push("/admin/productos")
+        refreshProducts()
+      } catch {
         setError("Ocurrio un error al guardar el producto")
       }
 
     }
   })
-
-  useEffect(() => {
-    const getC = async () => {
-
-      if (storeCategories.length === 0) {
-        await fetchCategories()
-      }
-
-      setCategories(storeCategories.map(category => ({
-        name: category.name,
-        id: category.id
-      })))
-    }
-
-    getC()
-  }, [storeCategories])
 
   useEffect(() => {
     setErrorImgs("")
@@ -98,7 +82,6 @@ export const useCreateProductForm = () => {
   }
 
   return {
-    categories,
     onSubmit,
     error,
     errorImgs,
@@ -108,6 +91,7 @@ export const useCreateProductForm = () => {
     register,
     loading,
     setTones,
-    tones
+    tones,
+    watch
   }
 }

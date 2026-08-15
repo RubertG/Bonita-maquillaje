@@ -6,6 +6,14 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
+const buildToneUrl = (color?: string, cantidad?: string) => {
+  const url = new URLSearchParams({
+    ...(color && { color }),
+    ...(cantidad && { cantidad })
+  })
+  return `?${url.toString()}`
+}
+
 export const Tones = ({
   className, tones, searchParams: { color, cantidad }
 }: {
@@ -18,26 +26,18 @@ export const Tones = ({
   const router = useRouter()
 
   useEffect(() => {
-    if (color) return 
+    if (color) return
 
-    router.replace(newUrl(tones[0].color, cantidad), {
+    router.replace(buildToneUrl(tones[0].color, cantidad), {
       scroll: false
     })
-  }, [])
-
-  const newUrl = (color?: string, cantidad?: string) => {
-    const url = new URLSearchParams({
-      ...(color && { color }),
-      ...(cantidad && { cantidad })
-    })
-    return `?${url.toString()}`
-  }
+  }, [cantidad, color, router, tones])
 
   return (
     <div className={`flex flex-wrap gap-1 ${className}`}>
       {
         tones.map((tone) => {
-          const href = newUrl(tone.color, cantidad)
+          const href = buildToneUrl(tone.color, cantidad)
           return (
             <Link
               key={tone.name}

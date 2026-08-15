@@ -3,6 +3,7 @@ import { db } from "../initializeApp"
 import { ROUTES_COLLECTIONS } from "@/consts/db/db"
 import { Category, Id } from "@/types/db/db"
 import { filterPublicCategories } from "@/lib/category-filter"
+import { sortCategories } from "@/lib/category-order"
 import { getAppEnv } from "@/lib/env"
 
 export const getCategories = async () => {
@@ -13,6 +14,11 @@ export const getCategories = async () => {
     categories.push({ ...doc.data(), id: doc.id } as Category)
   })
 
+  return sortCategories(categories)
+}
+
+export const getPublicCategories = async () => {
+  const categories = await getCategories()
   return filterPublicCategories(categories, getAppEnv())
 }
 

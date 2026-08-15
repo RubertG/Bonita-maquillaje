@@ -10,7 +10,7 @@ export const SelectCategory = ({ className }: { className?: string }) => {
   const fetchCategories = useStoreCategory(state => state.fetchCategories)
   const [items, setItems] = useState<Pick<Category , "name" | "id">[]>([])
 
-  useEffect(() => {	
+  useEffect(() => {
     const getC = async () => {
 
       if (categories.length === 0) {
@@ -24,7 +24,7 @@ export const SelectCategory = ({ className }: { className?: string }) => {
     }
 
     getC()
-  }, [categories])
+  }, [categories, fetchCategories])
   
   return (
     <SelectInput

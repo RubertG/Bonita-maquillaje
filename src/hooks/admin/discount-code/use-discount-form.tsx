@@ -1,9 +1,8 @@
-import { saveDiscountCode } from "@/firebase/services/discount-codes"
+import { createDiscountCode } from "@/app/actions/admin/discount-codes"
+import { getAuthToken } from "@/lib/auth-token"
 import { useForm } from "@/hooks/common/use-form"
 import { useStoreCategory } from "@/stores/common/category.store"
-import { DiscountCode } from "@/types/db/db"
 import { discountCodeSchema } from "@/validations/admin/discount-code/discount-code-schema"
-import { Timestamp } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { useState, useRef, useEffect } from "react"
 import { v4 as uuidv4 } from 'uuid'
@@ -26,14 +25,17 @@ export const useDiscountForm = () => {
     actionSubmit: async (inputs) => {
       setError("")
       try {
-        const newCode: DiscountCode = {
+        const token = await getAuthToken()
+        const result = await createDiscountCode(token, {
           id: uuidv4(),
           code: inputs.code,
           discount: parseInt(inputs.discount),
-          expiration: Timestamp.fromDate(new Date(inputs.day)),
+          expiration: inputs.day,
           category: inputs.category
+        })
+        if (!result.ok) {
+          throw new Error(result.error)
         }
-        await saveDiscountCode(newCode)
         router.refresh()
         formRef.current?.reset()
       } catch (error) {
@@ -44,7 +46,7 @@ export const useDiscountForm = () => {
 
   useEffect(() => {
     fetchCategories()
-  }, [])
+  }, [fetchCategories])
 
   return {
     error,

@@ -1,26 +1,31 @@
 "use client"
 
 import { Delete, Edit } from "@/components/common/icons"
-import { deleteProduct } from "@/firebase/services/products"
+import { deleteProduct } from "@/app/actions/admin/products"
+import { getAuthToken } from "@/lib/auth-token"
 import { deleteFile } from "@/firebase/services/storage"
 import { Product } from "@/types/db/db"
 import { useState } from "react"
 import { PopupDelete } from "../common/popup-delete"
 import Link from "next/link"
 import { useProductsContext } from "@/hooks/admin/products/use-products-context"
-import { useSearchParams } from "next/navigation"
 
 export const OptionsProduct = ({ id, imgs }: Pick<Product, "id" | "imgs">) => {
   const [popup, setPopup] = useState(false)
   const [loading, setLoading] = useState(false)
-  const searchParams = useSearchParams()
   const { refreshProducts } = useProductsContext()
 
   const handleDelete = async () => {
     setLoading(true)
-    await deleteProduct(id)
-    await Promise.all(imgs.map(img => deleteFile(`products/${img.name}`)))
-    refreshProducts(searchParams.get("categoria") || "")
+    const token = await getAuthToken()
+    const result = await deleteProduct(token, id)
+    if (!result.ok) {
+      setLoading(false)
+      setPopup(false)
+      return
+    }
+    await Promise.all(imgs.map(img => deleteFile(img.url)))
+    refreshProducts()
     setLoading(false)
     setPopup(false)
   }

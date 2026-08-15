@@ -1,6 +1,6 @@
 import { useCartStore } from "@/stores/cart/cart.store"
 import { useTransitionRouter } from "next-view-transitions"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 export const usePurchaseReminder = (delay = 4000) => {
@@ -20,13 +20,7 @@ export const usePurchaseReminder = (delay = 4000) => {
     return () => clearTimeout(timer)
   }, [delay])
 
-  useEffect(() => {
-    if (!show) return
-
-    handleMessage()
-  }, [show])
-
-  const handleMessage = () => {
+  const handleMessage = useCallback(() => {
     if (cartSize > 0) {
       toast("¡No olvides completar tu compra! ❤️", {
         action: (
@@ -46,5 +40,11 @@ export const usePurchaseReminder = (delay = 4000) => {
         </p>
       )
     }
-  }
+  }, [cartSize, router])
+
+  useEffect(() => {
+    if (!show) return
+
+    handleMessage()
+  }, [handleMessage, show])
 }
