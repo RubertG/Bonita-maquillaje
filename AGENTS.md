@@ -2,7 +2,7 @@
 
 Operating contract for OpenCode in the `Bonita-maquillaje` repository. Read this before touching code.
 
-Makeup e-commerce for Cúcuta, Colombia: linktree home, product catalog, cart, and an admin panel. Next.js 16 App Router, React 19, TypeScript strict, Tailwind 3, Firebase (Firestore + Auth + Storage), Zustand, React Hook Form + Zod. Import alias `@/*` maps to `src/*`. Package manager pinned to `pnpm@11.13.0`.
+Makeup e-commerce for Cúcuta, Colombia: linktree home, product catalog, cart, and an admin panel. Next.js 16 App Router, React 19, TypeScript strict, Tailwind 3, Firebase (Firestore + Auth + Storage), Zustand, React Hook Form + Zod. Import alias `@/*` maps to `src/*`. Package manager pinned to `pnpm@11.26.0` (`11.13.0` is a broken release — its `@pnpm/exe` build has no binary and Vercel refuses to install it).
 
 ## Orchestration
 
