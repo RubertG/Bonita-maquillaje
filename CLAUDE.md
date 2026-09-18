@@ -21,7 +21,7 @@ pnpm backfill-product-created-at          # one-off Firestore migration
 
 **There is no test runner in this project.** No Vitest/Jest/Playwright, no test files, no `test` script. `openspec/config.yaml` records this explicitly (`strict_tdd: false`, `runner: null`) — verification is `pnpm lint` + `pnpm exec tsc --noEmit` + `pnpm build`. Do not write tests against a framework that is not installed; if tests are needed, that is a design decision to raise first.
 
-Package manager is pinned: `pnpm@11.13.0`.
+Package manager is pinned: `pnpm@11.26.0`. Do not pin `pnpm@11.13.0` — its `@pnpm/exe` build shipped without a binary, so Vercel fails the install with `pnpm v11.13.0 is a broken release and cannot be installed`.
 
 ## Environment
 
