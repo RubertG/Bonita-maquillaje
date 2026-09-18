@@ -9,6 +9,11 @@ allowBuilds:
   '@firebase/util': true
   esbuild: true
   protobufjs: true
+  # Optional native accelerator of firebase-tools. Denied on purpose: firebase-tools
+  # ships re2js (pure JS) as a regular dependency and works without it, nothing in the
+  # build imports firebase-tools at all, and leaving it undecided fails the install with
+  # ERR_PNPM_IGNORED_BUILDS.
+  re2: false
   sharp: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
