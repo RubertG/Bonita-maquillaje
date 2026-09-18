@@ -180,7 +180,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
           <>
             <motion.div
               key="mobile-menu-backdrop"
-              className="fixed inset-x-0 top-0 h-screen z-40 bg-black/30"
+              className="fixed inset-x-0 top-0 h-dvh z-40 bg-black/30"
               variants={backdropVariants}
               initial="hidden"
               animate="visible"
@@ -195,7 +195,7 @@ export function MobileMenu({ children }: MobileMenuProps) {
               role="dialog"
               aria-modal="true"
               aria-label="Menú de navegación"
-              className="fixed top-0 left-0 h-screen w-full max-w-sm bg-bg-100 z-50 flex flex-col p-4"
+              className="fixed top-0 left-0 h-dvh w-full max-w-sm bg-bg-100 z-50 flex flex-col p-4"
               variants={panelVariants}
               initial="hidden"
               animate="visible"

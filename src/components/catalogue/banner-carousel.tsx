@@ -16,7 +16,7 @@ interface Props {
   className?: string
 }
 
-export const BannerCarousel = ({ banners, className }: Props) => {
+export const BannerCarousel = ({ banners, className = "" }: Props) => {
   const swiperRef = useRef<SwiperInstance | null>(null)
   const hoveringRef = useRef(false)
   const focusedRef = useRef(false)
@@ -83,7 +83,7 @@ export const BannerCarousel = ({ banners, className }: Props) => {
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={banner.id}>
-            <div className={`relative w-full ${banner.imgDesktop ? "aspect-[17/9] lg:aspect-[28/9]" : "aspect-[17/9]"}`}>
+            <div className="relative w-full aspect-[17/9] lg:aspect-[28/9]">
               {banner.imgDesktop ? (
                 <picture>
                   <source media="(min-width: 1024px)" srcSet={banner.imgDesktop.url} />
