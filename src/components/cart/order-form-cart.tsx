@@ -54,7 +54,7 @@ export const OrderFormCart = ({
         }
         let subTotal = 0
         let total = 0
-        let productsParser = ""
+        const productLines: string[] = []
 
         for (let i = 0; i < products.length; i++) {
           const product = products[i]
@@ -69,39 +69,42 @@ export const OrderFormCart = ({
           subTotal += product.price * product.amount
           total += payableUnit * product.amount
 
-          productsParser += `%0A      ${i + 1}. ${product.name} x ${product.amount} = ${formatCurrency(lineTotal)}
-          ${product.tone ? `%0A         Tono: ${product.tone.name}` : ""}
-          %0A         Precio: ${formatCurrency(offer ?? product.price)}
-          ${offer !== null ? `%0A         Antes: ${formatCurrency(product.price)} - Oferta ${getDiscountPercent(product.price, offer)}%25` : ""}
-          ${product.discountCode ? `%0A         Descuento: ${product.discountCode.code} - ${product.discountCode.discount}%25` : ""}
-          `
+          productLines.push(`      ${i + 1}. ${product.name} x ${product.amount} = ${formatCurrency(lineTotal)}`)
+          if (product.tone) productLines.push(`         Tono: ${product.tone.name}`)
+          productLines.push(`         Precio: ${formatCurrency(offer ?? product.price)}`)
+          if (offer !== null) productLines.push(`         Antes: ${formatCurrency(product.price)} - Oferta ${getDiscountPercent(product.price, offer)}%`)
+          if (product.discountCode) productLines.push(`         Descuento: ${product.discountCode.code} - ${product.discountCode.discount}%`)
         }
 
         removeStorage()
-        const message = `¡Hola Bonita Maquillaje! 👋
-          %0AEste es el resumen de mi pedido:
-          %0A   
-          %0A   Fecha: ${order.create_at.toDate().toLocaleDateString('es-ES', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        })}
-          %0A   Nombre del cliente: ${order.name}
-          %0A   Telefono: ${order.phone}
-          %0A   Email: ${order.email}
-          %0A   Departamento: ${order.department}
-          %0A   Ciudad: ${order.city}
-          %0A   Dirección: ${order.address}
-          %0A   Forma de Pago: ${order.paymentMethod}
-          %0A   Cantidad de Productos: ${products.length}
-          %0A   
-          %0A   Productos:
-          ${productsParser}
-          %0A   
-          %0A   Subtotal: ${formatCurrency(parseInt(subTotal.toFixed(0)))}
-          %0A   Total: ${formatCurrency(parseInt(total.toFixed(0)))}
-        `
-        const url = `https://api.whatsapp.com/send?phone=57${process.env.NEXT_PUBLIC_PHONE_NUMBER}&text=${message}`
+        const date = order.create_at.toDate().toLocaleDateString("es-ES", {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        })
+        // Free-text fields (address, name) often contain "#" or "&", so the text must be URL-encoded
+        // or the browser drops everything after them.
+        const message = [
+          "¡Hola Bonita Maquillaje! 👋",
+          "Este es el resumen de mi pedido:",
+          "",
+          `   Fecha: ${date}`,
+          `   Nombre del cliente: ${order.name}`,
+          `   Telefono: ${order.phone}`,
+          `   Email: ${order.email}`,
+          `   Departamento: ${order.department}`,
+          `   Ciudad: ${order.city}`,
+          `   Dirección: ${order.address}`,
+          `   Forma de Pago: ${order.paymentMethod}`,
+          `   Cantidad de Productos: ${products.length}`,
+          "",
+          "   Productos:",
+          ...productLines,
+          "",
+          `   Subtotal: ${formatCurrency(parseInt(subTotal.toFixed(0)))}`,
+          `   Total: ${formatCurrency(parseInt(total.toFixed(0)))}`
+        ].join("\n")
+        const url = `https://api.whatsapp.com/send?phone=57${process.env.NEXT_PUBLIC_PHONE_NUMBER}&text=${encodeURIComponent(message)}`
 
         if (window) {
           window.open(url, '_blank')
